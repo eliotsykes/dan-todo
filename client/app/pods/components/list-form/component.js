@@ -23,7 +23,7 @@ export default Ember.Component.extend({
         this.get('router').transitionTo('list.index');
       };
 
-      let hasUnsavedChanges = list.get('hasDirtyAttributes');
+      let hasUnsavedChanges = list.get('isDirty');
 
       if (!hasUnsavedChanges) {
         transitionToListIndex();
