@@ -12,6 +12,8 @@ end
 
 group :test do
   gem 'rspec-rails', '~> 3.1.0'
+  gem 'factory_girl_rails'
+  gem 'capybara'
 end
 
 gem 'rails', '4.2.0'
