@@ -77,4 +77,8 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   config.action_mailer.default_url_options = { host: 'dan-blocitoff.herokuapp.com' }
+
+  # Set to `:info` to match the current default, or set to `:debug` to opt-into
+  # the future default.
+  config.log_level = :info
 end
