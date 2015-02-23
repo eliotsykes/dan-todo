@@ -8,6 +8,8 @@ end
 group :development do
   gem 'sqlite3'
   gem 'web-console', '~> 2.0'
+  gem 'binding_of_caller'
+  gem 'better_errors'
 end
 
 group :test do
@@ -26,6 +28,8 @@ gem 'jbuilder', '~> 2.0'
 gem 'sdoc', '~> 0.4.0',          group: :doc
 gem 'spring',        group: :development
 gem 'bootstrap-sass'
+gem 'simple_form'
+
 
 gem 'figaro', '1.0'
 gem 'faker'
