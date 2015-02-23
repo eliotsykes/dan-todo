@@ -21,7 +21,7 @@ describe ListsController do
   end
 
   describe '#edit' do
-    it "destroys the favorite for the current user and post" do
+    it "edits the list title" do
       list = @user.lists.create
       list.update_attribute(:title, 'Hi')
       expect( list.title ).to eq('Hi')
