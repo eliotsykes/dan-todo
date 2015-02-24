@@ -22,7 +22,7 @@ class ListsController < ApplicationController
 
     if @list.save
       flash[:notice] = "List was saved."
-      redirect_to [@list]
+      redirect_to @list
     else
       flash[:error] = "There was an error saving the list. Please try again."
       render :new
@@ -34,7 +34,7 @@ class ListsController < ApplicationController
 
     if @list.update_attributes(list_params)
       flash[:notice] = "List was updated."
-      redirect_to [@list]
+      redirect_to @list
     else
       flash[:error] = "There was an error updating the list. Please try again."
       render :edit
@@ -47,7 +47,7 @@ class ListsController < ApplicationController
 
     if @list.destroy
       flash[:notice] = "\"#{title}\" was deleted successfully."
-      redirect_to [@list]
+      redirect_to @list
     else
       flash[:error] = "There was an error deleting the list. Please try again."
       render :show

@@ -11,29 +11,31 @@ describe ListsController do
   end
 
   describe '#create' do
-    it "creates 2 lists for the user" do
-      expect( @user.lists.count ).to eq(0)
-      @user.lists.create
-      expect( @user.lists.count ).to eq(1)
-      @user.lists.create
-      expect( @user.lists.count ).to eq(2)
+    it "creates 2 lists" do
+      post :create, list: { title: 'test', user: @user }
+      @list = List.last
+      expect(List.count).to eq(1)
+      expect(@list.title).to eq('test')
+      expect(response).to redirect_to(list_path(@list.id))
     end
   end
 
-  describe '#edit' do
-    it "edits the list title" do
-      list = @user.lists.create
-      list.update_attribute(:title, 'Hi')
-      expect( list.title ).to eq('Hi')
+  describe '#update' do
+    it "updates the list title" do
+      @list = create(:list)
+      put :update, id: @list.id, list: { title: 'I\'ve been updated' }
+      @list.reload
+      expect(response).to redirect_to(list_path(@list.id))
+      expect(@list.title).to eq('I\'ve been updated')
     end
   end
 
   describe '#destroy' do
-    it "creates then destroys a new list from the user" do
-      list = @user.lists.create
-      expect( @user.lists.count ).to eq(1)
-      list.destroy      
-      expect( @user.lists.count ).to eq(0)
+    it "creates then destroys a new list" do
+      @list = create(:list)
+      expect( List.count ).to eq(1)
+      delete :destroy, id: @list.id
+      expect( List.count ).to eq(0)
     end
   end
 
