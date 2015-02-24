@@ -1,4 +1,4 @@
-<%= simple_form_for [@list] do |f| %>
+<%= simple_form_for @list do |f| %>
   <%= f.input :title, label: 'Title', placeholder: "Enter list title" %>
   <%= f.submit 'Save' , class: 'btn btn-success' %>
 <% end %>
