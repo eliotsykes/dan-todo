@@ -3,7 +3,7 @@ require 'rails_helper'
 describe "Sign in flow" do
 
   describe "successful" do
-    it "redirects to the topics index" do
+    it "Signs the user up, logs the user in, and checks the users name after login" do
       user = create(:user)
       visit root_path
 
@@ -18,6 +18,8 @@ describe "Sign in flow" do
       end
 
       expect(current_path).to eq root_path
+      expect(user.name).to eq 'Douglas Adams'
+
     end
   end
 end
