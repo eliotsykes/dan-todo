@@ -1,2 +1,5 @@
- class ListPolicy < ApplicationPolicy
- end
+class ListPolicy < ApplicationPolicy
+    def index?
+        true
+    end
+end

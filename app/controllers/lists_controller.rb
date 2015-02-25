@@ -3,22 +3,27 @@ class ListsController < ApplicationController
 
   def show
     @list = List.find(params[:id])
+    authorize @list
   end
 
   def index
     @lists = current_user.lists
+    authorize @lists
   end
 
   def new
     @list = List.new
+    authorize @list
   end
 
   def edit
     @list = List.find(params[:id])
+    authorize @list
   end
 
   def create
     @list = current_user.lists.build(list_params)
+    authorize @list
 
     if @list.save
       flash[:notice] = "List was saved."

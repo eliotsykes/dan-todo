@@ -1,2 +1,4 @@
-<h1>Lists#edit</h1>
-<p>Find me in app/views/lists/edit.html.erb</p>
+<%= simple_form_for @list do |f| %>
+  <%= f.input :title, label: 'Title', placeholder: "Enter list title" %>
+  <%= f.submit 'Save' , class: 'btn btn-success' %>
+<% end %>
