@@ -35,7 +35,7 @@ class ListsController < ApplicationController
   end
 
   def update
-    @list = List.find(params[:id])
+    @list = current_user.lists.find(params[:id])
 
     if @list.update_attributes(list_params)
       flash[:notice] = "List was updated."
@@ -47,7 +47,7 @@ class ListsController < ApplicationController
   end
 
   def destroy
-    @list = List.find(params[:id])
+    @list = current_user.lists.find(params[:id])
     title = @list.title
 
     if @list.destroy

@@ -18,7 +18,7 @@ describe "Sign in flow" do
       end
 
       expect(current_path).to eq root_path
-      expect(user.name).to eq 'Douglas Adams'
+      expect(page).to have_content "Hello #{user.name}"
 
     end
   end
