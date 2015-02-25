@@ -11,8 +11,8 @@ describe ListsController do
   end
 
   describe '#create' do
-    it "creates 2 lists" do
-      post :create, list: { title: 'test', user: @user }
+    it "creates a list and checks it's title" do
+      post :create, list: { title: 'test' }
       @list = List.last
       expect(List.count).to eq(1)
       expect(@list.title).to eq('test')
@@ -21,7 +21,7 @@ describe ListsController do
 
     it "attempts to create a list with no user" do
       sign_out @user
-      post :create, list: { title: 'test', user: @user }
+      post :create, list: { title: 'test' }
       expect(List.count).to eq(0)
     end
   end
