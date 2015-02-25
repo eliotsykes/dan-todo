@@ -17,8 +17,8 @@ describe "Sign in flow" do
         click_button 'Sign in'
       end
 
-      expect(current_path).to eq root_path
-      expect(page).to have_content "Hello #{user.name}"
+      expect(current_path).to eq user_path(user)
+      expect(page).to have_content "Your E-mail is: #{ user.email }"
 
     end
   end
