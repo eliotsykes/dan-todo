@@ -5,9 +5,10 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   has_many :lists
+  has_many :items
 
- def admin?
-   role == 'admin'
- end
+  def admin?
+    role == 'admin'
+  end
 
 end
