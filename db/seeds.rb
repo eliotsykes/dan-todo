@@ -10,18 +10,15 @@ user.skip_confirmation!
 user.save!
 
 # Create a list
-1.times do
-  @user = User.last
-  @user.lists.create!(
-    title: Faker::Lorem.sentence
-  )
-end
+user.lists.create!(
+  title: Faker::Lorem.sentence
+)
 
 #create items
 
-@list = List.last
+list = List.last
 20.times do
-  @list.items.create(
+  list.items.create(
     name: Faker::Name.name,
   )
 end

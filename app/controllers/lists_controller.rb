@@ -3,7 +3,7 @@ class ListsController < ApplicationController
 
   def show
     @user = current_user
-    @list = List.find(params[:id])
+    @list = @user.lists.find(params[:id])
     @items = @list.items.order(created_at: :desc)
     authorize @list
   end
