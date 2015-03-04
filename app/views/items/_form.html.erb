@@ -1,0 +1,4 @@
+<%= simple_form_for [@user, @list, @list.items.build] do |f| %>
+  <%= f.input :name, label: 'Item Name', placeholder: "Enter item name" %>
+  <%= f.submit 'New Item' , class: 'btn btn-success' %>
+<% end %>
