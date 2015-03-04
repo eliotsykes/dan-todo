@@ -2,7 +2,9 @@ class ListsController < ApplicationController
   before_action :authenticate_user!
 
   def show
+    @user = current_user
     @list = List.find(params[:id])
+    @items = @list.items.order(created_at: :desc)
     authorize @list
   end
 
@@ -12,7 +14,8 @@ class ListsController < ApplicationController
   end
 
   def new
-    @list = List.new
+    @user = current_user
+    @list = @user.lists.new
     authorize @list
   end
 
@@ -27,7 +30,7 @@ class ListsController < ApplicationController
 
     if @list.save
       flash[:notice] = "List was saved."
-      redirect_to @list
+      redirect_to user_lists_path
     else
       flash[:error] = "There was an error saving the list. Please try again."
       render :new
@@ -39,7 +42,7 @@ class ListsController < ApplicationController
 
     if @list.update_attributes(list_params)
       flash[:notice] = "List was updated."
-      redirect_to @list
+      redirect_to user_lists_path
     else
       flash[:error] = "There was an error updating the list. Please try again."
       render :edit

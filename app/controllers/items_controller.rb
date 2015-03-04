@@ -1,18 +1,17 @@
 class ItemsController < ApplicationController
   before_action :authenticate_user!
 
-  def new
-    @item = Item.new
-    authorize @item
-  end
-
   def create
-    @item = current_user.items.build(item_params)
-    authorize @item
+    @list = List.find(params[:list_id])
+    @user = current_user
+    @item = @list.items.build(item_params)
+    @item.list = @list
+    @new_item = Item.new
+
 
     if @item.save
       flash[:notice] = "Item was saved."
-      redirect_to @item
+      redirect_to user_list_path(@user, @list)
     else
       flash[:error] = "There was an error saving the item. Please try again."
       render :new
@@ -22,7 +21,7 @@ class ItemsController < ApplicationController
   private
 
   def item_params
-    params.require(:list).permit(:name)
+    params.require(:item).permit(:name)
   end
 
 end

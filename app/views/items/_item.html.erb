@@ -1,0 +1,5 @@
+<% @items.each do |item| %>
+  <%= content_tag :div, class: 'media', id: "item-#{item.id}" do %>
+      <%= item.name %>
+  <% end %>
+<% end %>
