@@ -28,8 +28,9 @@ describe ListsController do
   describe '#update' do
     it "updates the list title" do
       @list = create(:list, user: @user)
-      put :update, id: @list.id, list: { title: 'I\'ve been updated', user:@user }
+      put :update, id: @list.id, list: { title: 'I\'ve been updated' }
       @list.reload
+      expect(response).to redirect_to(lists_path)
       expect(@list.title).to eq('I\'ve been updated')
     end
 

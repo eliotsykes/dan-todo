@@ -42,7 +42,7 @@ class ListsController < ApplicationController
 
     if @list.update_attributes(list_params)
       flash[:notice] = "List was updated."
-      redirect_to user_lists_path
+      redirect_to lists_path
     else
       flash[:error] = "There was an error updating the list. Please try again."
       render :edit

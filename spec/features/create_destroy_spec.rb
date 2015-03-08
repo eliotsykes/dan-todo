@@ -1,10 +1,11 @@
 require 'rails_helper'
 
-describe "Sign in flow" do
+describe "Create Comment" do
 
   describe "successful" do
     it "Signs the user up, logs the user in, and checks the users name after login" do
       user = create(:user)
+      list = create(:list, user: user)
       visit root_path
 
       within '.navbar-right' do
@@ -18,7 +19,7 @@ describe "Sign in flow" do
       end
 
       expect(current_path).to eq user_path(user)
-      expect(page).to have_content "Current User: #{ user.email }"
+      expect(page).to have_content "List Title"
 
     end
   end
