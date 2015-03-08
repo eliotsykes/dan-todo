@@ -1,3 +1,10 @@
 <% if @user == current_user %>
-  <%= "Your E-mail is: #{ @user.email }" %>
+  <h2>User Information</h2>
+  <%= "Current User: #{ @user.email }" %>
+  <h3>Lists</h3>
+  <% @lists.each do |list| %>
+        <div id="list-<%= list.id %>">
+          <%= link_to list.title, list_path(list) %>
+        </div>
+  <% end %>
 <% end %>

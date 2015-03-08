@@ -30,7 +30,7 @@ gem 'sdoc', '~> 0.4.0',          group: :doc
 gem 'spring',        group: :development
 gem 'bootstrap-sass'
 gem 'simple_form'
-
+gem "font-awesome-rails"
 
 gem 'figaro', '1.0'
 gem 'faker'

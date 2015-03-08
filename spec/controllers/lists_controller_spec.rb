@@ -16,7 +16,6 @@ describe ListsController do
       @list = List.last
       expect(List.count).to eq(1)
       expect(@list.title).to eq('test')
-      expect(response).to redirect_to(list_path(@list))
     end
 
     it "attempts to create a list with no user" do
@@ -31,7 +30,6 @@ describe ListsController do
       @list = create(:list, user: @user)
       put :update, id: @list.id, list: { title: 'I\'ve been updated', user:@user }
       @list.reload
-      expect(response).to redirect_to(list_path(@list))
       expect(@list.title).to eq('I\'ve been updated')
     end
 
