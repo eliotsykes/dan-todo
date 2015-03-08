@@ -1,9 +1,9 @@
 require 'rails_helper'
 
-describe "Create Comment" do
+describe "Create and Destroy Comment" do
 
   describe "successful" do
-    it "Signs the user up, logs the user in, and checks the users name after login" do
+    it "Signs the user up, in, makes a list, then adds and deletes an Item through BDD" do
       user = create(:user)
       list = create(:list, user: user)
       visit root_path
@@ -20,6 +20,23 @@ describe "Create Comment" do
 
       expect(current_path).to eq user_path(user)
       expect(page).to have_content "List Title"
+
+      within 'body' do
+        click_link 'List Title'
+      end
+
+      within 'form' do
+        fill_in 'item_name', with: 'New Item'
+        click_button 'Add'
+      end
+
+      expect(page).to have_content "New Item"
+
+      within '#item-1' do
+        click_link 'Delete'
+      end
+
+      expect(page).not_to have_content "New Item"
 
     end
   end
