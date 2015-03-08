@@ -30,7 +30,7 @@ class ListsController < ApplicationController
 
     if @list.save
       flash[:notice] = "List was saved."
-      redirect_to user_lists_path
+      redirect_to lists_path
     else
       flash[:error] = "There was an error saving the list. Please try again."
       render :new
