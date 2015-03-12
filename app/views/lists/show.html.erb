@@ -1,3 +1,20 @@
-<%= @list.title %>
-<%= render partial: 'items/form' %>
-<%= render partial: 'items/item' %>
+<div class="container">
+  <div class="row">
+    <div class="col-lg-12">
+      <%= link_to '<-- Back', lists_path(@user) %>
+    </div>
+  </div>
+  <h1><%= @list.title %></h1>
+  <div class="row">
+    <div class="new-item">
+      <%= render partial: 'items/form' %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="js-items">
+        <%= render partial: 'items/item' %>
+      </div>
+    </div>
+  </div>
+</div>

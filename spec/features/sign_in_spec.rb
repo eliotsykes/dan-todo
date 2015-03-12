@@ -18,7 +18,7 @@ describe "Sign in flow" do
       end
 
       expect(current_path).to eq user_path(user)
-      expect(page).to have_content "Your E-mail is: #{ user.email }"
+      expect(page).to have_content "Current User: #{ user.email }"
 
     end
   end

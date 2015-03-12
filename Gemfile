@@ -17,6 +17,7 @@ group :test do
   gem 'database_cleaner'
   gem 'factory_girl_rails'
   gem 'capybara'
+  gem 'selenium-webdriver'
 end
 
 gem 'rails', '4.2.0'
@@ -30,7 +31,7 @@ gem 'sdoc', '~> 0.4.0',          group: :doc
 gem 'spring',        group: :development
 gem 'bootstrap-sass'
 gem 'simple_form'
-
+gem "font-awesome-rails"
 
 gem 'figaro', '1.0'
 gem 'faker'

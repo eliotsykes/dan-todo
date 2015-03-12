@@ -1,5 +1,5 @@
 <% @items.each do |item| %>
-  <%= content_tag :div, class: 'media', id: "item-#{item.id}" do %>
-      <%= item.name %>
-  <% end %>
+  <div id="item-<%= item.id %>" class="item">
+    <%= item.name %> | <%= link_to "Delete", [item.list, item], class: 'fa fa-trash-o', method: :delete, remote: true %>
+  </div>
 <% end %>
