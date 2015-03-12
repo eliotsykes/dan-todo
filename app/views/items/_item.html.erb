@@ -1,5 +1,5 @@
 <% @items.each do |item| %>
-      <div id="item-<%= item.id %>">
-        <%= item.name %> | <%= link_to "Delete", [item.list, item], class: 'fa fa-trash-o', method: :delete, remote: true %>
-      </div>
+  <div id="item-<%= item.id %>" class="item">
+    <%= item.name %> | <%= link_to "Delete", [item.list, item], class: 'fa fa-trash-o', method: :delete, remote: true %>
+  </div>
 <% end %>

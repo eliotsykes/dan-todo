@@ -1,24 +1,26 @@
 require 'rails_helper'
 
-describe "Create and Destroy Comment" do
+describe "Takes a user through signing up, making a list, creating an item, and destroying it." do
 
-  describe "successful" do
-    it "Signs the user up, in, makes a list, then adds and deletes an Item through BDD" do
-      user = create(:user)
-      list = create(:list, user: user)
+  describe "A successful run through." do
+    it "Creates and destroys and item with AJAX.", js: true do
+      @user = create(:user)
+      @user.skip_confirmation!
+      @user.save!
+      list = create(:list, user: @user)
       visit root_path
 
       within '.navbar-right' do
         click_link 'Sign In'
       end
-      fill_in 'Email', with: user.email
-      fill_in 'Password', with: user.password
+      fill_in 'Email', with: @user.email
+      fill_in 'Password', with: @user.password
 
       within 'form' do
         click_button 'Sign in'
       end
 
-      expect(current_path).to eq user_path(user)
+      expect(current_path).to eq user_path(@user)
       expect(page).to have_content "List Title"
 
       within 'body' do
@@ -32,7 +34,7 @@ describe "Create and Destroy Comment" do
 
       expect(page).to have_content "New Item"
 
-      within '#item-1' do
+      within '.item' do
         click_link 'Delete'
       end
 
