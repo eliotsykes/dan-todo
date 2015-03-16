@@ -1,5 +1,5 @@
 require 'rails_helper'
-
+require 'support/database_cleaner'
 
 describe ListsController do
 
@@ -12,7 +12,7 @@ describe ListsController do
 
   describe '#create' do
     it "creates a list and checks it's title" do
-      post :create, list: { title: 'test', user_id: @user }
+      post :create, list: { title: 'test'}
       list = List.last
       expect(List.count).to eq(1)
       expect(list.title).to eq('test')
