@@ -4,7 +4,7 @@ class ItemsController < ApplicationController
 
   def create
     @list = List.find(params[:list_id])
-    @items = @list.items.order(created_at: :desc)
+    @items = @list.items
 
     @item = @list.items.build(item_params)
     @item.list = @list

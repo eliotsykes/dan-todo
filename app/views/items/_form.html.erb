@@ -1,4 +1,4 @@
-<%= simple_form_for [@list, @list.items.build], html: { class: 'form-horizontal' }, remote: true do |f| %>
+<%= simple_form_for [@list, @list.items.build], html: { class: 'form-horizontal' }, remote: true, format: :js do |f| %>
   <div class="col-lg-6">
     <%= f.input :name, label: false, placeholder: "Add a New Item", as: :string %>
   </div>
