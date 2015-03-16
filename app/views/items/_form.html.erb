@@ -1,8 +1,10 @@
-<%= simple_form_for [@list, @list.items.build], html: { class: 'form-horizontal' }, remote: true, format: :js do |f| %>
-  <div class="col-lg-6">
-    <%= f.input :name, label: false, placeholder: "Add a New Item", as: :string %>
-  </div>
-  <div class="col-lg-6">
-    <%= f.submit 'Add' , class: 'btn btn-success' %>
+<%= simple_form_for [@list, @list.items.build], html: { class: 'inline-form' }, remote: true, format: :js do |f| %>
+  <div class="input-group">
+      <%= f.input :name, label: false, placeholder: "Add a New Item", class: "form-control", as: :string %>
+    <span class="input-group-btn">
+      <%= button_tag(type: 'submit', class: "btn btn-success") do %>
+        <i class="fa fa-plus"></i> Add
+      <% end %>
+    </span>
   </div>
 <% end %>
