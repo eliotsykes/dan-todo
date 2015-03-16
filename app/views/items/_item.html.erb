@@ -1,5 +1,10 @@
-<% @items.each do |item| %>
-  <div id="item-<%= item.id %>" class="item">
-    <%= item.name %> | <%= item.days_left %> Days Left | <%= link_to "Delete", [item.list, item], class: 'fa fa-trash-o', method: :delete, remote: true %>
-  </div>
-<% end %>
+<tr>
+  <td><%= item.name %></td>
+  <td><%= item.days_left %></td>
+  <td><%= link_to "Delete", [item.list, item], class: 'fa fa-trash-o', method: :delete, remote: true %></td>
+</tr>
+
+
+
+
+
