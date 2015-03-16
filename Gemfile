@@ -32,6 +32,7 @@ gem 'spring',        group: :development
 gem 'bootstrap-sass'
 gem 'simple_form'
 gem "font-awesome-rails"
+gem 'whenever', :require => false
 
 gem 'figaro', '1.0'
 gem 'faker'
