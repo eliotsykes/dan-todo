@@ -1,5 +1,4 @@
 namespace :todo do
-  desc "TODO"
   desc "Delete items older than seven days"
 
   task delete_items: :environment do
