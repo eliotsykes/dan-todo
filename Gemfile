@@ -18,6 +18,7 @@ group :test do
   gem 'factory_girl_rails'
   gem 'capybara'
   gem 'selenium-webdriver'
+  gem 'timecop'
 end
 
 gem 'rails', '4.2.0'

@@ -6,10 +6,10 @@ RSpec.describe "Todo Rake", :type => :task do
 
     before do
       # Freeze time as task is time-sensitive
-      travel_to Time.now
+      Timecop.freeze(Time.now)
     end
 
-    after { travel_back }
+    after { Timecop.return }
 
     it "leaves items of age 7 days or younger" do
       not_overdue = create(:item, created_at: 0.days.ago)
