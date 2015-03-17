@@ -25,7 +25,7 @@
             <tr id="item-<%= item.id %>">
               <td><%= item.name %></td>
               <td><%= item.days_left %></td>
-              <td><%= link_to "Delete", [item.list, item], class: 'fa fa-trash-o', method: :delete, remote: true %></td>
+              <td><%= link_to "Delete", [item.list, item],class: 'fa fa-trash-o', method: :delete, remote: true %></td>
             </tr>
           <% end %>
         </tbody>
