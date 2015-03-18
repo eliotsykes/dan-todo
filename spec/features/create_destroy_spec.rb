@@ -34,11 +34,7 @@ describe "Takes a user through signing up, making a list, creating an item, and 
 
       expect(page).to have_content "New Item"
 
-      within '.item' do
-        click_link 'Delete'
-      end
-
-      expect(page).not_to have_content "New Item"
+      expect { find(:xpath, "//tr[td[contains(.,'Delete')]]/td/a", :text => 'Delete').click }.to change(Item, :count).by(-1)
 
     end
   end
