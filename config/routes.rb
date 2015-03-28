@@ -7,5 +7,11 @@ Rails.application.routes.draw do
     resources :items, only: [:create, :destroy]
   end
 
+  namespace :api do
+    namespace :v1 do
+      resources :events
+    end
+  end
+
   root to: 'welcome#index'
 end
