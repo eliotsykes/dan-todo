@@ -4,8 +4,9 @@ class Api::V1::ListsController < Api::ApiController
   before_action :authenticate
 
   def index
-    @lists = @user.lists
-    respond_with @lists
+    # @lists = @user.lists
+    # respond_with @lists
+    render json: @user.lists
   end
 
 end
