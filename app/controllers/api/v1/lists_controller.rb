@@ -14,7 +14,7 @@ class Api::V1::ListsController < Api::ApiController
   def create
     @list = @user.lists.new(list_params)
     if @list.save
-      respond_with @list
+      render json: @list
     end
   end
 
