@@ -5,7 +5,7 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   has_many :lists
-  validates :api_key, uniqueness: true
+#   validates :token, uniqueness: true
 
   before_create do |doc|
     doc.api_key = doc.generate_api_key
