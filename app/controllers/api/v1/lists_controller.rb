@@ -12,7 +12,7 @@ class Api::V1::ListsController < Api::ApiController
   end
 
   def create
-    @list = List.new(list_params)
+    @list = @user.lists.new(list_params)
     if @list.save
       respond_with @list
     end
