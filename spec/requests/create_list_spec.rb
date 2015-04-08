@@ -8,7 +8,7 @@ describe 'view lists api' do
     list1 = create(:list, :title => 'List 1', :user => user)
     list2 = create(:list, :title => 'List 2', :user => user)
 
-    get "/api/v1/lists", {}, "X-Api-Key" => api_key
+    get "/api/v1/lists", {}, "Authorization" => "Token token=#{api_key}"
 
     expect(response.status).to eq(200)
     expect(response.content_type).to eq("application/json")
