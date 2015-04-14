@@ -8,7 +8,7 @@ describe 'create list api' do
 
     post "/api/v1/lists", {"list" => {"title" => "List 1"}}, "X-Api-Key" => api_key
 
-    expect(response.status).to eq(201)
+    expect(response.status).to eq(200)
     expect(response.content_type).to eq("application/json")
     json = JSON.parse(response.body, symbolize_names: true)
     expect(List.last.title).to eq("List 1")
