@@ -6,9 +6,10 @@ class User < ActiveRecord::Base
 
   has_many :lists
   validates :api_key, uniqueness: true
+  before_create :assign_key
 
-  before_create do |doc|
-    doc.api_key = doc.generate_api_key
+  def assign_key
+    self.api_key = self.generate_api_key
   end
 
   def admin?
