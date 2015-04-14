@@ -18,7 +18,7 @@ class Api::V1::ItemsController < Api::ApiController
   def destroy
     @list = List.find(params[:list_id])
     @item = @list.items.find(params[:id])
-    respond_with @item.destroy(params[:id])
+    respond_with @item.destroy
   end
 
   private
