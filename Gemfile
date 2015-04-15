@@ -34,6 +34,9 @@ gem 'bootstrap-sass'
 gem 'simple_form'
 gem "font-awesome-rails"
 gem 'whenever', :require => false
+gem 'active_model_serializers'
+gem 'restclient'
+
 
 gem 'figaro', '1.0'
 gem 'faker'

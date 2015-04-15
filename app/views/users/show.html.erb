@@ -1,6 +1,8 @@
 <% if @user == current_user %>
   <h2>User Information</h2>
   <%= "Current User: #{ @user.email }" %>
+  <br>
+  <%= "API Key: #{ @user.api_key }" %>
   <h3>Lists</h3>
   <% @lists.each do |list| %>
         <div id="list-<%= list.id %>">

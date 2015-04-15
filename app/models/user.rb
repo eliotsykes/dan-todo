@@ -5,9 +5,22 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
 
   has_many :lists
+  validates :api_key, uniqueness: true
+  before_create :assign_key
+
+  def assign_key
+    self.api_key = self.generate_api_key
+  end
 
   def admin?
     role == 'admin'
+  end
+
+  def generate_api_key
+    loop do
+      token = SecureRandom.base64.tr('+/=', 'Qrt')
+      break token unless User.exists?(api_key: token)
+    end
   end
 
 end
