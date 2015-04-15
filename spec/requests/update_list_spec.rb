@@ -1,7 +1,7 @@
 require 'rails_helper'
 
-describe 'view lists api' do
-  it 'shows all lists' do
+describe 'update lists api' do
+  it 'updates a list' do
 
     user = create(:user)
     api_key = user.api_key

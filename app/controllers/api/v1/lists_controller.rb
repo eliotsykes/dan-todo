@@ -1,8 +1,6 @@
 class Api::V1::ListsController < Api::ApiController
   respond_to :json
 
-  before_action :authenticate
-
   def index
     render json: @user.lists
   end
@@ -19,11 +17,11 @@ class Api::V1::ListsController < Api::ApiController
   end
 
   def update
-    respond_with List.find(params[:id]).update_attributes(list_params)
+    respond_with current_user.lists.find(params[:id]).update_attributes(list_params)
   end
 
   def destroy
-    respond_with List.destroy(params[:id])
+    respond_with current_user.lists.destroy(params[:id])
   end
 
   private

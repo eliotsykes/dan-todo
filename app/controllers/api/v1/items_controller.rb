@@ -1,11 +1,9 @@
 class Api::V1::ItemsController < Api::ApiController
   respond_to :json
 
-  before_action :authenticate
-
   def create
 
-    @list = List.find(params[:list_id])
+    @list = current_user.lists.find(params[:list_id])
     @items = @list.items
     @item = @list.items.build(item_params)
     @item.list = @list
@@ -16,7 +14,7 @@ class Api::V1::ItemsController < Api::ApiController
   end
 
   def destroy
-    @list = List.find(params[:list_id])
+    @list = current_user.lists.find(params[:list_id])
     @item = @list.items.find(params[:id])
     respond_with @item.destroy
   end

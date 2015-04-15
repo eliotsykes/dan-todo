@@ -11,6 +11,7 @@ describe 'create list api' do
     expect(response.status).to eq(200)
     expect(response.content_type).to eq("application/json")
     json = JSON.parse(response.body, symbolize_names: true)
+    expect(json[:title]).to eq("List 1")
     expect(List.last.title).to eq("List 1")
     expect(List.last.user).to eq(user)
   end

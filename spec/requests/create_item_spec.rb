@@ -12,6 +12,7 @@ describe 'create list item api' do
     expect(response.status).to eq(200)
     expect(response.content_type).to eq("application/json")
     json = JSON.parse(response.body, symbolize_names: true)
+    expect(json[:name]).to eq("item 1")
     expect(Item.last.name).to eq("item 1")
   end
 end
