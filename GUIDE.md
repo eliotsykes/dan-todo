@@ -29,7 +29,7 @@ Create `public/index.html` with some intentionally simple content. For example:
 </html>
 ```
 
-Run `bin/rails s`, visit http://localhost:3000 and check you see `public/index.html`.
+Run `bin/rails s`, visit [http://localhost:3000] and check you see `public/index.html`.
 
 It may not seem like much now, but this HTML page is where your app begins. You'll add features soon, but first you're getting this app on to your phone.
 
@@ -75,9 +75,9 @@ ln -s ../../../public/index.html client/wrap/www/index.html
 
 Install the PhoneGap Developer app on a phone or tablet that you have connected to the same Wi-Fi network that your computer is connected to. This phone/tablet is the first device you will test your app on. The PhoneGap Developer app can be installed free from the major app stores and is made by Adobe:
 
-[Apple App Store (iOS) - install PhoneGap Developer](https://itunes.apple.com/app/id843536693)
-[Google Play (Android) - install PhoneGap Developer](https://play.google.com/store/apps/details?id=com.adobe.phonegap.app)
-[Windows Phone Store - install PhoneGap Developer](http://www.windowsphone.com/en-us/store/app/phonegap-developer/5c6a2d1e-4fad-4bf8-aaf7-71380cc84fe3)
+- [Apple App Store (iOS) - install PhoneGap Developer](https://itunes.apple.com/app/id843536693)
+- [Google Play (Android) - install PhoneGap Developer](https://play.google.com/store/apps/details?id=com.adobe.phonegap.app)
+- [Windows Phone Store - install PhoneGap Developer](http://www.windowsphone.com/en-us/store/app/phonegap-developer/5c6a2d1e-4fad-4bf8-aaf7-71380cc84fe3)
 
 To see our own app on the device, startup the PhoneGap server from the command line. Pay special attention to the the IP address and port number output, you'll be needing this shortly:
 
