@@ -29,7 +29,7 @@ Create `public/index.html` with some intentionally simple content. For example:
 </html>
 ```
 
-Run `bin/rails s`, visit [http://localhost:3000] and check you see `public/index.html`.
+Run `bin/rails s`, visit [http://localhost:3000](http://localhost:3000) and check you see `public/index.html`.
 
 It may not seem like much now, but this HTML page is where your app begins. You'll add features soon, but first you're getting this app on to your phone.
 
