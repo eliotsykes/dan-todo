@@ -195,8 +195,48 @@ One app installation is complete, open the app, and check it looks as you expect
 ## TODO: Install `.ipa` file on iOS
 
 
-## Coming Next...
+### Coming Next...
 
 Now you've setup a workflow for developing your app for real devices, we can begin work on replacing the static `index.html` app with a full featured application that works as an installable app **and** as a good old web app in any browser.
 
+## Ember and how to make a good enough choice of framework
 
+[Ember](http://emberjs.com/) is an established, open-source JavaScript framework that has been influenced in its design and community philosophy by Rails. Many Ember contributors and users use Rails as their backend of choice, paired with an Ember frontend (Ember may also be used with non-Rails backends).
+
+Ember favors convention over configuration. This means that you don't have to think hard about where to put a new script, stylesheet, or other asset. 
+
+In Rails there are directories for configuration code, models, controllers, views, and so on. Rails developers know where to put a new model, it goes in the `app/models` directory. Similarly, Ember has directories and conventions to help you organize your codebase and make it less likely your brain blows a fuse when jumping between projects that use the same framework.
+
+Ember provides a command line interface known as [Ember CLI](http://www.ember-cli.com/) that is invoked on the command line as `ember`. When developing Ember applications, you tend to use the `ember` command in ways that are similar to how you use the `rails` command.
+
+Thankfully -- as it creates a thriving, evolving JavaScript ecosystem -- not all developers will agree with what I'm about to write and that's okay. 
+
+I feel Ember is a good default choice JavaScript framework for most Rails web applications that also want to distribute apps in the app stores across all of the PhoneGap-supported operating systems. Ember will allow us to reuse and share templates throughout our app. Ember CLI will keep us from having to write many, if any, command line tools.
+
+I think it is rare that Ember will be a *bad* choice when choosing a JavaScript framework for an app store capable Rails app. However, that doesn't mean it is always the *best* choice. I strongly recommend you consider experimenting with other JavaScript libraries when choosing your own application architecture and take into account your own requirements. Other frameworks to consider include: AngularJS, Ionic, and React.
+
+When making your choice of framework, here are some guidelines and considerations that may prove helpful:
+
+- Do you need to run a web app and app store apps?
+- Which of the app stores does your app need to be in now and in the future? Does the framework support all of these platforms?
+- Is server-side rendering important? This can be important for:
+  - Search engine indexing
+  - SEO
+  - Low "start render" time (affects user-perceived performance and can be an important factor in conversion rate optimization for ecommerce)
+  - Progressive enhancement
+- Do the phone/tablet apps need to use the same view templates as the web app or is it acceptable to maintain two sets of templates, one set for the device apps, and one set for the web app?
+- How much experience do you and/or your teammates have with the framework?
+- Does the framework have good documentation and training resources?
+- How much experience do developers in your hiring pool have with the framework? Can you afford time to train developers in the ways of the framework?
+- How organized are your current frontend JavaScript codebases? Would you want the framework to provide conventions for organizing your files and assets?
+- Do you want the framework to have testing support baked in?
+- Are other teams and businesses successfully and happily using the framework in existing applications that are similar to what you're working on?
+
+
+Take mine and other developer's claims about frameworks with a pinch of salt. Be especially wary of developers claiming their framework is the one-framework-to-rule-them-all. 
+
+Each framework has its own advantages and disadvantages that vary depending on your unique requirements. Make time to do good research. Try frameworks out. Prototype. Make your own objective decision. Taking time up-front will likely save you time in the long run by helping you make an informed choice.
+
+### Coming Next...
+
+We'll setup Ember on your computer and create a new application inside the `your-rails-app/client` directory using Ember CLI.
