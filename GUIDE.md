@@ -240,3 +240,29 @@ Each framework has its own advantages and disadvantages that vary depending on y
 ### Coming Next...
 
 We'll setup Ember on your computer and create a new application inside the `your-rails-app/client` directory using Ember CLI.
+
+
+## How to install Ember
+
+If you've never installed Ember before:
+```bash
+# Install Ember CLI. The -g option makes
+# the `ember` command available globally:
+npm install -g ember-cli
+```
+
+Otherwise and **only** if you've previously installed Ember, then follow these instructions (original source: https://github.com/ember-cli/ember-cli/releases):
+```bash
+# Remove old global ember-cli:
+npm uninstall -g ember-cli
+
+# Clear NPM cache:
+npm cache clean
+
+# Clear Bower cache:
+bower cache clean
+
+# Install new global ember-cli:
+npm install -g ember-cli
+```
+
