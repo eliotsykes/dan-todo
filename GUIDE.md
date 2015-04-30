@@ -266,3 +266,33 @@ bower cache clean
 npm install -g ember-cli
 ```
 
+
+## Creating a New Ember Application
+
+You're about to create the Ember app using the `ember init` command:
+
+```bash
+# Be in the client/ directory:
+cd my-rails-app/client
+
+# Initialize a new ember application in the current directory,
+# and feel free to change the application name from todos:
+ember init --name todos
+```
+
+Once `ember init ...` has completed (it may take a while), it's a good idea to check that the ember app and environment is working okay:
+
+```bash
+# Be in the client/ directory:
+cd my-rails-app/client
+
+# Run Ember server:
+ember s
+```
+
+Once the Ember server is up and running, visit [http://localhost:4200/](http://localhost:4200/) in your browser. If everything is working as expected, you should see a page with the message "Welcome to Ember.js".
+
+Stop the Ember server by pressing `Ctrl+C`.
+
+Add the generated Ember app to your git repository.
+
