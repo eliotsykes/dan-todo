@@ -296,3 +296,69 @@ Stop the Ember server by pressing `Ctrl+C`.
 
 Add the generated Ember app to your git repository.
 
+
+## Ember at the front, Rails at the back
+
+Its time to get our Ember and Rails apps working together in our development environment.
+
+The Rails app is going to be responsible for delivering the Ember application files to the browser and will handle all API requests.
+
+The Ember app is going to be responsible for the frontend and will run in the browser.
+
+To support this in the development environment, you'll run two processes:
+
+1. `rails server` to serve requests for the API coming from the frontend, *and* to deliver the Ember application files to the browser
+2. `ember build` to build your Ember app files into a directory that Rails will serve them from
+
+By default, your Rails app is configured to serve static files, such as `index.html`, from the `public/` directory. Let's configure it to instead serve files from a directory that the Ember application will be built to.
+
+The Ember application will be built into the `client/dist` directory. This is the directory we want to replace the Rails `public/` directory with. Create a new initializer script at `your-rails-app/config/initializers/public_path.rb` with the following contents:
+
+```ruby
+# Set public path to be the Ember-managed client/dist directory:
+Rails.application.config.paths["public"] = File.join("client", "dist")
+```
+
+When we briefly ran the Ember server earlier, Ember built files into the `client/dist` directory. This is normal, but for now, to avoid the distraction of some unimportant logging messages, clear out the current contents of the `client/dist/` directory:
+
+```bash
+# Inside my-rails-app/ directory:
+rm -Rf client/dist/*
+```
+
+Now start a process to do a fresh build of Ember that will automatically and conveniently rebuild any files that are changed while you're developing:
+
+```bash
+# Inside my-rails-app/ directory:
+cd client
+
+# Builds Ember's files to client/dist/ and watches for changes to Ember's files:
+ember build --watch
+```
+
+`ember build --watch` is going to continue running while we develop. Next, open a new Terminal tab and start the Rails server:
+
+```bash
+# In new Terminal tab, inside my-rails-app/ directory
+
+# Start the Rails server:
+bin/rails s
+```
+
+Once `rails s` is running, visit [http://localhost:3000/](http://localhost:3000/) in your browser. You should see a page with the headline "Welcome to Ember.js". This page is being served by your Rails server. The contents of the page are the Ember app. The file for this page is `client/dist/index.html`.
+
+Let's check that changes you make to the Ember app during development are picked up in the browser.
+
+In your editor, open the Ember template located at `client/app/templates/application.hbs`. It will contain the "Welcome to Ember.js" headline. Change this headline text to "Hello World" and save the file.
+
+In the browser, refresh [http://localhost:3000/](http://localhost:3000/), and you should see the "Hello World" headline, which means congratulations, you've successfully put together a working development workflow.
+
+Stop both the Rails server and Ember build processes with `Ctrl+C` in each terminal tab.
+
+Save the changes we've made to your application to your repository.
+
+### Coming Next...
+
+Next we'll save ourselves time and precious keystrokes by using the Foreman gem to manage the `rails s` and `ember build` commands in our development environment.
+
+
