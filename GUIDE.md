@@ -178,7 +178,7 @@ Next, copy the APK file from your computer on to your Android device. Choose the
 - Dropbox or similar cloud storage service
 - Any other method you use for copying files to your Android device
 
-Once the APK is on the device, open the device's File Explorer/Browser app, navigate to where you've saved the APK, and open it. Follow the prompts to install the app on your device (let me know if this doesn't happen).
+Once the APK is on the device, open the device's File Explorer/Browser app, navigate to where you've saved the APK, and open it. Follow the prompts to install the app on your device. (If you're not prompted to install the app, go into your phone settings and enable the option to allow apps from Unknown Sources to be installed).
 
 One app installation is complete, open the app, and check it looks as you expected (there may be a blank screen for a few seconds while the app loads).
 
@@ -224,6 +224,7 @@ When making your choice of framework, here are some guidelines and consideration
   - SEO
   - Low "start render" time (affects user-perceived performance and can be an important factor in conversion rate optimization for ecommerce)
   - Progressive enhancement
+  - Fault tolerance and delivering accessible content under poor network conditions, such as slow and patchy mobile networks
 - Do the phone/tablet apps need to use the same view templates as the web app or is it acceptable to maintain two sets of templates, one set for the device apps, and one set for the web app?
 - How much experience do you and/or your teammates have with the framework?
 - Does the framework have good documentation and training resources?
