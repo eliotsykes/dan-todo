@@ -180,7 +180,7 @@ Next, copy the APK file from your computer on to your Android device. Choose the
 
 Once the APK is on the device, open the device's File Explorer/Browser app, navigate to where you've saved the APK, and open it. Follow the prompts to install the app on your device. (If you're not prompted to install the app, go into your phone settings and enable the option to allow apps from Unknown Sources to be installed).
 
-One app installation is complete, open the app, and check it looks as you expected (there may be a blank screen for a few seconds while the app loads).
+When app installation is complete, open the app, and check it looks as you expected (there may be a blank screen for a few seconds while the app loads).
 
 ### Genymotion Android Emulator Installation (move to Appendix)
 
