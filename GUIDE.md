@@ -363,3 +363,46 @@ Save the changes we've made to your application to your repository.
 Next we'll save ourselves time and precious keystrokes by using the Foreman gem to manage the `rails s` and `ember build` commands in our development environment.
 
 
+## Run multiple processes in one command with Foreman
+
+[Foreman](http://blog.daviddollar.org/2011/05/06/introducing-foreman.html) is the simplest way I've encountered to run the multiple processes that advanced Rails applications often need.
+
+In this particular app, we've got two processes that need managing in our development environment: the `ember build --watch` process, and the `rails s` process.
+
+Foreman is a gem that reads and runs the processes you want managed from a `Procfile`. Each line in the `Procfile` contains a name for a process and the command used to start that process. 
+
+Create `my-rails-app/Procfile` with these contents, which defines two named processes, `rails` and `ember`:
+
+```
+rails: bin/rails server
+ember: cd client && ember build --watch && cd ..
+```
+
+In Terminal, install the foreman gem:
+
+```bash
+gem install foreman
+```
+
+Finally, run the `foreman start` command (or `foreman s` for short) to get Foreman running your `ember` and `rails` processes:
+
+```bash
+foreman s
+```
+
+Lets check this is working correctly. Visit [http://localhost:3000/](http://localhost:3000/) and check you see the "Hello World" headline from the Ember app.
+
+From now on, you'll be mostly using `foreman s` to run your app while you develop it. The idea is this is simpler to remember and faster to type than if we tried to manage the two `rails` and `ember` processes separately in their own Terminal tabs. If we bring other developers on board it should also make it more straightforward for them to get the app up and running on their machine.
+
+Quit foreman and its managed processes with `Ctrl+C`.
+
+Now might be a good opportunity to briefly document `gem install foreman` and `foreman s` in your application's README.
+
+
+### Coming Next...
+
+Since introducing Ember into our application, we've got our Rails development environment up and running to work with it successfully and simply thanks to Foreman. 
+
+There's a little more re-organization and re-configuration of our application to do so it'll work everywhere we need it to, including on Heroku and as a PhoneGap app.
+
+
