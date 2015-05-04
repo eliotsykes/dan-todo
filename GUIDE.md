@@ -61,11 +61,11 @@ phonegap create client/wrap --id "com.appsfromdan.todo" --name "My Todos"
 
 This will create a few directories in `client/wrap`, including a `www` directory.
 
-The `www` directory is where PhoneGap expects to find `index.html`. PhoneGap has generated a default `index.html` in that location, but we won't be using that, so we can safely remove it:
+The `www` directory is where PhoneGap expects to find `index.html`. PhoneGap has generated a default `index.html` in that location, but we won't be using that just yet, so we can safely rename it to clearly identify it as the PhoneGap-generated version of `index.html`:
 
 ```bash
 # Inside my-rails-app/ directory:
-rm client/wrap/www/index.html
+mv client/wrap/www/index.html client/wrap/www/index.phonegap.html
 ```
 
 Now create a symlink to your `public/index.html`:
