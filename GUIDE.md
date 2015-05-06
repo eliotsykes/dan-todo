@@ -61,11 +61,11 @@ phonegap create client/wrap --id "com.appsfromdan.todo" --name "My Todos"
 
 This will create a few directories in `client/wrap`, including a `www` directory.
 
-The `www` directory is where PhoneGap expects to find `index.html`. PhoneGap has generated a default `index.html` in that location, but we won't be using that, so we can safely remove it:
+The `www` directory is where PhoneGap expects to find `index.html`. PhoneGap has generated a default `index.html` in that location, but we won't be using that just yet, so we can safely rename it to clearly identify it as the PhoneGap-generated version of `index.html`:
 
 ```bash
 # Inside my-rails-app/ directory:
-rm client/wrap/www/index.html
+mv client/wrap/www/index.html client/wrap/www/index.phonegap.html
 ```
 
 Now create a symlink to your `public/index.html`:
@@ -399,10 +399,40 @@ Quit foreman and its managed processes with `Ctrl+C`.
 Now might be a good opportunity to briefly document `gem install foreman` and `foreman s` in your application's README.
 
 
-### Coming Next...
+## Move `index.html` to Ember
 
-Since introducing Ember into our application, we've got our Rails development environment up and running to work with it successfully and simply thanks to Foreman. 
+Now's almost a good time to move the code out of `public/index.html` and make it part of the Ember app under `client/`. First let's touch on how Ember organizes its HTML.
 
-There's a little more re-organization and re-configuration of our application to do so it'll work everywhere we need it to, including on Heroku and as a PhoneGap app.
+The Ember app has its own `index.html` at `client/app/index.html`. We're not going to change this for a while, but it's good to take a look at it so you can get more familiar with how Ember renders HTML.
+
+In `client/app/index.html`, you'll see the structure for an HTML document, including the `<html>`, `<head>`, and `<body>` elements. This `index.html` is the file Ember uses as its layout for all of its views. The Ember view templates you write will ultimately end up rendered inside this skeleton HTML structure, usually in the `{{content-for 'body'}}` section.
+
+When using the Ember app in your browser, the `{{content-for 'body'}}` section is dynamically replaced with the contents of `client/app/templates/appliation.hbs`. 
+
+The `.hbs` file extension denotes a Handlebars template. Note the exception that `client/app/index.html` is also a Handlebars template although it doesn't have the `.hbs` file extension.
+
+Handlebars templates look like HTML with snippets wrapped in double braces, e.g. `{{title}}` and `{{content-for 'body'}}`. These double brace snippets are known as "handlebar expressions".
+
+Replace the `<h2>` title element in `client/app/templates/application.hbs` with the content from *inside* the `<body>` tag of `public/index.html`.
+
+Be sure to *keep* the `{{outlet}}` handlebars expression at the end of `application.hbs`. `application.hbs` should now look like this:
+
+```html
+<h1>TODOS</h1>
+<ul>
+  <li>Get more milk</li>
+  <li>Read book</li>
+  <li>Find tickets</li>
+</ul>
+<button onclick="alert('Thank You!');">Press Me</button>
+
+{{outlet}}
+```
+
+Delete `public/index.html`.
+
+Run `foreman s` inside the `my-rails-app/` directory, and visit [http://localhost:3000](http://localhost:3000) to check you see these changes.
+
+Press `Ctrl+C` to stop the Foreman processes.
 
 
