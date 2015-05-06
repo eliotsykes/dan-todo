@@ -1,6 +1,13 @@
 Work in progress
 ----------------
 
+
+### Coming Next...
+
+Since introducing Ember into our application, we've got our Rails development environment up and running to work with it successfully and simply thanks to Foreman. 
+
+There's a little more re-organization and re-configuration of our application to do so it'll work everywhere we need it to, including on Heroku and as a PhoneGap app.
+
 # Preparing for Production
 
 

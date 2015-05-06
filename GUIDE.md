@@ -399,10 +399,6 @@ Quit foreman and its managed processes with `Ctrl+C`.
 Now might be a good opportunity to briefly document `gem install foreman` and `foreman s` in your application's README.
 
 
-### Coming Next...
 
-Since introducing Ember into our application, we've got our Rails development environment up and running to work with it successfully and simply thanks to Foreman. 
-
-There's a little more re-organization and re-configuration of our application to do so it'll work everywhere we need it to, including on Heroku and as a PhoneGap app.
 
 
