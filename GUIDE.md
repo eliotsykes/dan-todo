@@ -496,7 +496,7 @@ Look for output like this from `foreman s` to identify the IP address and port n
 16:51:38 phonegap.1 | [phonegap] listening on XXX.XXX.XXX.XXX:4000
 ```
 
-Open the PhoneGap Developer app on your test device and enter the IP address and port number output by your Foreman `phonegap` process, and click the Connect button. Everything is working correct if you see the Ember app on your test device inside the PhoneGap Developer app.
+Open the PhoneGap Developer app on your test device and enter the IP address and port number output by your Foreman `phonegap` process, and click the Connect button. Everything is working correctly if you see the Ember app on your test device inside the PhoneGap Developer app.
 
 
 ### Coming Next...PhoneGap Build and Test
