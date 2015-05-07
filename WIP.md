@@ -1,12 +1,39 @@
 Work in progress
 ----------------
 
+Next Build APK from client/dist with ember build -prod
+and validate phonegap build app working
 
-### Coming Next...
+- Get heroku working
+  - build assets on deploy? rake asset:precompile override?
 
-Since introducing Ember into our application, we've got our Rails development environment up and running to work with it successfully and simply thanks to Foreman. 
 
-There's a little more re-organization and re-configuration of our application to do so it'll work everywhere we need it to, including on Heroku and as a PhoneGap app.
+---
+
+```bash
+cd client && ember build --environment production --output-path dist/pgb && cd -
+cd client/dist/pgb && zip -r pgb.zip . && cd -
+```
+
+---
+
+`bin/ember` and/or `bin/phonegap` scripts? Useful or not enough of a case given Foreman processes?
+
+---
+
+Improve performance of `ember build --watch`? Could not find watchman, falling back to NodeWatcher for file system events. Visit http://www.ember-cli.com/#watchman for more info.
+
+---
+
+Use `bundle exec` vs `bin/rails` vs `rails` on Windows? Generate binstubs on Windows?
+
+---
+
+- Use LiveReload with PhoneGap developer app and with Rails server. Use Ember's LiveReload for both and pass `--no-autoreload` option to `phonegap serve`?
+
+- Is `phonegap serve` needed? Can `rails server` do the same job?
+
+---
 
 # Preparing for Production
 
@@ -77,20 +104,3 @@ Ember's default configuration has the assets generated in the `dist/` directory 
 
 
 
-
----
-
-```bash
-cd client && ember build --environment production --output-path dist/pgb && cd -
-cd client/dist/pgb && zip -r pgb.zip . && cd -
-```
-
----
-
-`bin/ember` script?
-
----
-
-Improve performance of `ember build --watch`? Could not find watchman, falling back to NodeWatcher for file system events. Visit http://www.ember-cli.com/#watchman for more info.
-
----

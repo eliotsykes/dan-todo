@@ -472,3 +472,32 @@ ln -s ../dist www
 Check the symlink created successfully, open `client/wrap/www/index.html` and check its the same as the file at `client/dist/index.html`.
 
 
+### Manage `phonegap serve` with Foreman
+
+Edit your `Procfile` so it looks like this:
+
+```
+rails: bin/rails server --port 3000
+ember: cd client && ember build --watch && cd ..
+phonegap: cd client/wrap && phonegap serve --port 4000 && cd ../..
+```
+
+Foreman will now manage a third process for us, the `phonegap serve ...` process.
+
+In `Procfile` we specify port numbers for the `rails` and `phonegap` processes. We've done this as both processes conflict if we don't as they both try to use port 3000.
+
+Now run `foreman s` and we'll check the server processes are working as expected.
+
+Visit [http://localhost:3000](http://localhost:3000) in your web browser and check you see the Ember app. This proves the `rails` process is still working correctly.
+
+Look for output like this from `foreman s` to identify the IP address and port number you'll input into your PhoneGap Developer app on your test device:
+
+```
+16:51:38 phonegap.1 | [phonegap] listening on XXX.XXX.XXX.XXX:4000
+```
+
+Open the PhoneGap Developer app on your test device and enter the IP address and port number output by your Foreman `phonegap` process, and click the Connect button. Everything is working correct if you see the Ember app on your test device inside the PhoneGap Developer app.
+
+
+### Coming Next...PhoneGap Build and Test
+
