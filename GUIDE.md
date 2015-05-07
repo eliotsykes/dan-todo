@@ -436,3 +436,36 @@ Run `foreman s` inside the `my-rails-app/` directory, and visit [http://localhos
 Press `Ctrl+C` to stop the Foreman processes.
 
 
+## Configuring Ember and PhoneGap
+
+Since introducing Ember into our application, we've got our Rails development environment up and running to work with it successfully and simply thanks to Foreman.
+
+There's a little more re-organization and configuration of our application to do so it'll work as a PhoneGap app.
+
+### Ember Router `locationType`
+
+The Ember Router is responsible for routing client-side URLs to execute the right part of the Ember app. It might help to think of it as having a similar responsibility to Rails` server-side routing and `routes.rb` file.
+
+The Ember Router is configured with a `locationType` which can be one of: `auto`, `hash`, `history`, and `none`. The chosen option alters how URLs appear in the address bar and what browser API is used to manipulate the current URL.
+
+The `auto` option tries to pick the most appropriate option out of the other options, based on the capabilities of the browser.
+
+`history` is used if the browser supports the [JavaScript History API](https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/Manipulating_the_browser_history).
+
+`hash` depends on the `hashchange` event and using hashes in the URL. The `hash` option is used as a fallback when the browser doesn't support the History API.
+
+When compiled PhoneGap apps run, `index.html` isn't served over the `http:` protocol as is usual with HTML pages in a web browser environment. Instead `index.html` is served off the local filesystem of the device, which means the protocol is `file:` not `http:`. You can see this protocol in use in your own browser if you open any HTML file on your computer using the `File > Open` menu.
+
+The History API isn't supported with pages served over the `file:` protocol. For our Ember app to work in the PhoneGap environment, it needs to use the `hash` `location` configuration option.
+
+Open `client/config/environment.js` and change the `locationType` option from `auto` to `hash`:
+
+```javascript
+    ...
+    // 'history' locationType not supported in compiled PhoneGap apps, use 'hash':
+    locationType: 'hash',
+    ...
+```
+
+
+

@@ -5,7 +5,8 @@ module.exports = function(environment) {
     modulePrefix: 'todos',
     environment: environment,
     baseURL: '/',
-    locationType: 'auto',
+    // 'history' locationType not supported in compiled PhoneGap apps, use 'hash':
+    locationType: 'hash',
     EmberENV: {
       FEATURES: {
         // Here you can enable experimental features on an ember canary build
