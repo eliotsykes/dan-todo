@@ -56,27 +56,10 @@ Create a new PhoneGap app, using `--id` and `--name` options of your choice. For
 
 ```bash
 # Inside my-rails-app/ directory:
-phonegap create client/wrap --id "com.appsfromdan.todo" --name "My Todos"
+phonegap create client/wrap --link-to public --id "com.appsfromdan.todo" --name "My Todos"
 ```
 
-This will create a few directories in `client/wrap`, including a `www` directory.
-
-The `www` directory is where PhoneGap expects to find `index.html`. PhoneGap has generated a default `index.html` in that location, but we won't be using that just yet, so we can safely rename it to clearly identify it as the PhoneGap-generated version of `index.html`:
-
-```bash
-# Inside my-rails-app/ directory:
-mv client/wrap/www/index.html client/wrap/www/index.phonegap.html
-```
-
-Now create a symlink to your `public/index.html`:
-
-
-```bash
-# Inside my-rails-app/ directory:
-ln -s ../../../public/index.html client/wrap/www/index.html
-```
-
-(Check the symlink is correct by trying to open the `client/wrap/www/index.html` file in an editor).
+This will create a few directories in `client/wrap`, including a `www` directory symlink which resolves to the Rails `public/` directory, where PhoneGap expects to find `index.html`.
 
 Install the PhoneGap Developer app on a phone or tablet that you have connected to the same Wi-Fi network that your computer is connected to. This phone/tablet is the first device you will test your app on. The PhoneGap Developer app can be installed free from the major app stores and is made by Adobe:
 
@@ -467,5 +450,25 @@ Open `client/config/environment.js` and change the `locationType` option from `a
     ...
 ```
 
+### Unify PhoneGap and Ember
+
+The PhoneGap `www` directory and Ember `dist` directory are where both frameworks respectively expect to find the `index.html` and other application asset files.
+
+To enable us to easily use the Ember app as our PhoneGap app, we'll make these directories point to the same location with a symlink.
+
+Delete the current `www` and create a symlink to replace it:
+
+```bash
+# Inside my-rails-app/ directory:
+cd client/wrap
+
+# Remove www:
+rm www
+
+# Symlink to Ember's dist directory:
+ln -s ../dist www
+```
+
+Check the symlink created successfully, open `client/wrap/www/index.html` and check its the same as the file at `client/dist/index.html`.
 
 
