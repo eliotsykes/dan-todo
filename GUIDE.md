@@ -427,7 +427,7 @@ There's a little more re-organization and configuration of our application to do
 
 ### Ember Router `locationType`
 
-The Ember Router is responsible for routing client-side URLs to execute the right part of the Ember app. It might help to think of it as having a similar responsibility to Rails` server-side routing and `routes.rb` file.
+The Ember Router is responsible for routing client-side URLs to execute the right part of the Ember app. It might help to think of it as having a similar responsibility to Rails' server-side routing and `routes.rb` file.
 
 The Ember Router is configured with a `locationType` which can be one of: `auto`, `hash`, `history`, and `none`. The chosen option alters how URLs appear in the address bar and what browser API is used to manipulate the current URL.
 
