@@ -439,7 +439,7 @@ The `auto` option tries to pick the most appropriate option out of the other opt
 
 When compiled PhoneGap apps run, `index.html` isn't served over the `http:` protocol as is usual with HTML pages in a web browser environment. Instead `index.html` is served off the local filesystem of the device, which means the protocol is `file:` not `http:`. You can see this protocol in use in your own browser if you open any HTML file on your computer using the `File > Open` menu.
 
-The History API isn't supported with pages served over the `file:` protocol. For our Ember app to work in the PhoneGap environment, it needs to use the `hash` `location` configuration option.
+The History API isn't supported with pages served over the `file:` protocol. For our Ember app to work in the PhoneGap environment, it needs to use `hash` for `locationType`.
 
 Open `client/config/environment.js` and change the `locationType` option from `auto` to `hash`:
 
