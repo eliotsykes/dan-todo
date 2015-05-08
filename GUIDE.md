@@ -499,5 +499,58 @@ Look for output like this from `foreman s` to identify the IP address and port n
 Open the PhoneGap Developer app on your test device and enter the IP address and port number output by your Foreman `phonegap` process, and click the Connect button. Everything is working correctly if you see the Ember app on your test device inside the PhoneGap Developer app.
 
 
-### Coming Next...PhoneGap Build and Test
+### PhoneGap Build and run the Ember app
+
+Ember has multiple environments: `development`, `test`, and `production`.
+
+This is much like Rails, including the ability to configure each environment differently.
+
+We're not about to change this file, but quickly take a look at `client/config/environment.js` so you're familiar with where environment-specific configuration goes in an Ember app. You'll see three if blocks, one for each environment:
+
+```javascript
+  ...
+
+  if (environment === 'development') {
+  
+  ...
+  
+  if (environment === 'test') {
+
+  ...
+
+  if (environment === 'production') {
+
+  ...
+
+```
+
+The web app we upload to the PhoneGap Build server from now on will be built with the Ember `production` environment. This is done by passing the `--environment` flag to `ember build`.
+
+Perform the commands below to create a new zip file to upload to PhoneGap Build.
+
+```bash
+# Inside my-rails-app/ directory:
+cd client
+
+# Build the production app to the dist/ directory:
+ember build --environment production
+
+# Create the zip file of the contents of the dist directory:
+cd dist
+rm ../wrap/phonegap-build-source-app.zip
+zip -r ../wrap/phonegap-build-source-app.zip .
+```
+
+There should now be a zip file at this location inside your Rails app:
+
+```
+# Inside my-rails-app/ directory, check zip file exists here:
+client/wrap/phonegap-build-source-app.zip
+```
+
+Log on to PhoneGap Build, upload this latest zip file (at time of writing this is done by clicking the "Update code" button), and wait for the platform build for your test device to complete.
+
+Once the platform build is complete, download the resulting distribution from PhoneGap Build and install it on your test device as you have done previously, and check the app runs successfully.
+
+
 

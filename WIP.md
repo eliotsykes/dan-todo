@@ -1,23 +1,17 @@
 Work in progress
 ----------------
 
-Next Build APK from client/dist with ember build -prod
-and validate phonegap build app working
 
 - Get heroku working
   - build assets on deploy? rake asset:precompile override?
 
-
----
-
-```bash
-cd client && ember build --environment production --output-path dist/pgb && cd -
-cd client/dist/pgb && zip -r pgb.zip . && cd -
-```
-
 ---
 
 `bin/ember` and/or `bin/phonegap` scripts? Useful or not enough of a case given Foreman processes?
+
+---
+
+Automate zip create and/or upload and/or download with bash script or rake task?
 
 ---
 
