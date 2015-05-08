@@ -553,4 +553,37 @@ Log on to PhoneGap Build, upload this latest zip file (at time of writing this i
 Once the platform build is complete, download the resulting distribution from PhoneGap Build and install it on your test device as you have done previously, and check the app runs successfully.
 
 
+## How to deploy an Ember-Rails app to Heroku
+
+```bash
+heroku create
+```
+
+Setup Heroku buildpack and other tasks as described here: https://github.com/rwz/ember-cli-rails#heroku (Gemify this? rake task that creates .buildpacks etc.?)
+
+Trigger `ember build --environment production` on `git push heroku master`. Perhaps from a redefined `assets:precompile` rake task?
+
+
+
+
+
+Inspired by:
+
+https://github.com/rwz/ember-cli-rails/issues/30#issuecomment-90117556
+
+It seems like ember-cli-rails is for hybrid apps that need some pages rendered in Rails. We decided we could live with no Rails generated pages and were able to eliminate ember-cli-rails. We now have basically this setup:
+
+Disable the asset pipeline in application.rb with config.assets.enabled = false
+Make a symlink from public/assets to frontend/dist/assets
+The root controller action serves frontend/dist/index.html
+Use url('images/logo.png') in SCSS to refer to frontend/public/assets/images/logo.png
+Use ember build --prod instead of rake assets:precompile for production (broccoli-asset-rev works correctly)
+Use ember build -w for development and integration tests (install Watchman, and you might need to stop when you do a git rebase)
+ember-cli-rails was an essential bridge to enable our spike of re-writing our front end with Ember, but the production deployment limitations made it necessary to move on, but the impact on development workflow turns out to be minimal in our situation.
+
+- https://github.com/rwz/ember-cli-rails#heroku
+- https://github.com/rwz/ember-cli-rails/blob/master/lib/tasks/ember-cli.rake#L18
+- https://github.com/rwz/ember-cli-rails/blob/master/lib/ember-cli-rails.rb
+
+
 
