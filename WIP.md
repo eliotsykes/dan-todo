@@ -96,5 +96,10 @@ Ember's default configuration has the assets generated in the `dist/` directory 
 - `dist/production` for the generated **production** assets. These *will be* stored in the git repo because the production assets need to be in the repo that is pushed to Heroku at deploy time.
 
 
+---
 
+Not ideal using hash location type in non-PhoneGap web app, URLs have visible hashes. Experiment with something like this in environment.js:
 
+```javascript
+  locationType: location.protocol === "file:" ? 'hash' : 'auto',
+```
