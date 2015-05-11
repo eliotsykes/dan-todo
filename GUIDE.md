@@ -555,6 +555,45 @@ Once the platform build is complete, download the resulting distribution from Ph
 
 ## How to deploy an Ember-Rails app to Heroku
 
+We're going to shortly deploy your app to Heroku. This will be the production environment.
+
+The `Procfile` we use to control our development environment processes is also used by Heroku if its present. 
+
+The processes we want to run in production are not the same as our development environment processes, so we need to make sure Heroku doesn't try to run our `Procfile`.
+
+To stop Heroku from trying to use our `Procfile`, rename it to `Procfile.development`:
+
+```bash
+# Inside your-rails-app/ dir, rename Procfile to Procfile.development:
+mv Procfile Procfile.development
+```
+
+Now Heroku won't find a `Procfile`, but neither will `foreman` when we next try to run `foreman s` (try it and you should see an error message like `Procfile does not exist`). 
+
+To fix this, you can remember to pass the `-f Procfile.development` option to `foreman s`, or you can create a script that will call `foreman` for you with this option. 
+
+In the long run, a new script will save keystrokes, so create a new file at `my-rails-app/bin/serve`, with these contents:
+
+```bash
+#!/bin/sh
+foreman start -f Procfile.development
+```
+
+Make the script executable:
+
+```bash
+# Inside your-rails-app/ dir:
+chmod +x bin/serve
+```
+
+From now on, to start your development processes, just run the new script:
+
+```bash
+# Inside your-rails-app/ dir:
+bin/serve
+```
+
+
 ```bash
 heroku create
 ```

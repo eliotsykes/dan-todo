@@ -1,6 +1,25 @@
 Work in progress
 ----------------
 
+Move Procfile to Procfile.development to prevent Heroku using our development environment processes.
+
+Use foreman -f Procfile.development
+
+Simplify with our own script at:
+
+./bin/server
+./bin/serve
+./bin/s
+
+bin/server -> script calling foreman -f Procfile.development
+
+Avoids Procfile running in production (link to Heroku docs for Puma setup in production)
+
+(Eventually heroku git hook or rake assets:precompile task that creates a .foreman file
+on Heroku with the Procfile option set to Procfile.production or moves Procfile.production to Procfile?)
+
+---
+
 
 - Get heroku working
   - build assets on deploy? rake asset:precompile override?
