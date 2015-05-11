@@ -557,7 +557,9 @@ Once the platform build is complete, download the resulting distribution from Ph
 
 We're going to shortly deploy your app to Heroku. This will be the production environment.
 
-The `Procfile` we use to control our development environment processes is also used by Heroku if its present. 
+### Hiding `Procfile` from Heroku
+
+The `Procfile` we use to control our development environment processes is also used by Heroku if it is present. 
 
 The processes we want to run in production are not the same as our development environment processes, so we need to make sure Heroku doesn't try to run our `Procfile`.
 
@@ -592,6 +594,11 @@ From now on, to start your development processes, just run the new script:
 # Inside your-rails-app/ dir:
 bin/serve
 ```
+
+When Heroku doesn't find a `Procfile`, it falls back to using the default WEBrick server used by `rails s` which is fine while we're building our app.
+
+Once you have an app on Heroku that you want to share with more users, consider moving away from WEBrick. Using a different server on Heroku will involve adding a new `Procfile`. When that time comes, read [Heroku's overview of WEBrick](https://devcenter.heroku.com/articles/ruby-default-web-server) for guidance and links on how to setup an alternative, recommended server.
+
 
 
 ```bash
