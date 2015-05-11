@@ -600,6 +600,13 @@ When Heroku doesn't find a `Procfile`, it falls back to using the default WEBric
 Once you have an app on Heroku that you want to share with more users, consider moving away from WEBrick. Using a different server on Heroku will involve adding a new `Procfile`. When that time comes, read [Heroku's overview of WEBrick](https://devcenter.heroku.com/articles/ruby-default-web-server) for guidance and links on how to setup an alternative, recommended server.
 
 
+### Join Heroku
+
+If you're not already signed up for Heroku, sign up and install the Heroku toolbelt.
+
+TODO: Expand these instructions, link to Heroku and toolbelt install how-to.
+
+
 
 ```bash
 heroku create
