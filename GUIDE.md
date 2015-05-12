@@ -607,12 +607,42 @@ If you're not already signed up for Heroku, sign up and install the Heroku toolb
 TODO: Expand these instructions, link to Heroku and toolbelt install how-to.
 
 
+### Heroku buildpacks
 
-```bash
-heroku create
+Heroku is a great way to host your Rails apps. It just works out-of-the-box, which can sometimes feel a little magical.
+
+We're going to need to understand what causes this magical illusion if we want to successfully deploy an app that relies on both Ruby **and** Node.js.
+
+When you deploy to Heroku, it looks at the files inside your app, and takes an educated guess at what programming language and environment is needed to run your application.
+
+In the case of Rails apps, it guesses you need a Ruby environment, and sets this up for you using the "Ruby buildpack". 
+
+A buildpack is a collection of scripts that setup a Heroku server by installing software specified in the buildpack. For example, the Ruby buildpack installs Ruby on any Heroku server its used on.
+
+Heroku has individual buildpacks to setup environments for many programming languages, including Ruby, Python, PHP, Java, and most importantly to us, JavaScript/Node.js.
+
+### Heroku's Multi Buildpack
+
+Our Rails-Ember app needs a JavaScript environment to build the Ember assets at deploy time, **and** it needs a Ruby environment to run the Rails app at runtime. On Heroku, this means we need two buildpacks, the Node.js buildpack, and the Ruby buildpack.
+
+When an app running on Heroku needs multiple buildpacks, then its time to use the multi buildpack.
+
+The multi buildpack lets you specify all the buildpacks you want installed for your app. Multi buildpack installs all of the buildpacks specified in a file named `.buildpacks`, which you're going to add to your app's root directory.
+
+Create a `my-rails-app/.buildpacks` file and save it with these contents, which specify the GitHub URLs for the Node.js and Ruby buildpacks:
+
+```
+https://github.com/heroku/heroku-buildpack-nodejs
+https://github.com/heroku/heroku-buildpack-ruby
 ```
 
-Setup Heroku buildpack and other tasks as described here: https://github.com/rwz/ember-cli-rails#heroku (Gemify this? rake task that creates .buildpacks etc.?)
+These two buildpacks will be installed when we deploy our app to Heroku.
+
+### Create a Heroku app
+
+```bash
+heroku create --buildpack https://github.com/heroku/heroku-buildpack-multi
+```
 
 Trigger `ember build --environment production` on `git push heroku master`. Perhaps from a redefined `assets:precompile` rake task?
 
