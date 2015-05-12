@@ -652,6 +652,14 @@ Next we're going to create a new Heroku app to use as the production environment
 heroku create dans-todos --buildpack https://github.com/heroku/heroku-buildpack-multi
 ```
 
+---
+
+> For Dan: Update these options in these files to use the new `<APP NAME>.herokuapp.com` URL:
+  - `config.action_mailer.default_url_options` in `config/environments/production.rb`
+  - `config.mailer_sender` in `config/initializers/devise.rb`
+
+---
+
 **Only** if you forgot to include the `--buildpack` option with `heroku create` above, **or** you are converting an existing Heroku app to use the multi-buildpack, then run this command to set the app's buildpack:
 
 ```bash
