@@ -595,6 +595,8 @@ From now on, to start your development processes, just run the new script:
 bin/serve
 ```
 
+Update any `foreman s` instructions in the `README` to use `bin/serve` instead.
+
 When Heroku doesn't find a `Procfile`, it falls back to using the default WEBrick server used by `rails s` which is fine while we're building our app.
 
 Once you have an app on Heroku that you want to share with more users, consider moving away from WEBrick. Using a different server on Heroku will involve adding a new `Procfile`. When that time comes, read [Heroku's overview of WEBrick](https://devcenter.heroku.com/articles/ruby-default-web-server) for guidance and links on how to setup an alternative, recommended server.
