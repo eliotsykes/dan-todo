@@ -2,8 +2,9 @@
 A rake automated todo list
 
 To run the app, ensure the foreman gem is installed (`gem install foreman`), and run:
+
 ```bash
-foreman s
+bin/serve
 ```
 
 To seed:
