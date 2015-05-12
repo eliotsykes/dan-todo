@@ -7,6 +7,12 @@ Work in progress
 
 ---
 
+Needs rails_12factor gem:
+
+gem "rails_12factor", group: :production
+
+---
+
 `bin/ember` and/or `bin/phonegap` scripts? Useful or not enough of a case given Foreman processes?
 
 ---

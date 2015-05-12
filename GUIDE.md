@@ -640,11 +640,30 @@ These two buildpacks will be installed when we deploy our app to Heroku.
 
 ### Create a Heroku app
 
+Next we're going to create a new Heroku app to use as the production environment. Run the following command, optionally changing the name `dans-todos` to the app name you want:
+
 ```bash
-heroku create --buildpack https://github.com/heroku/heroku-buildpack-multi
+# Inside my-rails-app/ dir:
+#
+# Create a new Heroku app at dans-todos.herokuapp.com, and
+# use the multi-buildpack:
+heroku create dans-todos --buildpack https://github.com/heroku/heroku-buildpack-multi
+```
+
+**Only** if you forgot to include the `--buildpack` option with `heroku create` above, **or** you are converting an existing Heroku app to use the multi-buildpack, then run this command to set the app's buildpack:
+
+```bash
+# Inside my-rails-app/ dir
+#
+# **Only** run if you forgot the --buildpack option above or are converting 
+# an existing app:
+heroku buildpacks:set https://github.com/heroku/heroku-buildpack-multi
 ```
 
 Trigger `ember build --environment production` on `git push heroku master`. Perhaps from a redefined `assets:precompile` rake task?
+
+
+
 
 
 
