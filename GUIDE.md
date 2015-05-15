@@ -712,13 +712,16 @@ Create `my-rails-app/.bowerrc` with current working directory (`cwd`) option:
 }
 ```
 
-Add `"postinstall": "bower install" or "node_modules/bower/bin/bower install"` to package.json > scripts.
+Add `"postinstall": "bin/heroku_postinstall"` or `"postinstall": "cd client && bower install && ember build --environment production && cd .."` to package.json > scripts.
 
 
 
 Trigger `ember build --environment production` on `git push heroku master`. Perhaps from a redefined `assets:precompile` rake task?
 
-
+$ cat .bowerrc 
+{
+  "cwd": "client"
+}
 
 
 
