@@ -34,6 +34,10 @@ curl -H "X-Api-Key: TCwrsTTMp8C2H1vIHPNX4wtt" -X DELETE http://localhost:3000/ap
 - `cd client && npm install && cd ..`
 - `bower install`
 
+## Ember Upgrades
+
+Follow instructions carefully: https://github.com/ember-cli/ember-cli/releases
+
 
 # Fresh Heroku Production Environment Setup
 

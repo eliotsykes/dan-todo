@@ -11,3 +11,4 @@
 # https://github.com/heroku/heroku-buildpack-nodejs#enable-or-disable-node_modules-caching
 # https://github.com/tonycoco/heroku-buildpack-ember-cli#troubleshooting
 # https://github.com/tonycoco/heroku-buildpack-ember-cli#caching
+# https://github.com/ember-cli/ember-cli/releases
