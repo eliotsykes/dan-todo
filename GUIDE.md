@@ -243,7 +243,8 @@ npm uninstall -g ember-cli
 # Clear NPM cache:
 npm cache clean
 
-# Clear Bower cache:
+# Clear Bower cache (assuming bower installed globally,
+# may not be, then run `npm install -g bower`)
 bower cache clean
 
 # Install new global ember-cli:
@@ -471,6 +472,22 @@ ln -s ../dist www
 
 Check the symlink created successfully, open `client/wrap/www/index.html` and check its the same as the file at `client/dist/index.html`.
 
+The `client/dist` directory is always required for `phonegap serve` to run. `client/dist` is not yet tracked by git, its transient and won't be present if we clone our git repo to a new environment. Let's change that so the `client/dist` directory is tracked:
+
+```bash
+# Inside my-rails-app/ dir:
+touch client/dist/.keep
+```
+
+Replace the `/dist` line in `client/.gitignore` with these lines:
+
+```
+# Configure git to track only the dist/ directory and its .keep file. No other
+# files in the dist/ dir will be tracked as they are files that are regularly
+# regenerated from the app's source files.
+/dist/*
+!/dist/.keep
+```
 
 ### Manage `phonegap serve` with Foreman
 
@@ -724,7 +741,30 @@ $ cat .bowerrc
 }
 
 
+---
 
+### Special Instruction for Dan (new instruction added and copied from above)
+
+The `client/dist` directory is always required for `phonegap serve` to run. `client/dist` is not yet tracked by git, its transient and won't be present if we clone our git repo to a new environment. Let's change that so the `client/dist` directory is tracked:
+
+```bash
+# Inside my-rails-app/ dir:
+touch client/dist/.keep
+```
+
+Replace the `/dist` line in `client/.gitignore` with these lines:
+
+```
+# Configure git to track only the dist/ directory and its .keep file. No other
+# files in the dist/ dir will be tracked as they are files that are regularly
+# regenerated from the app's source files.
+/dist/*
+!/dist/.keep
+```
+---
+
+
+Fix up postinstall in package.json so it runs successfully on dev and prod as "bin/postinstall" can't be found in dev.
 
 Inspired by:
 
