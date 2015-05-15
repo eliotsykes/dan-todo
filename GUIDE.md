@@ -652,14 +652,6 @@ Next we're going to create a new Heroku app to use as the production environment
 heroku create dans-todos --buildpack https://github.com/heroku/heroku-buildpack-multi
 ```
 
----
-
-> For Dan: Update these options in these files to use the new `<APP NAME>.herokuapp.com` URL:
-  - `config.action_mailer.default_url_options` in `config/environments/production.rb`
-  - `config.mailer_sender` in `config/initializers/devise.rb`
-
----
-
 **Only** if you forgot to include the `--buildpack` option with `heroku create` above, **or** you are converting an existing Heroku app to use the multi-buildpack, then run this command to set the app's buildpack:
 
 ```bash
@@ -670,9 +662,47 @@ heroku create dans-todos --buildpack https://github.com/heroku/heroku-buildpack-
 heroku buildpacks:set https://github.com/heroku/heroku-buildpack-multi
 ```
 
+---
+
+### Special Instruction For Dan:
+
+Update these options in these files to use the new `<APP NAME>.herokuapp.com` URL:
+
+- `config.action_mailer.default_url_options` in `config/environments/production.rb`
+- `config.mailer_sender` in `config/initializers/devise.rb`
+
+Create a new `config/application.yml` file with these options, replacing the values:
+
+```
+production:
+  SENDGRID_PASSWORD: PLEASE_SET_SENDGRID_PASSWORD
+  SENDGRID_USERNAME: PLEASE_SET_SENDGRID_USERNAME
+  SECRET_KEY_BASE: PLEASE_SET_SECRET_KEY_BASE (generate with 'bin/rake secret')
+```
+
+and set the config on Heroku with:
+
+```bash
+figaro heroku:set --environment production
+```
+
+---
+
+### Prepare for Node.js Buildpack
+
+The Node.js buildpack expects a `package.json` file at the project root. We need to create this only to satisfy the Node.js buildpack so it doesn't cause a deploy time error. There is no other reason we are creating this.
+
+Create a `package.json` file inside `my-rails-app/`, and save it with the following single line of content (an empty JavaScript object):
+
+```javascript
+{}
+```
+
+
+Use `client/package.json` instead of having this empty one? Use `.npmrc` to specify where to find `package.json`. Heroku will also look for `server.js` instead of `package.json`. Maybe `server.js` can help with this.
+
+
 Trigger `ember build --environment production` on `git push heroku master`. Perhaps from a redefined `assets:precompile` rake task?
-
-
 
 
 

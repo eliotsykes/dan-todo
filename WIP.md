@@ -5,6 +5,15 @@ Work in progress
 - Get heroku working
   - build assets on deploy? rake asset:precompile override?
 
+Ensure bower available at build/deploy? https://devcenter.heroku.com/articles/troubleshooting-node-deploys#ensure-you-aren-t-relying-on-untracked-dependencies
+
+Debug with verbose logging: https://devcenter.heroku.com/articles/troubleshooting-node-deploys#enable-verbose-logging
+
+> Make sure you have bower as a npm dependency of your ember-cli app. 
+https://github.com/rwz/ember-cli-rails#heroku
+
+Customize dyno environment with profile.d scripts during startup: https://devcenter.heroku.com/articles/profiled
+
 ---
 
 Needs rails_12factor gem:
@@ -109,3 +118,17 @@ Not ideal using hash location type in non-PhoneGap web app, URLs have visible ha
 ```javascript
   locationType: location.protocol === "file:" ? 'hash' : 'auto',
 ```
+
+---
+
+Use a .slugignore with Heroku to ignore files (e.g. development settings like `.foreman`):
+
+> The .slugignore file causes files to be removed after you push code to Heroku and before the buildpack runs. This lets you prevent large files from being included in the final slug
+
+Source: https://devcenter.heroku.com/articles/slug-compiler#ignoring-files-with-slugignore
+
+---
+
+Speed up deploys with "cacheDirectories"???: ["node_modules", "bower_components"] https://devcenter.heroku.com/articles/nodejs-support#cache-behavior
+
+May want to use cache with npm shrinkwrap to ensure dependency versions are predictable. More here: http://forum.railsonmaui.com/t/notes-on-deploying-to-heroku-with-gsl-and-node/89
