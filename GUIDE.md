@@ -701,7 +701,7 @@ Create a `package.json` file inside `my-rails-app/`, and save it with the follow
 OR symlink to client/package.json and remove "scripts > start" line (this triggers Heroku to create an incorrect Procfile on deploy).
 
 ```bash
-cd client && npm install --save-dev bower
+cd client && npm install --save bower
 ```
 
 Add `"postinstall": "bower install" or "node_modules/bower/bin/bower install"` to package.json > scripts.
