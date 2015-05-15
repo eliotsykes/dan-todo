@@ -701,20 +701,20 @@ Create a `package.json` file inside `my-rails-app/`, and save it with the follow
 OR symlink to client/package.json and remove "scripts > start" line (this triggers Heroku to create an incorrect Procfile on deploy).
 
 ```bash
-cd client && npm install --save bower
+cd client && npm install --save-dev bower
 ```
 
-Create `my-rails-app/.bowerrc` with current working directory (`cwd`) option:
+TRY TO AVOID: Create `my-rails-app/.bowerrc` with current working directory (`cwd`) option:
 
 ```json
-{
+{ MAY BE AVOIDABLE
   "cwd": "client"
 }
 ```
 
 Add `"postinstall": "bin/heroku_postinstall"` or `"postinstall": "cd client && bower install && ember build --environment production && cd .."` to package.json > scripts.
 
-
+`heroku config:set NPM_CONFIG_PRODUCTION=false` to install devDependencies when `npm install` run by nodejs buildpack (https://github.com/heroku/heroku-buildpack-nodejs#enable-or-disable-devdependencies-installation)
 
 Trigger `ember build --environment production` on `git push heroku master`. Perhaps from a redefined `assets:precompile` rake task?
 
