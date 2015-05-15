@@ -765,7 +765,23 @@ Replace the `/dist` line in `client/.gitignore` with these lines:
 
 Remember to unset NODE_MODULES_CACHE on Heroku once dependencies resolved.
 
+```
+# Inside my-rails-app/ dir
+# Move package.json to project root:
+mv client/package.json ./
+```
+
 Fix up postinstall in package.json so it runs successfully on dev and prod as "bin/postinstall" can't be found in dev.
+
+Need to review `npm install` commands above, no longer run in `client/`.
+
+
+
+Add `node_modules/` to my-rails-app/.gitignore
+
+
+TODO: Special instruction on removing client/node_modules
+
 
 Inspired by:
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env sh
 
 # if [ "$RAILS_ENV" == "production" ]; then
-  echo "postinstall will run in production"
+  echo "postinstall will run"
   
   echo "Clearing bower cache"
   bower cache clean
@@ -25,9 +25,16 @@
   echo "cd client"
   cd client
 
-  echo "../node_modules/ember-cli/bin/ember build --environment production"
-  # ember build --environment production
-  ../node_modules/ember-cli/bin/ember build --environment production
+  echo "Make node_modules available inside client/ via symlink"
+  echo "ln -s ../node_modules node_modules"
+  ln -s ../node_modules node_modules
+
+  echo "ember build --environment production"
+  ember build --environment production
+  # ../node_modules/ember-cli/bin/ember build --environment production
+
+  echo "Clean up, remove client/node_modules symlink"
+  rm node_modules
 
   # status "Building Ember CLI application $build_env distribution"
   # node_modules/ember-cli/bin/ember build --environment $build_env | indent

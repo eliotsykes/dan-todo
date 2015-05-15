@@ -31,8 +31,8 @@ curl -H "X-Api-Key: TCwrsTTMp8C2H1vIHPNX4wtt" -X DELETE http://localhost:3000/ap
 
 - Specify ruby version in `.ruby-version`
 - `bundle install --without production`
-- `cd client && npm install && cd ..`
-- `bower install`
+- `npm install` (automatically triggers `bower install` via bin/postinstall script)
+
 
 ## Ember Upgrades
 
