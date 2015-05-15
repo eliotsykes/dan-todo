@@ -20,3 +20,6 @@
 
 # Ignore PhoneGap zip files
 /client/wrap/*.zip
+
+# Ignore .ruby-version file used in developer environments with rbenv
+.ruby-version
