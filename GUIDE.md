@@ -700,6 +700,12 @@ Create a `package.json` file inside `my-rails-app/`, and save it with the follow
 
 OR symlink to client/package.json and remove "scripts > start" line (this triggers Heroku to create an incorrect Procfile on deploy).
 
+```bash
+cd client && npm install --save-dev bower
+```
+
+Add `"postinstall": "bower install"` to package.json > scripts.
+
 
 
 Trigger `ember build --environment production` on `git push heroku master`. Perhaps from a redefined `assets:precompile` rake task?
