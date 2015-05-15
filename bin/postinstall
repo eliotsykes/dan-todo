@@ -5,6 +5,7 @@
   
   echo "Clearing bower cache"
   bower cache clean
+  rm -rf client/bower_components
 
   echo "Running bower install"
   bower install
@@ -15,14 +16,18 @@
   echo "Running which ember"
   which ember
 
+  echo "PATH:"
+  echo $PATH
+
   echo "Running find . -name ember"
   find . -name ember
 
   echo "cd client"
   cd client
 
-  echo "ember build --environment production"
-  ember build --environment production
+  echo "node_modules/ember-cli/bin/ember build --environment production"
+  # ember build --environment production
+  node_modules/ember-cli/bin/ember build --environment production
 
   # status "Building Ember CLI application $build_env distribution"
   # node_modules/ember-cli/bin/ember build --environment $build_env | indent
