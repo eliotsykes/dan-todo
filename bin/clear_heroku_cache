@@ -1,6 +1,11 @@
 #!/usr/bin/env sh
 
-heroku repo:purge_cache
+#heroku repo:purge_cache
+
+#heroku config:set NODE_MODULES_CACHE=false
+#git commit -am 'rebuild' --allow-empty
+#git push heroku master
+#heroku config:unset NODE_MODULES_CACHE
 
 # More cache clearing possibilities:
 # https://github.com/heroku/heroku-buildpack-nodejs#enable-or-disable-node_modules-caching
