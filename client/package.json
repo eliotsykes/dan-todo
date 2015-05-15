@@ -10,7 +10,7 @@
   "scripts": {
     "build": "ember build",
     "test": "ember test",
-    "postinstall": "bower install && cd client && ember build --environment production && cd .."
+    "postinstall": "bin/postinstall"
   },
   "repository": "",
   "engines": {
