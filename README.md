@@ -25,3 +25,17 @@ To delete one:
 ```
 curl -H "X-Api-Key: TCwrsTTMp8C2H1vIHPNX4wtt" -X DELETE http://localhost:3000/api/v1/lists/[:id]
 ```
+
+
+# Developer Setup
+
+- Specify ruby version in `.ruby-version`
+- `bundle install --without production`
+- `cd client && npm install && cd ..`
+- `bower install`
+
+
+# Fresh Heroku Production Environment Setup
+
+- `cp config/application.yml.example config/application.yml` and fill in blanks for production env.
+- `bin/figaro heroku:set --environment production`
