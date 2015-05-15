@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 
-if [ "$RAILS_ENV" == "production" ]; then
+# if [ "$RAILS_ENV" == "production" ]; then
   echo "postinstall will run in production"
   
   echo "Running bower install"
@@ -29,6 +29,6 @@ if [ "$RAILS_ENV" == "production" ]; then
 
   echo "postinstall complete!"
 
-else
-  echo "postinstall does not run outside of production"
-fi
+# else
+  # echo "postinstall does not run outside of production"
+# fi
