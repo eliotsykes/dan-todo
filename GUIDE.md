@@ -763,6 +763,7 @@ Replace the `/dist` line in `client/.gitignore` with these lines:
 ```
 ---
 
+Remember to unset NODE_MODULES_CACHE on Heroku once dependencies resolved.
 
 Fix up postinstall in package.json so it runs successfully on dev and prod as "bin/postinstall" can't be found in dev.
 

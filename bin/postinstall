@@ -25,9 +25,9 @@
   echo "cd client"
   cd client
 
-  echo "node_modules/ember-cli/bin/ember build --environment production"
+  echo "../node_modules/ember-cli/bin/ember build --environment production"
   # ember build --environment production
-  node_modules/ember-cli/bin/ember build --environment production
+  ../node_modules/ember-cli/bin/ember build --environment production
 
   # status "Building Ember CLI application $build_env distribution"
   # node_modules/ember-cli/bin/ember build --environment $build_env | indent
