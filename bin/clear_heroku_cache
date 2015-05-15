@@ -1,0 +1,8 @@
+#!/usr/bin/env sh
+
+heroku repo:purge_cache
+
+# More cache clearing possibilities:
+# https://github.com/heroku/heroku-buildpack-nodejs#enable-or-disable-node_modules-caching
+# https://github.com/tonycoco/heroku-buildpack-ember-cli#troubleshooting
+# https://github.com/tonycoco/heroku-buildpack-ember-cli#caching
