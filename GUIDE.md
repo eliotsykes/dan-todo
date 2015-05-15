@@ -698,8 +698,8 @@ Create a `package.json` file inside `my-rails-app/`, and save it with the follow
 {}
 ```
 
+OR symlink to client/package.json and remove "scripts > start" line (this triggers Heroku to create an incorrect Procfile on deploy).
 
-Use `client/package.json` instead of having this empty one? Use `.npmrc` to specify where to find `package.json`. Heroku will also look for `server.js` instead of `package.json`. Maybe `server.js` can help with this.
 
 
 Trigger `ember build --environment production` on `git push heroku master`. Perhaps from a redefined `assets:precompile` rake task?
