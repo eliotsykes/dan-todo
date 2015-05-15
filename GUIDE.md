@@ -704,6 +704,14 @@ OR symlink to client/package.json and remove "scripts > start" line (this trigge
 cd client && npm install --save bower
 ```
 
+Create `my-rails-app/.bowerrc` with current working directory (`cwd`) option:
+
+```json
+{
+  "cwd": "client"
+}
+```
+
 Add `"postinstall": "bower install" or "node_modules/bower/bin/bower install"` to package.json > scripts.
 
 
