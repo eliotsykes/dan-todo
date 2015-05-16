@@ -1,1 +1,4 @@
-client/.bowerrc
+{
+  "directory": "bower_components",
+  "analytics": false
+}
