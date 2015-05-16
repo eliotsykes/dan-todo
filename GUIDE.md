@@ -1,5 +1,40 @@
 # App Development Guide
 
+<!-- MarkdownTOC depth=0 autolink=true bracket=round -->
+
+- [public/index.html is an app](#publicindexhtml-is-an-app)
+- [Getting the app on your phone for development](#getting-the-app-on-your-phone-for-development)
+- [Use PhoneGap Build to create platform distributions](#use-phonegap-build-to-create-platform-distributions)
+- [Install `.apk` file on Android](#install-apk-file-on-android)
+  - [Genymotion Android Emulator Installation (move to Appendix)](#genymotion-android-emulator-installation-move-to-appendix)
+- [TODO: Install `.xap` file on Windows](#todo-install-xap-file-on-windows)
+- [TODO: Install `.ipa` file on iOS](#todo-install-ipa-file-on-ios)
+  - [Coming Next...](#coming-next)
+- [Ember and how to make a good enough choice of framework](#ember-and-how-to-make-a-good-enough-choice-of-framework)
+  - [Coming Next...](#coming-next-1)
+- [How to install Ember](#how-to-install-ember)
+- [Creating a New Ember Application](#creating-a-new-ember-application)
+- [Ember at the front, Rails at the back](#ember-at-the-front-rails-at-the-back)
+  - [Coming Next...](#coming-next-2)
+- [Run multiple processes in one command with Foreman](#run-multiple-processes-in-one-command-with-foreman)
+- [Move `index.html` to Ember](#move-indexhtml-to-ember)
+- [Configuring Ember and PhoneGap](#configuring-ember-and-phonegap)
+  - [Ember Router `locationType`](#ember-router-locationtype)
+  - [Unify PhoneGap and Ember](#unify-phonegap-and-ember)
+  - [Manage `phonegap serve` with Foreman](#manage-phonegap-serve-with-foreman)
+  - [PhoneGap Build and run the Ember app](#phonegap-build-and-run-the-ember-app)
+- [How to deploy an Ember-Rails app to Heroku](#how-to-deploy-an-ember-rails-app-to-heroku)
+  - [Hiding `Procfile` from Heroku](#hiding-procfile-from-heroku)
+  - [Join Heroku](#join-heroku)
+  - [Heroku buildpacks](#heroku-buildpacks)
+  - [Heroku's Multi Buildpack](#herokus-multi-buildpack)
+  - [Create a Heroku app](#create-a-heroku-app)
+  - [Special Instruction For Dan:](#special-instruction-for-dan)
+  - [Prepare for Node.js Buildpack](#prepare-for-nodejs-buildpack)
+
+<!-- /MarkdownTOC -->
+
+
 ## public/index.html is an app
 
 ```bash
