@@ -24,5 +24,6 @@
 # Ignore .ruby-version file used in developer environments with rbenv
 .ruby-version
 
-# Ignore local node dependencies
+# Ignore local dependencies
 /node_modules
+/bower_components
