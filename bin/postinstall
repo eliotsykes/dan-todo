@@ -9,7 +9,7 @@ echo "Where are all the bower_components dirs?"
 find . -name bower_components
 
 echo "Running bower install"
-bower install
+bin/bower install
 
 echo "Where are all the bower_components dirs?"
 find . -name bower_components
