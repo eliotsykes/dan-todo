@@ -8,6 +8,9 @@
 echo "Running bower install"
 bin/bower install
 
+echo "export output:"
+echo $(export)
+
 build_env=${NODE_ENV:-development}
 echo "Building Ember application for $build_env environment"
 bin/ember build --environment $build_env
