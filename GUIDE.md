@@ -777,7 +777,7 @@ Need to review `npm install` commands above, no longer run in `client/`.
 
 
 
-Add `node_modules/` to my-rails-app/.gitignore
+Add `node_modules/` to my-rails-app/.gitignore -> NOPE. Need a symlink from node_modules -> client/node_modules, and should be committed so its available on Heroku.
 
 TODO: Notes on Add/Update bin/ scripts for Dan. bin/phonegap,ember. Procfile.development changes
 
