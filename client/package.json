@@ -8,9 +8,9 @@
     "test": "tests"
   },
   "scripts": {
-    "build": "bin/ember build --environment ${DEPLOY:-development}",
+    "build": "bin/ember build",
     "test": "bin/ember test",
-    "postinstall": "bower install && npm run build"
+    "postinstall": "bower install && bin/ember build --environment ${DEPLOY:-development}"
   },
   "cacheDirectories": ["node_modules", "bower_components"],
   "repository": "",
