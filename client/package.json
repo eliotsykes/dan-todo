@@ -12,7 +12,6 @@
     "test": "bin/ember test",
     "postinstall": "bin/postinstall"
   },
-  "cacheDirectories": ["client/node_modules", "client/bower_components"],
   "repository": "",
   "engines": {
     "node": ">= 0.12.0"
