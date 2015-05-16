@@ -29,17 +29,23 @@ curl -H "X-Api-Key: TCwrsTTMp8C2H1vIHPNX4wtt" -X DELETE http://localhost:3000/ap
 
 # Developer Setup
 
+- `npm install` (automatically triggers `bower install` via postinstall script in `package.json`)
 - Specify ruby version in `.ruby-version`
 - `bundle install --without production`
-- `npm install` (automatically triggers `bower install` via bin/postinstall script)
 
 
 ## Ember Upgrades
 
 Follow instructions carefully: https://github.com/ember-cli/ember-cli/releases
 
-
 # Fresh Heroku Production Environment Setup
 
+- `heroku create choose-your-app-name --buildpack https://github.com/heroku/heroku-buildpack-multi`
 - `cp config/application.yml.example config/application.yml` and fill in blanks for production env.
 - `bin/figaro heroku:set --environment production`
+
+# Commands to run via `bin/`
+
+- `bin/ember`
+- `bin/phonegap`
+- `bin/rails`
