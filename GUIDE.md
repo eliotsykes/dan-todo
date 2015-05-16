@@ -15,6 +15,9 @@
   - [Coming Next...](#coming-next-1)
 - [How to install Ember](#how-to-install-ember)
 - [Creating a New Ember Application](#creating-a-new-ember-application)
+  - [Install npm dependencies](#install-npm-dependencies)
+  - [Install Bower dependencies](#install-bower-dependencies)
+  - [Serve the Ember app](#serve-the-ember-app)
 - [Ember at the front, Rails at the back](#ember-at-the-front-rails-at-the-back)
   - [Coming Next...](#coming-next-2)
 - [Run multiple processes in one command with Foreman](#run-multiple-processes-in-one-command-with-foreman)
@@ -344,10 +347,83 @@ cd my-rails-app/client
 
 # Initialize a new ember application in the current directory,
 # and feel free to change the application name from todos:
-ember init --name todos
+ember init --name todos --skip-npm --skip-bower
 ```
 
-Once `ember init ...` has completed (it may take a while), it's a good idea to check that the ember app and environment is working okay:
+The `--skip-npm` and `--skip-bower` options were given to `ember init` to stop Ember's dependencies (these are conceptually similar to how Rails apps have gem dependencies) from being installed in the `client/node_modules` (used by npm to keep Ember's development dependencies) and `client/bower_components` (used by Bower to keep Ember's frontend dependencies) directories.
+
+Instead of using the `client/` directory for these dependencies, we're going to install these dependencies in the project root, under the `my-rails-app/node_modules` and `my-rails-app/bower_components` directories. This will pay off later by simplifying our production environment deployment to Heroku.
+
+
+### Install npm dependencies
+
+npm dependencies are specified in `client/package.json` under the `devDependencies` configuration. These are the dependencies needed to build and serve the Ember app (they are *not* runtime dependencies required in the browser. Browser runtime dependencies are managed by Bower).
+
+npm always installs its dependencies in a directory named `node_modules` that is in the same directory as the `package.json` file. 
+
+To get the npm dependencies installed in `node_modules/` in our project root, perform the following:
+
+```bash
+# Inside my-rails-app/ directory:
+
+# Symlink so npm sees a package.json in project root:
+ln -s client/package.json package.json
+
+# Install the dependencies (this may take a while):
+npm install
+
+# Check you can see the dependencies directory and it contains directories that
+# match the names under devDependencies in package.json:
+ls -al node_modules/
+
+# Symlink to node_modules from client/ so ember commands are able to operate
+# without error:
+ln -s ../node_modules client/node_modules
+```
+
+Remove this line from `client/.gitignore` so the symlink at `client/node_modules` can be tracked in version control:
+
+```
+/node_modules
+```
+
+Then **add** this line to `.gitignore` in `my-rails-app/` so the `node_modules/` directory and its contents are **not** tracked by git:
+
+```
+# Ignore local dependencies
+/node_modules
+```
+
+### Install Bower dependencies
+
+Bower dependencies are specified in `client/bower.json` under the `dependencies` configuration. These are the dependencies needed at in the browser to successfully run an Ember application.
+
+Bower installs its dependencies in a directory named `bower_components` that is in the same directory as the `bower.json` file. 
+
+To get the Bower dependencies installed in `bower_components/` in our project root, perform the following:
+
+```bash
+# Inside my-rails-app/ directory:
+
+# Symlink so bower sees a bower.json in project root:
+ln -s client/package.json package.json
+
+# Install the dependencies (this may take a while):
+npm install
+
+# Check you can see the dependencies directory and it contains directories that
+# match the names under devDependencies in package.json:
+ls -al node_modules/
+
+# Symlink to node_modules from client/ so ember commands are able to operate
+# without error:
+ln -s ../node_modules client/node_modules
+```
+
+
+### Serve the Ember app
+
+Once the dependencies have been installed, it's a good idea to check that the ember app and environment is working okay:
 
 ```bash
 # Be in the client/ directory:
@@ -775,15 +851,13 @@ figaro heroku:set --environment production
 
 ### Prepare for Node.js Buildpack
 
-The Node.js buildpack expects a `package.json` file at the project root, lets reuse the one in the Ember `client/` directory.
-
-Inside `my-rails-app/`, symlink to `client/package.json` and remove "scripts > start" line (this triggers Heroku to create an incorrect Procfile on deploy).
+Remove "scripts > start" line from `package.json` (this triggers Heroku to create an incorrect Procfile on deploy).
 
 ```bash
-cd client && npm install --save-dev bower
+npm install --save-dev bower
 ```
 
-Add `"postinstall": "bin/heroku_postinstall"` to package.json > scripts.
+Add `"postinstall": "put correct commands here"` to package.json > scripts.
 
 `heroku config:set NPM_CONFIG_PRODUCTION=false` to install devDependencies when `npm install` run by nodejs buildpack (https://github.com/heroku/heroku-buildpack-nodejs#enable-or-disable-devdependencies-installation)
 
@@ -866,26 +940,4 @@ gem "rails_12factor", group: :production
 ```
 
 The `rails_12factor` ensures your Rails app can serve static files and that your app's logging is performed in the Heroku-recommended way. For more information see the [`rails_12factor` README](https://github.com/heroku/rails_12factor).
-
-
-
-- https://github.com/rwz/ember-cli-rails#heroku
-- https://github.com/rwz/ember-cli-rails/blob/master/lib/tasks/ember-cli.rake#L18
-- https://github.com/rwz/ember-cli-rails/blob/master/lib/ember-cli-rails.rb
-
-Make scripts in bin/ and in package.json>scripts windows-compatible: http://blog.keithcirkel.co.uk/how-to-use-npm-as-a-build-tool/ . Below snippet taken from that article:
-
-```
-"scripts": {
-  "clean": "rm -r dist/*"
-}
-If you really need to have Windows support, it does not support rm - luckily there is rimraf which is a cross-compatible tool to do the same thing:
-
-"devDependencies": {
-  "rimraf": "latest"
-},
-"scripts": {
-  "clean": "rimraf dist"
-}
-```
 

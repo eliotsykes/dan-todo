@@ -2,10 +2,32 @@ Work in progress
 ----------------
 
 Special instructions:
+
 - Create `bin/phonegap` script as detailed here in `bin/phonegap` section (TODO: add link)
+
 - Change phonegap process in `Procfile.development` to this:
 ```
 phonegap: bin/phonegap serve --port 4000
+```
+
+- As `ember init` didn't run with `--skip-npm --skip-bower`, the `node_modules` and `bower_components`directories need to be moved to the project root. The client directory will then have symlinks to these directories. These directories hold the dependencies for node and for bower. By moving them to the project root, these dependencies are in a more universal, more accessible, and more easily deployed location for development and production environments. Perform these changes:
+
+```bash
+# Inside my-rails-app/ dir
+mv client/node_modules ./node_modules
+mv client/bower_components ./bower_components
+
+# Symlink to dependency folders, enables ember commands to continue to operate
+# without error:
+ln -s ../bower_components client/bower_components
+ln -s ../node_modules client/node_modules
+```
+
+Remove these lines from `client/.gitignore` **and** add them to `.gitignore`:
+```
+# Ignore local dependencies
+/node_modules
+/bower_components
 ```
 
 
