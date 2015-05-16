@@ -784,7 +784,20 @@ TODO: Notes on Add/Update bin/ scripts for Dan. bin/phonegap,ember. Procfile.dev
 TODO: Special instruction on removing client/node_modules
 
 
-`"cacheDirectories": ["node_modules", "client/bower_components"],` in `package.json` to speed up Heroku deploys.
+`"cacheDirectories": ["node_modules", "bower_components"],` in `package.json` to speed up Heroku deploys.
+
+
+
+bower symlink to client/.bowerrc and client/bower_components (within a script?)
+
+In .gitignore:
+```
+# Ignore local dependencies
+/bower_components
+```
+
+
+
 
 Inspired by:
 
