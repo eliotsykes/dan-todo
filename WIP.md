@@ -1,32 +1,9 @@
 Work in progress
 ----------------
 
-
-- Get heroku working
-  - build assets on deploy? rake asset:precompile override?
-
-Ensure bower available at build/deploy? https://devcenter.heroku.com/articles/troubleshooting-node-deploys#ensure-you-aren-t-relying-on-untracked-dependencies
-
-Debug with verbose logging: https://devcenter.heroku.com/articles/troubleshooting-node-deploys#enable-verbose-logging
-
-> Make sure you have bower as a npm dependency of your ember-cli app. 
-https://github.com/rwz/ember-cli-rails#heroku
-
-Customize dyno environment with profile.d scripts during startup: https://devcenter.heroku.com/articles/profiled
-
 ---
 
-Needs rails_12factor gem:
-
-gem "rails_12factor", group: :production
-
----
-
-`bin/ember` and/or `bin/phonegap` scripts? Useful or not enough of a case given Foreman processes?
-
----
-
-Automate zip create and/or upload and/or download with bash script or rake task?
+PhoneGap Build: Automate zip create and/or upload and/or download with bash script or rake task?
 
 ---
 
@@ -34,18 +11,15 @@ Improve performance of `ember build --watch`? Could not find watchman, falling b
 
 ---
 
-Use `bundle exec` vs `bin/rails` vs `rails` on Windows? Generate binstubs on Windows?
+- Use LiveReload with PhoneGap developer app and with Rails server. Use Ember's LiveReload for both and pass `--no-autoreload` option to `phonegap serve`?
 
 ---
-
-- Use LiveReload with PhoneGap developer app and with Rails server. Use Ember's LiveReload for both and pass `--no-autoreload` option to `phonegap serve`?
 
 - Is `phonegap serve` needed? Can `rails server` do the same job?
 
 ---
 
 # Preparing for Production
-
 
 ## Multiple index pages and rewrite rules
 
@@ -96,21 +70,6 @@ The above change to `config.xml` tells PhoneGap to use `index.phonegap.html` as 
 ```bash
 TODO: put symlink instructions here for index.html -> index.phonegap.html
 ```
-
-## Heroku Deployment
-
-For now, for our Heroku production deployment, we are going to generate the production assets on our own computer and store them in our git repository. This is different to what normally happens with Rails apps, where Heroku generates the production assets as part of the deployment process and the generated asset files are *not* stored in the repo (we'll revisit this in a later chapter).
-
-### Dedicated Environment `dist/` Directories
-
-The assets Ember creates for the development and production environments are different. The production assets take a little longer to build and they have performance optimizations applied to them that get in the way when you want to debug during development.
-
-Ember's default configuration has the assets generated in the `dist/` directory regardless of what environment you're building for. Let's alter this default so we have a dedicated subdirectory in `dist/` for each environment:
-
-- `dist/development` for the generated **development** assets. These will *not* be stored in the git repo.
-- `dist/production` for the generated **production** assets. These *will be* stored in the git repo because the production assets need to be in the repo that is pushed to Heroku at deploy time.
-
-
 ---
 
 Not ideal using hash location type in non-PhoneGap web app, URLs have visible hashes. Experiment with something like this in environment.js:
@@ -118,7 +77,6 @@ Not ideal using hash location type in non-PhoneGap web app, URLs have visible ha
 ```javascript
   locationType: location.protocol === "file:" ? 'hash' : 'auto',
 ```
-
 ---
 
 Use a .slugignore with Heroku to ignore files (e.g. development settings like `.foreman`):
@@ -128,7 +86,3 @@ Use a .slugignore with Heroku to ignore files (e.g. development settings like `.
 Source: https://devcenter.heroku.com/articles/slug-compiler#ignoring-files-with-slugignore
 
 ---
-
-Speed up deploys with "cacheDirectories"???: ["node_modules", "bower_components"] https://devcenter.heroku.com/articles/nodejs-support#cache-behavior
-
-May want to use cache with npm shrinkwrap to ensure dependency versions are predictable. More here: http://forum.railsonmaui.com/t/notes-on-deploying-to-heroku-with-gsl-and-node/89

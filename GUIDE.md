@@ -777,8 +777,13 @@ ln -sfn ../node_modules node_modules
 
 
 
-Ensure Gemfile has this (and static gem from heroku???):
+To run on Heroku, ensure the `Gemfile` includes the `rails_12factor` gem in the `:production` environment:
+
+```ruby
 gem "rails_12factor", group: :production
+```
+
+The `rails_12factor` ensures your Rails app can serve static files and that your app's logging is performed in the Heroku-recommended way. For more information see the [`rails_12factor` README](https://github.com/heroku/rails_12factor).
 
 
 
