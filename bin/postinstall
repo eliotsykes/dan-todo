@@ -5,14 +5,8 @@
 # into package.json>scripts and remove this script. Then call those scripts
 # from withing the postinstall script in package.json.
 
-echo "Where are all the bower_components dirs?"
-find . -name bower_components
-
 echo "Running bower install"
 bin/bower install
-
-echo "Where are all the bower_components dirs?"
-find . -name bower_components
 
 build_env=${NODE_ENV:-development}
 echo "Building Ember application for $build_env environment"
