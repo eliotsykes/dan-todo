@@ -8,8 +8,8 @@
     "test": "tests"
   },
   "scripts": {
-    "build": "ember build",
-    "test": "ember test",
+    "build": "bin/ember build",
+    "test": "bin/ember test",
     "postinstall": "bin/postinstall"
   },
   "repository": "",
