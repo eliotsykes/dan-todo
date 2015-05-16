@@ -8,6 +8,10 @@
 # ember command working directory must be client/:
 cd client
 
+# Ensure node_modules in parent directory is symlinked to so ember resolves
+# dependencies correctly in all environments.
+ln -sfh ../node_modules node_modules
+
 # Forward args to npm-installed ember command:
 ember "$@"
 
