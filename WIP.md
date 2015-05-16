@@ -21,15 +21,34 @@ mv client/bower_components ./bower_components
 # without error:
 ln -s ../bower_components client/bower_components
 ln -s ../node_modules client/node_modules
+
+# Move package.json to project root, and symlink from old location in client/:
+# (package.json expected in project root by Heroku)
+mv client/package.json ./
+ln -s ../package.json client/package.json
+
+# Move bower.json and .bowerrc to project root:
+mv client/bower.json ./
+mv client/.bowerrc ./
+
+# Symlink bower.json and .bowerrc from client/ so ember operates without error:
+ln -s ../bower.json client/bower.json
+ln -s ../.bowerrc client/.bowerrc
+
+# Install bower under devDependencies in package.json with this:
+npm install --save-dev bower
 ```
 
 Remove these lines from `client/.gitignore` **and** add them to `.gitignore`:
 ```
-# Ignore local dependencies
+# Ignore local npm dependencies as they are derived from package.json
 /node_modules
+
+# Ignore local bower dependencies as they are derived from bower.json
 /bower_components
 ```
 
+Commit all the above changes to version control.
 
 ---
 

@@ -16,6 +16,7 @@
 - [How to install Ember](#how-to-install-ember)
 - [Creating a New Ember Application](#creating-a-new-ember-application)
   - [Install npm dependencies](#install-npm-dependencies)
+  - [Install Bower as npm dependency](#install-bower-as-npm-dependency)
   - [Install Bower dependencies](#install-bower-dependencies)
   - [Serve the Ember app](#serve-the-ember-app)
 - [Ember at the front, Rails at the back](#ember-at-the-front-rails-at-the-back)
@@ -366,8 +367,8 @@ To get the npm dependencies installed in `node_modules/` in our project root, pe
 ```bash
 # Inside my-rails-app/ directory:
 
-# Symlink so npm sees a package.json in project root:
-ln -s client/package.json package.json
+# Move package.json to project root to satisfy npm (and later Heroku):
+mv client/package.json ./
 
 # Install the dependencies (this may take a while):
 npm install
@@ -376,9 +377,9 @@ npm install
 # match the names under devDependencies in package.json:
 ls -al node_modules/
 
-# Symlink to node_modules from client/ so ember commands are able to operate
-# without error:
+# Symlink node_modules and package.json from client/ so ember operates without error:
 ln -s ../node_modules client/node_modules
+ln -s ../package.json client/package.json
 ```
 
 Remove this line from `client/.gitignore` so the symlink at `client/node_modules` can be tracked in version control:
@@ -387,12 +388,26 @@ Remove this line from `client/.gitignore` so the symlink at `client/node_modules
 /node_modules
 ```
 
-Then **add** this line to `.gitignore` in `my-rails-app/` so the `node_modules/` directory and its contents are **not** tracked by git:
+Then **add** these lines to `.gitignore` in `my-rails-app/` so the `node_modules/` directory and its contents are **not** tracked by git (they don't need to be as they are derived from `package.json` which is already tracked by git):
 
 ```
-# Ignore local dependencies
+# Ignore local npm dependencies as they are derived from package.json
 /node_modules
 ```
+
+The npm dependencies have been installed. Commit all of the above changes to your git repository.
+
+
+### Install Bower as npm dependency
+
+For deployment to Heroku, Bower needs to be installed as an npm development dependency. Let's add it now:
+
+```bash
+# Inside your-rails-app/ directory:
+npm install --save-dev bower
+```
+
+This will install Bower and add it to `package.json` under `devDependencies`. Do a `git diff` to see the change. Commit the updated `package.json` to your repository.
 
 ### Install Bower dependencies
 
@@ -405,25 +420,42 @@ To get the Bower dependencies installed in `bower_components/` in our project ro
 ```bash
 # Inside my-rails-app/ directory:
 
-# Symlink so bower sees a bower.json in project root:
-ln -s client/package.json package.json
+# Move bower.json and .bowerrc to project root:
+mv client/bower.json ./
+mv client/.bowerrc ./
 
 # Install the dependencies (this may take a while):
-npm install
+bower install
 
 # Check you can see the dependencies directory and it contains directories that
-# match the names under devDependencies in package.json:
-ls -al node_modules/
+# match the names under dependencies in bower.json:
+ls -al bower_components/
 
-# Symlink to node_modules from client/ so ember commands are able to operate
-# without error:
-ln -s ../node_modules client/node_modules
+# Symlink bower_components, bower.json, and .bowerrc from client/ so ember operates without error:
+ln -s ../bower_components client/bower_components
+ln -s ../bower.json client/bower.json
+ln -s ../.bowerrc client/.bowerrc
 ```
+
+Remove this line from `client/.gitignore` so the symlink at `client/bower_components` can be tracked in version control:
+
+```
+/bower_components
+```
+
+Then **add** these lines to `.gitignore` in `my-rails-app/` so the `bower_components/` directory and its contents are **not** tracked by git (they don't need to be as they are derived from `bower.json` which is already tracked by git):
+
+```
+# Ignore local bower dependencies as they are derived from bower.json
+/bower_components
+```
+
+The Bower dependencies have been installed. Commit all of the above changes to your git repository.
 
 
 ### Serve the Ember app
 
-Once the dependencies have been installed, it's a good idea to check that the ember app and environment is working okay:
+Now the dependencies have been installed, it's a good idea to check that the ember app and development environment is working okay:
 
 ```bash
 # Be in the client/ directory:
