@@ -777,6 +777,8 @@ ln -sfn ../node_modules node_modules
 
 
 
+Ensure Gemfile has this (and static gem from heroku???):
+gem "rails_12factor", group: :production
 
 
 
