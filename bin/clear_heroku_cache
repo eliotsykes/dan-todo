@@ -1,5 +1,10 @@
 #!/usr/bin/env sh
 
+# Currently just notes cobbled together on how a clear heroku cache script might look
+# eventually. Also consider using npm shrinkwrap.
+
+# Heroku cache of node and bower modules may need clearing from time-to-time.
+
 #heroku repo:purge_cache
 
 #heroku config:set NODE_MODULES_CACHE=false
