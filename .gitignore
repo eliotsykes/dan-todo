@@ -24,6 +24,8 @@
 # Ignore .ruby-version file used in developer environments with rbenv
 .ruby-version
 
-# Ignore local dependencies
+# Ignore local npm dependencies as they are derived from package.json
 /node_modules
+
+# Ignore local bower dependencies as they are derived from bower.json
 /bower_components
