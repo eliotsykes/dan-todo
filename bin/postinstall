@@ -1,49 +1,21 @@
 #!/usr/bin/env sh
 
-# if [ "$RAILS_ENV" == "production" ]; then
-  echo "postinstall will run"
-  
-  echo "Clearing bower cache"
-  bower cache clean
-  rm -rf client/bower_components
 
-  echo "Running bower install"
-  bower install
+# TODO: Move bower install and bin/ember build ... from this script 
+# into package.json>scripts and remove this script. Then call those scripts
+# from withing the postinstall script in package.json.
+echo "build_env"
+echo $build_env
 
-  echo "Working directory"
-  pwd
+echo "export env vars"
+echo $(export)
 
-  echo "Running which ember"
-  which ember
+echo "Running bower install"
+bower install
 
-  echo "PATH:"
-  echo $PATH
-
-  echo "Running find . -name ember"
-  find . -name ember
-
-  echo "cd client"
-  cd client
-
-  echo "Make node_modules available inside client/ via symlink"
-  echo "ln -s ../node_modules node_modules"
-  ln -s ../node_modules node_modules
-
-  echo "ember build --environment production"
-  ember build --environment production
-  # ../node_modules/ember-cli/bin/ember build --environment production
-
-  echo "Clean up, remove client/node_modules symlink"
-  rm node_modules
-
-  # status "Building Ember CLI application $build_env distribution"
-  # node_modules/ember-cli/bin/ember build --environment $build_env | indent
-
-  echo "cd .."
-  cd ..
-
-  echo "postinstall complete!"
-
-# else
-  # echo "postinstall does not run outside of production"
-# fi
+echo "Building Ember application"
+echo "TODO: use correct build_env"
+bin/ember build --environment production
+# ../node_modules/ember-cli/bin/ember build --environment production
+# status "Building Ember CLI application $build_env distribution"
+# node_modules/ember-cli/bin/ember build --environment $build_env | indent
