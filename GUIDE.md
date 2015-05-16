@@ -779,6 +779,7 @@ Need to review `npm install` commands above, no longer run in `client/`.
 
 Add `node_modules/` to my-rails-app/.gitignore
 
+TODO: Notes on Add/Update bin/ scripts for Dan. bin/phonegap,ember. Procfile.development changes
 
 TODO: Special instruction on removing client/node_modules
 
