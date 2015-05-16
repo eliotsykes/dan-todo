@@ -1,4 +1,1 @@
-{
-  "cwd": "client",
-  "analytics": false
-}
+client/.bowerrc
