@@ -1,0 +1,15 @@
+#!/usr/bin/env sh
+
+# Thin wrapper script to execute ember commands in the correct working directory. 
+# All ember commands need to be run inside the client/ dir. To save remembering
+# to change directories, just run `bin/ember ...` from the project root. All
+# ember commands will work. For usage enter `bin/ember --help`
+
+# ember command working directory must be client/:
+cd client
+
+# Forward args to npm-installed ember command:
+ember "$@"
+
+# Return to project root:
+cd ..
