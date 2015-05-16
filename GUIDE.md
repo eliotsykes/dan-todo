@@ -3,39 +3,41 @@
 <!-- MarkdownTOC depth=0 autolink=true bracket=round -->
 
 - [public/index.html is an app](#publicindexhtml-is-an-app)
-- [Getting the app on your phone for development](#getting-the-app-on-your-phone-for-development)
-  - [`bin/phonegap`](#binphonegap)
-- [Use PhoneGap Build to create platform distributions](#use-phonegap-build-to-create-platform-distributions)
-- [Install `.apk` file on Android](#install-apk-file-on-android)
-  - [Genymotion Android Emulator Installation (move to Appendix)](#genymotion-android-emulator-installation-move-to-appendix)
-- [TODO: Install `.xap` file on Windows](#todo-install-xap-file-on-windows)
-- [TODO: Install `.ipa` file on iOS](#todo-install-ipa-file-on-ios)
-  - [Coming Next...](#coming-next)
-- [Ember and how to make a good enough choice of framework](#ember-and-how-to-make-a-good-enough-choice-of-framework)
-  - [Coming Next...](#coming-next-1)
-- [How to install Ember](#how-to-install-ember)
-- [Creating a New Ember Application](#creating-a-new-ember-application)
-  - [Install npm dependencies](#install-npm-dependencies)
-  - [Install Bower as npm dependency](#install-bower-as-npm-dependency)
-  - [Install Bower dependencies](#install-bower-dependencies)
-  - [Serve the Ember app](#serve-the-ember-app)
-- [Ember at the front, Rails at the back](#ember-at-the-front-rails-at-the-back)
-  - [Coming Next...](#coming-next-2)
-- [Run multiple processes in one command with Foreman](#run-multiple-processes-in-one-command-with-foreman)
-- [Move `index.html` to Ember](#move-indexhtml-to-ember)
-- [Configuring Ember and PhoneGap](#configuring-ember-and-phonegap)
-  - [Ember Router `locationType`](#ember-router-locationtype)
-  - [Unify PhoneGap and Ember](#unify-phonegap-and-ember)
-  - [Manage `phonegap serve` with Foreman](#manage-phonegap-serve-with-foreman)
-  - [PhoneGap Build and run the Ember app](#phonegap-build-and-run-the-ember-app)
-- [How to deploy an Ember-Rails app to Heroku](#how-to-deploy-an-ember-rails-app-to-heroku)
-  - [Hiding `Procfile` from Heroku](#hiding-procfile-from-heroku)
-  - [Join Heroku](#join-heroku)
-  - [Heroku buildpacks](#heroku-buildpacks)
-  - [Heroku's Multi Buildpack](#herokus-multi-buildpack)
-  - [Create a Heroku app](#create-a-heroku-app)
-  - [Special Instruction For Dan:](#special-instruction-for-dan)
-  - [Prepare for Node.js Buildpack](#prepare-for-nodejs-buildpack)
+  - [Getting the app on your phone for development](#getting-the-app-on-your-phone-for-development)
+    - [`bin/phonegap`](#binphonegap)
+  - [Use PhoneGap Build to create platform distributions](#use-phonegap-build-to-create-platform-distributions)
+  - [Install `.apk` file on Android](#install-apk-file-on-android)
+    - [Genymotion Android Emulator Installation (move to Appendix)](#genymotion-android-emulator-installation-move-to-appendix)
+  - [TODO: Install `.xap` file on Windows](#todo-install-xap-file-on-windows)
+  - [TODO: Install `.ipa` file on iOS](#todo-install-ipa-file-on-ios)
+    - [Coming Next...](#coming-next)
+  - [Ember and how to make a good enough choice of framework](#ember-and-how-to-make-a-good-enough-choice-of-framework)
+    - [Coming Next...](#coming-next-1)
+  - [How to install Ember](#how-to-install-ember)
+  - [Creating a New Ember Application](#creating-a-new-ember-application)
+    - [Install npm dependencies](#install-npm-dependencies)
+    - [Install Bower as npm dependency](#install-bower-as-npm-dependency)
+    - [Install Bower dependencies](#install-bower-dependencies)
+    - [Serve the Ember app](#serve-the-ember-app)
+    - [bin/ember](#binember)
+- [WHEREAMI/TODO: asdf write bin/ember script here, borrow from bin/phonegap section](#whereamitodo-asdf-write-binember-script-here-borrow-from-binphonegap-section)
+  - [Ember at the front, Rails at the back](#ember-at-the-front-rails-at-the-back)
+    - [Coming Next...](#coming-next-2)
+  - [Run multiple processes in one command with Foreman](#run-multiple-processes-in-one-command-with-foreman)
+  - [Move `index.html` to Ember](#move-indexhtml-to-ember)
+  - [Configuring Ember and PhoneGap](#configuring-ember-and-phonegap)
+    - [Ember Router `locationType`](#ember-router-locationtype)
+    - [Unify PhoneGap and Ember](#unify-phonegap-and-ember)
+    - [Manage `phonegap serve` with Foreman](#manage-phonegap-serve-with-foreman)
+    - [PhoneGap Build and run the Ember app](#phonegap-build-and-run-the-ember-app)
+  - [How to deploy an Ember-Rails app to Heroku](#how-to-deploy-an-ember-rails-app-to-heroku)
+    - [Hiding `Procfile` from Heroku](#hiding-procfile-from-heroku)
+    - [Join Heroku](#join-heroku)
+    - [Heroku buildpacks](#heroku-buildpacks)
+    - [Heroku's Multi Buildpack](#herokus-multi-buildpack)
+    - [Create a Heroku app](#create-a-heroku-app)
+    - [Special Instruction For Dan:](#special-instruction-for-dan)
+    - [Prepare for Node.js Buildpack](#prepare-for-nodejs-buildpack)
 
 <!-- /MarkdownTOC -->
 
@@ -355,6 +357,7 @@ The `--skip-npm` and `--skip-bower` options were given to `ember init` to stop E
 
 Instead of using the `client/` directory for these dependencies, we're going to install these dependencies in the project root, under the `my-rails-app/node_modules` and `my-rails-app/bower_components` directories. This will pay off later by simplifying our production environment deployment to Heroku.
 
+Add the generated Ember app to your repo.
 
 ### Install npm dependencies
 
@@ -469,7 +472,10 @@ Once the Ember server is up and running, visit [http://localhost:4200/](http://l
 
 Stop the Ember server by pressing `Ctrl+C`.
 
-Add the generated Ember app to your git repository.
+### bin/ember
+
+# WHEREAMI/TODO: asdf write bin/ember script here, borrow from bin/phonegap section
+
 
 
 ## Ember at the front, Rails at the back
@@ -885,9 +891,6 @@ figaro heroku:set --environment production
 
 Remove "scripts > start" line from `package.json` (this triggers Heroku to create an incorrect Procfile on deploy).
 
-```bash
-npm install --save-dev bower
-```
 
 Add `"postinstall": "put correct commands here"` to package.json > scripts.
 
@@ -901,17 +904,11 @@ TODO: Notes on Add/Update bin/ scripts for Dan. bin/phonegap,ember.
 
 TODO: Procfile.development changes.
 
-TODO: Special instruction on moving/symlinking client/node_modules
+
 
 `"cacheDirectories": ["node_modules", "bower_components"],` in `package.json` to speed up Heroku deploys.
 
-bower symlink to client/.bowerrc and client/bower_components (within a script?)
 
-In .gitignore:
-```
-# Ignore local dependencies
-/bower_components
-```
 
 No need for `bin/postinstall` script, put it all in `package.json`. Briefly explain `npm run ...` shorthand with couple examples.
 
@@ -925,40 +922,6 @@ No need for `bin/postinstall` script, put it all in `package.json`. Briefly expl
   ...
 ```
 
-Do bower symlinks manually once, no need for wrapper script as these can all be stored in git repo:
-
-```bash
-# Symlink to client/.bowerrc preferences
-ln -sfn client/.bowerrc .bowerrc
-
-# Symlink to client/bower.json
-ln -sfn client/bower.json bower.json
-
-# Symlink to bower_components to ensure ember environment will be able to 
-# resolve bower dependencies.
-ln -sfn ../bower_components client/bower_components
-TODO: Instructions on removing client/bower_components and symlinking to ../bower_components, will
-      also need to mentioning allowing client/bower_components symlink to be tracked in git.
-```
-
-TODO: Instructions on removing client/node_modules (so it can be symlinked by ember script)
-
-Remove these lines from `client/.gitignore` and add to `.gitignore`:
-```
-# Ignore local dependencies
-/node_modules
-/bower_components
-```
-
-
-
-
-```
-TODO: remove from bin/ember the symlink, can be stored in git repo and setup one-time:
-# Ensure node_modules in parent directory is symlinked to so ember resolves
-# dependencies correctly in all environments.
-ln -sfn ../node_modules node_modules
-```
 
 
 

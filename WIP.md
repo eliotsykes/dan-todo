@@ -35,7 +35,8 @@ mv client/.bowerrc ./
 ln -s ../bower.json client/bower.json
 ln -s ../.bowerrc client/.bowerrc
 
-# Install bower under devDependencies in package.json with this:
+# Install bower under devDependencies in package.json with this
+# (deployment to production will require this in package.json):
 npm install --save-dev bower
 ```
 
