@@ -725,11 +725,78 @@ In .gitignore:
 /bower_components
 ```
 
+No need for `bin/postinstall` script, put it all in `package.json`. Briefly explain `npm run ...` shorthand with couple examples.
+
+```
+  ...
+  "scripts": {
+    "build": "bin/ember build --environment ${DEPLOY:-development}",
+    "test": "bin/ember test",
+    "postinstall": "bin/bower install && npm run build"
+  },
+  ...
+```
+
+Do bower symlinks manually once, no need for wrapper script as these can all be stored in git repo:
+
+```bash
+# Symlink to client/.bowerrc preferences
+ln -sfn client/.bowerrc .bowerrc
+
+# Symlink to client/bower.json
+ln -sfn client/bower.json bower.json
+
+# Symlink to bower_components to ensure ember environment will be able to 
+# resolve bower dependencies.
+ln -sfn ../bower_components client/bower_components
+TODO: Instructions on removing client/bower_components and symlinking to ../bower_components, will
+      also need to mentioning allowing client/bower_components symlink to be tracked in git.
+```
+
+TODO: Instructions on removing client/node_modules (so it can be symlinked by ember script)
+
+Remove these lines from `client/.gitignore` and add to `.gitignore`:
+```
+# Ignore local dependencies
+/node_modules
+/bower_components
+```
+
+
+
+
+```
+TODO: remove from bin/ember the symlink, can be stored in git repo and setup one-time:
+# Ensure node_modules in parent directory is symlinked to so ember resolves
+# dependencies correctly in all environments.
+ln -sfn ../node_modules node_modules
+```
+
+
+
+
+
+
+
 
 
 - https://github.com/rwz/ember-cli-rails#heroku
 - https://github.com/rwz/ember-cli-rails/blob/master/lib/tasks/ember-cli.rake#L18
 - https://github.com/rwz/ember-cli-rails/blob/master/lib/ember-cli-rails.rb
 
+Make scripts in bin/ and in package.json>scripts windows-compatible: http://blog.keithcirkel.co.uk/how-to-use-npm-as-a-build-tool/ . Below snippet taken from that article:
 
+```
+"scripts": {
+  "clean": "rm -r dist/*"
+}
+If you really need to have Windows support, it does not support rm - luckily there is rimraf which is a cross-compatible tool to do the same thing:
+
+"devDependencies": {
+  "rimraf": "latest"
+},
+"scripts": {
+  "clean": "rimraf dist"
+}
+```
 
