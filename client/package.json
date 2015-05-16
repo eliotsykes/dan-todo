@@ -10,7 +10,7 @@
   "scripts": {
     "build": "bin/ember build",
     "test": "bin/ember test",
-    "postinstall": "bin/postinstall"
+    "postinstall": "bin/bower install && bin/build_client"
   },
   "cacheDirectories": ["node_modules", "bower_components"],
   "repository": "",

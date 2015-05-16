@@ -1,0 +1,6 @@
+#!/usr/bin/env sh
+
+# DEPLOY env var == "production" on Heroku at deploy time.
+build_env=${DEPLOY:-development}
+echo "Building Ember application for $build_env environment"
+bin/ember build --environment $build_env

@@ -472,22 +472,8 @@ ln -s ../dist www
 
 Check the symlink created successfully, open `client/wrap/www/index.html` and check its the same as the file at `client/dist/index.html`.
 
-The `client/dist` directory is always required for `phonegap serve` to run. `client/dist` is not yet tracked by git, its transient and won't be present if we clone our git repo to a new environment. Let's change that so the `client/dist` directory is tracked:
+The `client/dist` directory is always required for `phonegap serve` to run. As `client/dist` contains files that are regenerated regularly from source files, `client/dist` is deliberately git-ignored in `client/.gitignore`. We just need to make sure this directory always exists. See `bin/phonegap` script.
 
-```bash
-# Inside my-rails-app/ dir:
-touch client/dist/.keep
-```
-
-Replace the `/dist` line in `client/.gitignore` with these lines:
-
-```
-# Configure git to track only the dist/ directory and its .keep file. No other
-# files in the dist/ dir will be tracked as they are files that are regularly
-# regenerated from the app's source files.
-/dist/*
-!/dist/.keep
-```
 
 ### Manage `phonegap serve` with Foreman
 
@@ -707,86 +693,29 @@ figaro heroku:set --environment production
 
 ### Prepare for Node.js Buildpack
 
-The Node.js buildpack expects a `package.json` file at the project root. We need to create this only to satisfy the Node.js buildpack so it doesn't cause a deploy time error. There is no other reason we are creating this.
+The Node.js buildpack expects a `package.json` file at the project root, lets reuse the one in the Ember `client/` directory.
 
-Create a `package.json` file inside `my-rails-app/`, and save it with the following single line of content (an empty JavaScript object):
-
-```javascript
-{}
-```
-
-OR symlink to client/package.json and remove "scripts > start" line (this triggers Heroku to create an incorrect Procfile on deploy).
+Inside `my-rails-app/`, symlink to `client/package.json` and remove "scripts > start" line (this triggers Heroku to create an incorrect Procfile on deploy).
 
 ```bash
 cd client && npm install --save-dev bower
 ```
 
-TRY TO AVOID: Create `my-rails-app/.bowerrc` with current working directory (`cwd`) option:
-
-```json
-{ MAY BE AVOIDABLE
-  "cwd": "client"
-}
-```
-
-Add `"postinstall": "bin/heroku_postinstall"` or `"postinstall": "cd client && bower install && ember build --environment production && cd .."` to package.json > scripts.
+Add `"postinstall": "bin/heroku_postinstall"` to package.json > scripts.
 
 `heroku config:set NPM_CONFIG_PRODUCTION=false` to install devDependencies when `npm install` run by nodejs buildpack (https://github.com/heroku/heroku-buildpack-nodejs#enable-or-disable-devdependencies-installation)
 
-Trigger `ember build --environment production` on `git push heroku master`. Perhaps from a redefined `assets:precompile` rake task?
+`bin/postinstall` script creation and added to `package.json` > scripts > postinstall.
 
-$ cat .bowerrc 
-{
-  "cwd": "client"
-}
+TODO: Need to review `npm install` commands above, no longer run in `client/`.
 
+TODO: Notes on Add/Update bin/ scripts for Dan. bin/phonegap,ember. 
 
----
+TODO: Procfile.development changes.
 
-### Special Instruction for Dan (new instruction added and copied from above)
-
-The `client/dist` directory is always required for `phonegap serve` to run. `client/dist` is not yet tracked by git, its transient and won't be present if we clone our git repo to a new environment. Let's change that so the `client/dist` directory is tracked:
-
-```bash
-# Inside my-rails-app/ dir:
-touch client/dist/.keep
-```
-
-Replace the `/dist` line in `client/.gitignore` with these lines:
-
-```
-# Configure git to track only the dist/ directory and its .keep file. No other
-# files in the dist/ dir will be tracked as they are files that are regularly
-# regenerated from the app's source files.
-/dist/*
-!/dist/.keep
-```
----
-
-Remember to unset NODE_MODULES_CACHE on Heroku once dependencies resolved.
-
-```
-# Inside my-rails-app/ dir
-# Move package.json to project root:
-mv client/package.json ./
-```
-
-Fix up postinstall in package.json so it runs successfully on dev and prod as "bin/postinstall" can't be found in dev.
-
-Need to review `npm install` commands above, no longer run in `client/`.
-
-
-
-Add `node_modules/` to my-rails-app/.gitignore -> NOPE. Need a symlink from node_modules -> client/node_modules, and should be committed so its available on Heroku.
-
-TODO: Notes on Add/Update bin/ scripts for Dan. bin/phonegap,ember. Procfile.development changes
-
-TODO: Special instruction on removing client/node_modules
-
+TODO: Special instruction on moving/symlinking client/node_modules
 
 `"cacheDirectories": ["node_modules", "bower_components"],` in `package.json` to speed up Heroku deploys.
-
-
 
 bower symlink to client/.bowerrc and client/bower_components (within a script?)
 
@@ -797,21 +726,6 @@ In .gitignore:
 ```
 
 
-
-
-Inspired by:
-
-https://github.com/rwz/ember-cli-rails/issues/30#issuecomment-90117556
-
-It seems like ember-cli-rails is for hybrid apps that need some pages rendered in Rails. We decided we could live with no Rails generated pages and were able to eliminate ember-cli-rails. We now have basically this setup:
-
-Disable the asset pipeline in application.rb with config.assets.enabled = false
-Make a symlink from public/assets to frontend/dist/assets
-The root controller action serves frontend/dist/index.html
-Use url('images/logo.png') in SCSS to refer to frontend/public/assets/images/logo.png
-Use ember build --prod instead of rake assets:precompile for production (broccoli-asset-rev works correctly)
-Use ember build -w for development and integration tests (install Watchman, and you might need to stop when you do a git rebase)
-ember-cli-rails was an essential bridge to enable our spike of re-writing our front end with Ember, but the production deployment limitations made it necessary to move on, but the impact on development workflow turns out to be minimal in our situation.
 
 - https://github.com/rwz/ember-cli-rails#heroku
 - https://github.com/rwz/ember-cli-rails/blob/master/lib/tasks/ember-cli.rake#L18
