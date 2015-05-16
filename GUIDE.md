@@ -4,6 +4,7 @@
 
 - [public/index.html is an app](#publicindexhtml-is-an-app)
 - [Getting the app on your phone for development](#getting-the-app-on-your-phone-for-development)
+  - [`bin/phonegap`](#binphonegap)
 - [Use PhoneGap Build to create platform distributions](#use-phonegap-build-to-create-platform-distributions)
 - [Install `.apk` file on Android](#install-apk-file-on-android)
   - [Genymotion Android Emulator Installation (move to Appendix)](#genymotion-android-emulator-installation-move-to-appendix)
@@ -80,7 +81,7 @@ npm install -g phonegap
 # npm not available? Install npm+node via nvm: https://github.com/creationix/nvm
 ```
 
-Make a new subdirectory, 'client/wrap', of your existing Rails application. This is the directory PhoneGap will perform its work in:
+Make a new subdirectory, 'client/wrap', in your existing Rails application. This is the directory PhoneGap will perform its work in:
 
 ```bash
 # Inside my-rails-app/ directory:
@@ -131,7 +132,53 @@ Check PhoneGap's auto-reload feature is working by saving a minor edit to `publi
 [phonegap] 200 /socket.io/?EIO=2&transport=polling&t=1234567890123-1&sid=abc1xyzA12BcdefgWXYZ
 ```
 
-Add these changes and the new `client` directory to version control.
+Add the changes in your app, including the new `client` directory to version control.
+
+### `bin/phonegap`
+
+Currently we have to remember to `cd` into the `client/wrap` directory to run `phonegap serve` correctly. This is an extra step that can be easily forgotten, so lets capture this knowledge in a wrapper script in the `bin/` directory. This will save us having to remember to do this in the future when we want to use the `phonegap` command.
+
+Create a new file `bin/phonegap` and make it executable:
+
+```bash
+# Inside my-rails-app/ directory:
+touch bin/phonegap
+
+# Make the phonegap wrapper script executable:
+chmod +x bin/phonegap
+```
+
+Open `bin/phonegap` in your editor and save it with these contents:
+
+```bash
+#!/usr/bin/env sh
+
+# Thin wrapper script to execute phonegap commands in the correct working directory. 
+# All phonegap commands need to be run inside the client/wrap dir. To save remembering
+# to change directories, just run `bin/phonegap ...` from the project root. All
+# phonegap commands will work. For usage enter `bin/phonegap --help`
+
+# phonegap serve command requires client/dist directory to exist:
+mkdir -p client/dist
+
+# phonegap command working directory must be client/wrap:
+cd client/wrap
+
+# Forward args to bin/phonegap to npm-installed phonegap command:
+phonegap "$@"
+
+# Return to project root:
+cd ../..
+```
+
+From now on, if you want to run any `phonegap` commands, run them using `bin/phonegap` as this will make sure they're executed in the correct working directory. For example, to start the PhoneGap server, we would now just run this command in the terminal:
+
+```bash
+# Inside your-rails-app/ directory:
+bin/phonegap serve
+```
+
+Commit the new `bin/phonegap` script to your repo.
 
 In the next stage you'll get to compile your app so it can be installed on devices *without* installing the PhoneGap Developer app.
 

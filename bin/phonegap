@@ -5,13 +5,13 @@
 # to change directories, just run `bin/phonegap ...` from the project root. All
 # phonegap commands will work. For usage enter `bin/phonegap --help`
 
-# phonegap serve command requires client/dist directory to exist (client/dist is symlinked from client/wrap/www)
+# phonegap serve command requires client/dist directory to exist:
 mkdir -p client/dist
 
 # phonegap command working directory must be client/wrap:
 cd client/wrap
 
-# Forward args to npm-installed phonegap command:
+# Forward args to bin/phonegap to npm-installed phonegap command:
 phonegap "$@"
 
 # Return to project root:

@@ -1,6 +1,14 @@
 Work in progress
 ----------------
 
+Special instructions:
+- Create `bin/phonegap` script as detailed here in `bin/phonegap` section (TODO: add link)
+- Change phonegap process in `Procfile.development` to this:
+```
+phonegap: bin/phonegap serve --port 4000
+```
+
+
 ---
 
 PhoneGap Build: Automate zip create and/or upload and/or download with bash script or rake task?
