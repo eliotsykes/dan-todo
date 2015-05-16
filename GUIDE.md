@@ -784,6 +784,8 @@ TODO: Notes on Add/Update bin/ scripts for Dan. bin/phonegap,ember. Procfile.dev
 TODO: Special instruction on removing client/node_modules
 
 
+`"cacheDirectories": ["node_modules", "client/bower_components"],` in `package.json` to speed up Heroku deploys.
+
 Inspired by:
 
 https://github.com/rwz/ember-cli-rails/issues/30#issuecomment-90117556
