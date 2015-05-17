@@ -39,6 +39,8 @@
     - [Edit `package.json`](#edit-packagejson)
   - [Prepare for Ruby Buildpack](#prepare-for-ruby-buildpack)
   - [First Deploy!](#first-deploy)
+  - [Second Deploy!](#second-deploy)
+  - [Coming Next...](#coming-next-3)
 
 <!-- /MarkdownTOC -->
 
@@ -1016,6 +1018,8 @@ Your app is now ready to be deployed as an Ember-Rails app to your production en
 ```bash
 # Inside your-rails-app/ directory:
 
+# Commit all remaining changes to the repo, and push them to GitHub.
+
 # Start the deployment to Heroku, may take a few minutes:
 git push heroku master
 ```
@@ -1045,3 +1049,20 @@ heroku open
 
 In the browser, check you see the Ember app (there may be a delay while the Rails app starts).
 
+
+### Second Deploy!
+
+Its a good idea to check that our deployment process is repeatable and reliable. We'll make a small change to the app, redeploy, and check the change is visible.
+
+Change the heading text in `client/app/templates/application.hbs` to something very different from the current heading. Save the changes, push them to GitHub, then deploy:
+
+```bash
+git push heroku master
+```
+
+Once deployment has completed, open the browser and refresh your app's production URL. Check you see the changes to the heading.
+
+
+### Coming Next...
+
+We'll start building out the Ember app to make use of the backend API (served by Rails) to produce a full featured todo application that runs as a web app in the browser and as a native app on smartphones and tablets.
