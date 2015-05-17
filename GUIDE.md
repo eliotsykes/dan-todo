@@ -183,7 +183,9 @@ From now on, if you want to run any `phonegap` commands, run them using `bin/pho
 bin/phonegap serve
 ```
 
-Commit the new `bin/phonegap` script to your repo.
+Now's a good time to add some brief usage information about `bin/phonegap` to your README.
+
+Commit this latest set of changes to your repo.
 
 In the next stage you'll get to compile your app so it can be installed on devices *without* installing the PhoneGap Developer app.
 
@@ -512,7 +514,9 @@ From now on, if you want to run any `ember` commands, run them using `bin/ember`
 bin/ember serve
 ```
 
-Commit the new `bin/ember` script to your repo.
+Consider briefly documenting `bin/ember` in your application's README for reference for your future self.
+
+Commit the changes we've made to your repo.
 
 
 ## Ember at the front, Rails at the back
@@ -525,8 +529,8 @@ The Ember app is going to be responsible for the frontend and will run in the br
 
 To support this in the development environment, you'll run two processes:
 
-1. `rails server` to serve requests for the API coming from the frontend, *and* to deliver the Ember application files to the browser
-2. `ember build` to build your Ember app files into a directory that Rails will serve them from
+1. `bin/rails server` to serve requests for the API coming from the frontend, *and* to deliver the Ember application files to the browser
+2. `bin/ember build` to build your Ember app files into a directory that Rails will serve them from
 
 By default, your Rails app is configured to serve static files, such as `index.html`, from the `public/` directory. Let's configure it to instead serve files from a directory that the Ember application will be built to.
 
@@ -547,23 +551,18 @@ rm -Rf client/dist/*
 Now start a process to do a fresh build of Ember that will automatically and conveniently rebuild any files that are changed while you're developing:
 
 ```bash
-# Inside my-rails-app/ directory:
-cd client
-
 # Builds Ember's files to client/dist/ and watches for changes to Ember's files:
-ember build --watch
+bin/ember build --watch
 ```
 
-`ember build --watch` is going to continue running while we develop. Next, open a new Terminal tab and start the Rails server:
+`bin/ember build --watch` is going to continue running while we develop. Next, open a new terminal tab and start the Rails server:
 
 ```bash
-# In new Terminal tab, inside my-rails-app/ directory
-
-# Start the Rails server:
+# In a new terminal tab, start the Rails server:
 bin/rails s
 ```
 
-Once `rails s` is running, visit [http://localhost:3000/](http://localhost:3000/) in your browser. You should see a page with the headline "Welcome to Ember.js". This page is being served by your Rails server. The contents of the page are the Ember app. The file for this page is `client/dist/index.html`.
+Once `bin/rails s` is running, visit [http://localhost:3000/](http://localhost:3000/) in your browser. You should see a page with the headline "Welcome to Ember.js". This page is being served by your Rails server. The contents of the page are the Ember app. The file for this page is `client/dist/index.html`.
 
 Let's check that changes you make to the Ember app during development are picked up in the browser.
 
@@ -577,14 +576,14 @@ Save the changes we've made to your application to your repository.
 
 ### Coming Next...
 
-Next we'll save ourselves time and precious keystrokes by using the Foreman gem to manage the `rails s` and `ember build` commands in our development environment.
+Next we'll save ourselves time and precious keystrokes by using the Foreman gem to manage the `bin/rails s` and `bin/ember build` commands in our development environment.
 
 
 ## Run multiple processes in one command with Foreman
 
 [Foreman](http://blog.daviddollar.org/2011/05/06/introducing-foreman.html) is the simplest way I've encountered to run the multiple processes that advanced Rails applications often need.
 
-In this particular app, we've got two processes that need managing in our development environment: the `ember build --watch` process, and the `rails s` process.
+In this particular app, we've got two processes that need managing in our development environment: the `bin/ember build --watch` process, and the `bin/rails s` process.
 
 Foreman is a gem that reads and runs the processes you want managed from a `Procfile`. Each line in the `Procfile` contains a name for a process and the command used to start that process. 
 
@@ -592,10 +591,10 @@ Create `my-rails-app/Procfile` with these contents, which defines two named proc
 
 ```
 rails: bin/rails server
-ember: cd client && ember build --watch && cd ..
+ember: bin/ember build --watch
 ```
 
-In Terminal, install the foreman gem:
+In the terminal, install the foreman gem:
 
 ```bash
 gem install foreman
@@ -609,7 +608,7 @@ foreman s
 
 Lets check this is working correctly. Visit [http://localhost:3000/](http://localhost:3000/) and check you see the "Hello World" headline from the Ember app.
 
-From now on, you'll be mostly using `foreman s` to run your app while you develop it. The idea is this is simpler to remember and faster to type than if we tried to manage the two `rails` and `ember` processes separately in their own Terminal tabs. If we bring other developers on board it should also make it more straightforward for them to get the app up and running on their machine.
+`foreman s` is simpler to remember and faster to type than if we tried to manage the two `rails` and `ember` processes separately in their own terminal tabs. If we bring other developers on board it should also make it more straightforward for them to get the app up and running on their machine.
 
 Quit foreman and its managed processes with `Ctrl+C`.
 
