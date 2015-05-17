@@ -37,6 +37,7 @@
   - [Create a Heroku app](#create-a-heroku-app)
   - [Prepare for Node.js Buildpack](#prepare-for-nodejs-buildpack)
     - [Edit `package.json`](#edit-packagejson)
+  - [Prepare for Ruby Buildpack](#prepare-for-ruby-buildpack)
 
 <!-- /MarkdownTOC -->
 
@@ -993,21 +994,19 @@ Lets set it up so Heroku will cache the directories where the npm and Bower depe
   ...
 ```
 
-Commit your changes to your repository.
+That's all the preparations done for the Node.js buildpack. Commit your changes to your repository.
 
+### Prepare for Ruby Buildpack
 
+At deployment, the Ruby buildpack runs immediately after the Node.js buildpack and will configure our production environment so it can run our Rails app. Compared to the preparations we did for the Node.js buildpack, there's very little we need to do for the Ruby buildpack.
 
-
-
-
-
-
-
-To run on Heroku, ensure the `Gemfile` includes the `rails_12factor` gem in the `:production` environment:
+Ensure the `Gemfile` includes the `rails_12factor` gem in the `:production` environment:
 
 ```ruby
 gem "rails_12factor", group: :production
 ```
 
 The `rails_12factor` ensures your Rails app can serve static files and that your app's logging is performed in the Heroku-recommended way. For more information see the [`rails_12factor` README](https://github.com/heroku/rails_12factor).
+
+
 
