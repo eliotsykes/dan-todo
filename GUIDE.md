@@ -35,8 +35,8 @@
   - [Heroku buildpacks](#heroku-buildpacks)
   - [Heroku's Multi Buildpack](#herokus-multi-buildpack)
   - [Create a Heroku app](#create-a-heroku-app)
-  - [Special Instruction For Dan:](#special-instruction-for-dan)
   - [Prepare for Node.js Buildpack](#prepare-for-nodejs-buildpack)
+    - [Edit `package.json`](#edit-packagejson)
 
 <!-- /MarkdownTOC -->
 
@@ -786,11 +786,12 @@ Once the platform build is complete, download the resulting distribution from Ph
 
 We're going to shortly deploy your app to Heroku. This will be the production environment.
 
+
 ### Hiding `Procfile` from Heroku
 
 The `Procfile` we use to control our development environment processes is also used by Heroku if it is present. 
 
-The processes we want to run in production are not the same as our development environment processes, so we need to make sure Heroku doesn't try to run our `Procfile`.
+The processes we want to run in production are *not* the same as our development environment processes, so we need to make sure Heroku doesn't try to run our `Procfile`.
 
 To stop Heroku from trying to use our `Procfile`, rename it to `Procfile.development`:
 
@@ -801,20 +802,22 @@ mv Procfile Procfile.development
 
 Now Heroku won't find a `Procfile`, but neither will `foreman` when we next try to run `foreman s` (try it and you should see an error message like `Procfile does not exist`). 
 
-To fix this, you can remember to pass the `-f Procfile.development` option to `foreman s`, or you can create a script that will call `foreman` for you with this option. 
+To fix this, you can remember to pass the `-f Procfile.development` option to `foreman s`, or you can create a `bin/serve` script to remember this for you. 
 
-In the long run, a new script will save keystrokes, so create a new file at `my-rails-app/bin/serve`, with these contents:
-
-```bash
-#!/bin/sh
-foreman start -f Procfile.development
-```
-
-Make the script executable:
+Create a new executable file at `my-rails-app/bin/serve`:
 
 ```bash
 # Inside your-rails-app/ dir:
+touch bin/serve
+
+# Make script executable:
 chmod +x bin/serve
+```
+Save the following lines to the `bin/serve` file:
+
+```bash
+#!/usr/bin/env sh
+foreman start -f Procfile.development
 ```
 
 From now on, to start your development processes, just run the new script:
@@ -824,7 +827,7 @@ From now on, to start your development processes, just run the new script:
 bin/serve
 ```
 
-Update any `foreman s` instructions in the `README` to use `bin/serve` instead.
+Update any `foreman s` instructions in the `README` to refer to `bin/serve` instead. From now on use `bin/serve` instead of `foreman s`.
 
 When Heroku doesn't find a `Procfile`, it falls back to using the default WEBrick server used by `rails s` which is fine while we're building our app.
 
@@ -840,15 +843,15 @@ TODO: Expand these instructions, link to Heroku and toolbelt install how-to.
 
 ### Heroku buildpacks
 
-Heroku is a great way to host your Rails apps. It just works out-of-the-box, which can sometimes feel a little magical.
+Heroku is a great way to host your Rails apps. It just works out-of-the-box, which can sometimes feel a little mysterious.
 
-We're going to need to understand what causes this magical illusion if we want to successfully deploy an app that relies on both Ruby **and** Node.js.
+We're going to peak behind the curtain on this mystery to help us build a working, repeatable, deployment process that relies on both Ruby **and** Node.js.
 
 When you deploy to Heroku, it looks at the files inside your app, and takes an educated guess at what programming language and environment is needed to run your application.
 
 In the case of Rails apps, it guesses you need a Ruby environment, and sets this up for you using the "Ruby buildpack". 
 
-A buildpack is a collection of scripts that setup a Heroku server by installing software specified in the buildpack. For example, the Ruby buildpack installs Ruby on any Heroku server its used on.
+A buildpack is a collection of scripts that setup a Heroku server by installing software specified in the buildpack. For example, the Ruby buildpack installs Ruby on any Heroku server it is used on.
 
 Heroku has individual buildpacks to setup environments for many programming languages, including Ruby, Python, PHP, Java, and most importantly to us, JavaScript/Node.js.
 
@@ -867,7 +870,7 @@ https://github.com/heroku/heroku-buildpack-nodejs
 https://github.com/heroku/heroku-buildpack-ruby
 ```
 
-These two buildpacks will be installed when we deploy our app to Heroku.
+These two buildpacks will be installed in the order specified in `.buildpacks` when we deploy our app to Heroku.
 
 ### Create a Heroku app
 
@@ -893,7 +896,7 @@ heroku buildpacks:set https://github.com/heroku/heroku-buildpack-multi
 
 ---
 
-### Special Instruction For Dan:
+*INSTRUCTIONS FOR DAN START*
 
 Update these options in these files to use the new `<APP NAME>.herokuapp.com` URL:
 
@@ -915,40 +918,84 @@ and set the config on Heroku with:
 figaro heroku:set --environment production
 ```
 
+*INSTRUCTIONS FOR DAN END*
+
 ---
 
 ### Prepare for Node.js Buildpack
 
-Remove "scripts > start" line from `package.json` (this triggers Heroku to create an incorrect Procfile on deploy).
+The Node.js buildpack is the first buildpack that will run on deploying to Heroku. There are a few things we need to alter to make our app work successfully with the Node.js buildpack.
 
-
-Add `"postinstall": "put correct commands here"` to package.json > scripts.
-
-`heroku config:set NPM_CONFIG_PRODUCTION=false` to install devDependencies when `npm install` run by nodejs buildpack (https://github.com/heroku/heroku-buildpack-nodejs#enable-or-disable-devdependencies-installation)
-
-`bin/postinstall` script creation and added to `package.json` > scripts > postinstall.
-
-TODO: Need to review `npm install` commands above, no longer run in `client/`.
-
-TODO: Procfile.development changes.
-
-
-
-`"cacheDirectories": ["node_modules", "bower_components"],` in `package.json` to speed up Heroku deploys.
-
-
-
-No need for `bin/postinstall` script, put it all in `package.json`. Briefly explain `npm run ...` shorthand with couple examples.
+By *default*, at deploy time, the Node.js buildpack runs `npm install` and installs any dependencies defined in `dependencies` in `package.json`. However, the dependencies our app needs to build are defined in `devDependencies` (not `dependencies`) in `package.json`. `devDependencies` will *not* be installed unless we set `NPM_CONFIG_PRODUCTION` to false, which you should do now:
 
 ```
-  ...
-  "scripts": {
-    "build": "bin/ember build --environment ${DEPLOY:-development}",
+# Inside my-rails-app/ directory:
+
+# Even though this Heroku app is our production environment, set
+# NPM_CONFIG_PRODUCTION to false. There are no downsides to this, it
+# makes Heroku install the devDependencies in package.json:
+heroku config:set NPM_CONFIG_PRODUCTION=false
+
+# Check NPM_CONFIG_PRODUCTION is now false. This should print false:
+heroku config:get NPM_CONFIG_PRODUCTION
+```
+
+#### Edit `package.json`
+
+`package.json` contains more than just our Ember app's development dependencies. Open `package.json` and see it contains a `scripts` object. In `scripts` you can specify commands to be runnable with `npm run ...`.
+
+Currently your `scripts` object probably contains `start`, `build`, and `test` entries. These can all be run from the command line (don't bother running them at the moment):
+
+```bash
+# Example on how to run scripts defined in package.json:
+npm run start # Performs command specified by scripts > start
+npm run build # Performs command specified by scripts > build
+npm run test  # Performs command specified by scripts > test
+```
+
+Delete the following line from the `scripts` configuration:
+
+```
+    "start": "ember server",
+```
+
+(If we left this `start` script in, we would get a problem on Heroku, as the buildpack tries to create an incorrect `Procfile` on deployment based on the content of any `scripts.start` entry in `package.json`.)
+
+Edit the `build` and `start` scripts in `package.json` so they use the `bin/ember` script created earlier:
+
+```
+    "build": "bin/ember build",
     "test": "bin/ember test",
-    "postinstall": "bin/bower install && npm run build"
-  },
+```
+
+After Heroku runs `npm install` at deploy time, it will run the `postinstall` scripts entry in `package.json` if it is defined.
+
+Define a `postinstall` scripts entry in `package.json` to install the Bower dependencies *and* build the Ember application. Add this line inside the `scripts` object:
+
+```
+    `"postinstall": "bower install && bin/ember build --environment ${DEPLOY:-development}"`
+```
+
+(`${DEPLOY:-development}` will evaluate to `production` on Heroku so the Ember build will be correctly done with the `production` environment configuration).
+
+The npm and Bower dependencies installed in your Heroku environment may take a few minutes. This time cost is inevitable the first time you deploy and these dependencies are installed.
+
+To speed up subsequent deployments, you can tell Heroku to cache these dependencies by specifying the `cacheDirectories` option in `package.json`. Heroku will cache the given directories between deployments. 
+
+Lets set it up so Heroku will cache the directories where the npm and Bower dependencies are installed. Edit `package.json` so this `cacheDirectories` option is specified below the existing `scripts` option:
+
+```
+  ...
+  "cacheDirectories": [
+    "node_modules",
+    "bower_components"
+  ],
   ...
 ```
+
+Commit your changes to your repository.
+
+
 
 
 
