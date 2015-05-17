@@ -1,0 +1,11 @@
+production:
+  SENDGRID_PASSWORD: 
+  SENDGRID_USERNAME: 
+  SECRET_KEY_BASE:
+  # NPM_CONFIG_PRODUCTION set to false installs package.json devDependencies on 
+  # Heroku deploy, which is what we want.
+  NPM_CONFIG_PRODUCTION: false
+  
+development:
+  SENDGRID_PASSWORD: 
+  SENDGRID_USERNAME: 
