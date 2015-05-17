@@ -163,11 +163,12 @@ Open `bin/phonegap` in your editor and save it with these contents:
 # to change directories, just run `bin/phonegap ...` from the project root. All
 # phonegap commands will work. For usage enter `bin/phonegap --help`
 
-# phonegap serve command requires client/dist directory to exist:
-mkdir -p client/dist
-
 # phonegap command working directory must be client/wrap:
 cd client/wrap
+
+# Ensure path symlinked to from www exists to make phonegap serve happy:
+symlink_target_path=$(readlink www)
+mkdir -p $symlink_target_path
 
 # Forward args to bin/phonegap to npm-installed phonegap command:
 phonegap "$@"
@@ -672,7 +673,7 @@ The `auto` option tries to pick the most appropriate option out of the other opt
 
 When compiled PhoneGap apps run, `index.html` isn't served over the `http:` protocol as is usual with HTML pages in a web browser environment. Instead `index.html` is served off the local filesystem of the device, which means the protocol is `file:` not `http:`. You can see this protocol in use in your own browser if you open any HTML file on your computer using the `File > Open` menu.
 
-The History API isn't supported with pages served over the `file:` protocol. For our Ember app to work in the PhoneGap environment, it needs to use `hash` for `locationType`.
+For security reasons, History API support is patchy when used in some browsers with pages served over the `file:` protocol. For our Ember app to work in the PhoneGap environment, it needs to use `hash` for `locationType`.
 
 Open `client/config/environment.js` and change the `locationType` option from `auto` to `hash`:
 
@@ -689,7 +690,7 @@ The PhoneGap `www` directory and Ember `dist` directory are where both framework
 
 To enable us to easily use the Ember app as our PhoneGap app, we'll make these directories point to the same location with a symlink.
 
-Delete the current `www` and create a symlink to replace it:
+Delete the current `www` symlink and create a new symlink to replace it:
 
 ```bash
 # Inside my-rails-app/ directory:
@@ -704,20 +705,16 @@ ln -s ../dist www
 
 Check the symlink created successfully, open `client/wrap/www/index.html` and check its the same as the file at `client/dist/index.html`.
 
-The `client/dist` directory is always required for `phonegap serve` to run. As `client/dist` contains files that are regenerated regularly from source files, `client/dist` is deliberately git-ignored in `client/.gitignore`. We just need to make sure this directory always exists. See `bin/phonegap` script.
-
 
 ### Manage `phonegap serve` with Foreman
 
-Edit your `Procfile` so it looks like this:
+Foreman will now manage a third process for us, the `phonegap serve ...` process. Edit your `Procfile` so it looks like this:
 
 ```
 rails: bin/rails server --port 3000
-ember: cd client && ember build --watch && cd ..
-phonegap: cd client/wrap && phonegap serve --port 4000 && cd ../..
+ember: bin/ember build --watch
+phonegap: bin/phonegap serve --port 4000
 ```
-
-Foreman will now manage a third process for us, the `phonegap serve ...` process.
 
 In `Procfile` we specify port numbers for the `rails` and `phonegap` processes. We've done this as both processes conflict if we don't as they both try to use port 3000.
 

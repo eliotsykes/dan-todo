@@ -3,17 +3,16 @@ Work in progress
 
 Special instructions:
 
-- Create `bin/phonegap` script as detailed here in `bin/phonegap` section (TODO: add link)
+- Create `bin/phonegap` script as detailed here in `bin/phonegap` section (TODO: add link).
 
-- Change phonegap process in `Procfile(.development)` to this:
-```
-phonegap: bin/phonegap serve --port 4000
-```
-- Create `bin/ember` script as detailed here in `bin/ember` section (TODO: add link)
+- Create `bin/ember` script as detailed here in `bin/ember` section (TODO: add link).
 
-- Change ember process in `Procfile(.development)` to this:
+- Edit `Procfile(.development)` so its contents are as follows:
+
 ```
+rails: bin/rails server --port 3000
 ember: bin/ember build --watch
+phonegap: bin/phonegap serve --port 4000
 ```
 
 - As `ember init` didn't run with `--skip-npm --skip-bower`, the `node_modules` and `bower_components`directories need to be moved to the project root. The client directory will then have symlinks to these directories. These directories hold the dependencies for node and for bower. By moving them to the project root, these dependencies are in a more universal, more accessible, and more easily deployed location for development and production environments. Perform these changes:
