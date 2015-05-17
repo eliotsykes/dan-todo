@@ -38,6 +38,7 @@
   - [Prepare for Node.js Buildpack](#prepare-for-nodejs-buildpack)
     - [Edit `package.json`](#edit-packagejson)
   - [Prepare for Ruby Buildpack](#prepare-for-ruby-buildpack)
+  - [First Deploy!](#first-deploy)
 
 <!-- /MarkdownTOC -->
 
@@ -1008,5 +1009,39 @@ gem "rails_12factor", group: :production
 
 The `rails_12factor` ensures your Rails app can serve static files and that your app's logging is performed in the Heroku-recommended way. For more information see the [`rails_12factor` README](https://github.com/heroku/rails_12factor).
 
+### First Deploy!
 
+Your app is now ready to be deployed as an Ember-Rails app to your production environment on Heroku, start the deployment and try to read and review the output as it is generated, it'll give you an overview of the steps that are happening at deployment time (being familiar with this will be useful):
+
+```bash
+# Inside your-rails-app/ directory:
+
+# Start the deployment to Heroku, may take a few minutes:
+git push heroku master
+```
+
+Here's an overview of what happens during deployment to Heroku:
+
+- A copy of your latest code (from master) is sent to Heroku
+- The multi buildpack starts:
+  - The Node.js buildpack starts:
+    - `package.json` `devDependencies` installed to `node_modules/`
+    - `postinstall` command from `package.json` is run:
+      - Bower dependencies are installed to `bower_components/`
+      - Ember `production` application is built to `client/dist/`
+    - npm and Bower dependencies directories are cached for use in later deployments
+  - The Ruby buildpack starts:
+    - Gems required for production are installed
+    - Rails server is started
+
+Once the deployment completes, visit your application in your browser:
+
+```bash
+# In your-rails-app/ directory:
+
+# Opens URL for your app in web browser:
+heroku open
+```
+
+In the browser, check you see the Ember app (there may be a delay while the Rails app starts).
 
