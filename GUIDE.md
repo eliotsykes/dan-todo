@@ -756,16 +756,13 @@ We're not about to change this file, but quickly take a look at `client/config/e
 
 ```
 
-The web app we upload to the PhoneGap Build server from now on will be built with the Ember `production` environment. This is done by passing the `--environment` flag to `ember build`.
+The web app we upload to the PhoneGap Build server from now on will be built with the Ember `production` environment. This is done by passing the `--environment` flag to `bin/ember build`.
 
 Perform the commands below to create a new zip file to upload to PhoneGap Build.
 
 ```bash
-# Inside my-rails-app/ directory:
-cd client
-
 # Build the production app to the dist/ directory:
-ember build --environment production
+bin/ember build --environment production
 
 # Create the zip file of the contents of the dist directory:
 cd dist
