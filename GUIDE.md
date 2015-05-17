@@ -3,41 +3,40 @@
 <!-- MarkdownTOC depth=0 autolink=true bracket=round -->
 
 - [public/index.html is an app](#publicindexhtml-is-an-app)
-  - [Getting the app on your phone for development](#getting-the-app-on-your-phone-for-development)
-    - [`bin/phonegap`](#binphonegap)
-  - [Use PhoneGap Build to create platform distributions](#use-phonegap-build-to-create-platform-distributions)
-  - [Install `.apk` file on Android](#install-apk-file-on-android)
-    - [Genymotion Android Emulator Installation (move to Appendix)](#genymotion-android-emulator-installation-move-to-appendix)
-  - [TODO: Install `.xap` file on Windows](#todo-install-xap-file-on-windows)
-  - [TODO: Install `.ipa` file on iOS](#todo-install-ipa-file-on-ios)
-    - [Coming Next...](#coming-next)
-  - [Ember and how to make a good enough choice of framework](#ember-and-how-to-make-a-good-enough-choice-of-framework)
-    - [Coming Next...](#coming-next-1)
-  - [How to install Ember](#how-to-install-ember)
-  - [Creating a New Ember Application](#creating-a-new-ember-application)
-    - [Install npm dependencies](#install-npm-dependencies)
-    - [Install Bower as npm dependency](#install-bower-as-npm-dependency)
-    - [Install Bower dependencies](#install-bower-dependencies)
-    - [Serve the Ember app](#serve-the-ember-app)
-    - [bin/ember](#binember)
-- [WHEREAMI/TODO: asdf write bin/ember script here, borrow from bin/phonegap section](#whereamitodo-asdf-write-binember-script-here-borrow-from-binphonegap-section)
-  - [Ember at the front, Rails at the back](#ember-at-the-front-rails-at-the-back)
-    - [Coming Next...](#coming-next-2)
-  - [Run multiple processes in one command with Foreman](#run-multiple-processes-in-one-command-with-foreman)
-  - [Move `index.html` to Ember](#move-indexhtml-to-ember)
-  - [Configuring Ember and PhoneGap](#configuring-ember-and-phonegap)
-    - [Ember Router `locationType`](#ember-router-locationtype)
-    - [Unify PhoneGap and Ember](#unify-phonegap-and-ember)
-    - [Manage `phonegap serve` with Foreman](#manage-phonegap-serve-with-foreman)
-    - [PhoneGap Build and run the Ember app](#phonegap-build-and-run-the-ember-app)
-  - [How to deploy an Ember-Rails app to Heroku](#how-to-deploy-an-ember-rails-app-to-heroku)
-    - [Hiding `Procfile` from Heroku](#hiding-procfile-from-heroku)
-    - [Join Heroku](#join-heroku)
-    - [Heroku buildpacks](#heroku-buildpacks)
-    - [Heroku's Multi Buildpack](#herokus-multi-buildpack)
-    - [Create a Heroku app](#create-a-heroku-app)
-    - [Special Instruction For Dan:](#special-instruction-for-dan)
-    - [Prepare for Node.js Buildpack](#prepare-for-nodejs-buildpack)
+- [Getting the app on your phone for development](#getting-the-app-on-your-phone-for-development)
+  - [`bin/phonegap`](#binphonegap)
+- [Use PhoneGap Build to create platform distributions](#use-phonegap-build-to-create-platform-distributions)
+- [Install `.apk` file on Android](#install-apk-file-on-android)
+  - [Genymotion Android Emulator Installation (move to Appendix)](#genymotion-android-emulator-installation-move-to-appendix)
+- [TODO: Install `.xap` file on Windows](#todo-install-xap-file-on-windows)
+- [TODO: Install `.ipa` file on iOS](#todo-install-ipa-file-on-ios)
+  - [Coming Next...](#coming-next)
+- [Ember and how to make a good enough choice of framework](#ember-and-how-to-make-a-good-enough-choice-of-framework)
+  - [Coming Next...](#coming-next-1)
+- [How to install Ember](#how-to-install-ember)
+- [Creating a New Ember Application](#creating-a-new-ember-application)
+  - [Install npm dependencies](#install-npm-dependencies)
+  - [Install Bower as npm dependency](#install-bower-as-npm-dependency)
+  - [Install Bower dependencies](#install-bower-dependencies)
+  - [Serve the Ember app](#serve-the-ember-app)
+  - [`bin/ember`](#binember)
+- [Ember at the front, Rails at the back](#ember-at-the-front-rails-at-the-back)
+  - [Coming Next...](#coming-next-2)
+- [Run multiple processes in one command with Foreman](#run-multiple-processes-in-one-command-with-foreman)
+- [Move `index.html` to Ember](#move-indexhtml-to-ember)
+- [Configuring Ember and PhoneGap](#configuring-ember-and-phonegap)
+  - [Ember Router `locationType`](#ember-router-locationtype)
+  - [Unify PhoneGap and Ember](#unify-phonegap-and-ember)
+  - [Manage `phonegap serve` with Foreman](#manage-phonegap-serve-with-foreman)
+  - [PhoneGap Build and run the Ember app](#phonegap-build-and-run-the-ember-app)
+- [How to deploy an Ember-Rails app to Heroku](#how-to-deploy-an-ember-rails-app-to-heroku)
+  - [Hiding `Procfile` from Heroku](#hiding-procfile-from-heroku)
+  - [Join Heroku](#join-heroku)
+  - [Heroku buildpacks](#heroku-buildpacks)
+  - [Heroku's Multi Buildpack](#herokus-multi-buildpack)
+  - [Create a Heroku app](#create-a-heroku-app)
+  - [Special Instruction For Dan:](#special-instruction-for-dan)
+  - [Prepare for Node.js Buildpack](#prepare-for-nodejs-buildpack)
 
 <!-- /MarkdownTOC -->
 
@@ -472,10 +471,48 @@ Once the Ember server is up and running, visit [http://localhost:4200/](http://l
 
 Stop the Ember server by pressing `Ctrl+C`.
 
-### bin/ember
 
-# WHEREAMI/TODO: asdf write bin/ember script here, borrow from bin/phonegap section
+### `bin/ember`
 
+Currently we have to remember to `cd` into the `client` directory to run `ember` commands. This is an extra step that can be easily forgotten. Capture this knowledge in a wrapper script in the `bin/` directory.
+
+Create a new file `bin/ember` and make it executable:
+
+```bash
+# Inside my-rails-app/ directory:
+touch bin/ember
+
+# Make the ember wrapper script executable:
+chmod +x bin/ember
+```
+Open `bin/ember` in your editor and save it with these contents:
+
+```bash
+#!/usr/bin/env sh
+
+# Thin wrapper script to execute ember commands in the correct working directory. 
+# All ember commands need to be run inside the client/ dir. To save remembering
+# to change directories, just run `bin/ember ...` from the project root. All
+# ember commands will work. For usage enter `bin/ember --help`
+
+# ember command working directory must be client/:
+cd client
+
+# Forward args to npm-installed ember command:
+ember "$@"
+
+# Return to project root:
+cd ..
+```
+
+From now on, if you want to run any `ember` commands, run them using `bin/ember` as this will make sure they're executed in the correct working directory. For example, to start the Ember server, we would now just run this command in the terminal:
+
+```bash
+# Inside your-rails-app/ directory:
+bin/ember serve
+```
+
+Commit the new `bin/ember` script to your repo.
 
 
 ## Ember at the front, Rails at the back
@@ -899,8 +936,6 @@ Add `"postinstall": "put correct commands here"` to package.json > scripts.
 `bin/postinstall` script creation and added to `package.json` > scripts > postinstall.
 
 TODO: Need to review `npm install` commands above, no longer run in `client/`.
-
-TODO: Notes on Add/Update bin/ scripts for Dan. bin/phonegap,ember. 
 
 TODO: Procfile.development changes.
 
