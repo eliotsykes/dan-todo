@@ -977,7 +977,7 @@ After Heroku runs `npm install` at deploy time, it will run the `postinstall` sc
 Define a `postinstall` scripts entry in `package.json` to install the Bower dependencies *and* build the Ember application. Add this line inside the `scripts` object:
 
 ```
-    `"postinstall": "bower install && bin/ember build --environment ${DEPLOY:-development}"`
+    "postinstall": "bower install && bin/ember build --environment ${DEPLOY:-development}"
 ```
 
 (`${DEPLOY:-development}` will evaluate to `production` on Heroku so the Ember build will be correctly done with the `production` environment configuration).
