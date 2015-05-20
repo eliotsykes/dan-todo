@@ -10,8 +10,11 @@ class EmberBuilder
   end
 
   def build
-    p "TODO: bin/ember build --environment=test"
-    p "...and wait until it completes (print time output? --quiet option?)"
+    puts "----------------------------------------------"
+    puts "Building Ember test environment..."
+    system "bin/ember build --environment=test"
+    puts "...completed building Ember test environment"
+    puts "----------------------------------------------"
     @build_count += 1
   end
 
