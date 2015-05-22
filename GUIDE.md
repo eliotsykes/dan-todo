@@ -41,6 +41,9 @@
   - [First Deploy!](#first-deploy)
   - [Second Deploy!](#second-deploy)
   - [Coming Next...](#coming-next-3)
+- [User Registration](#user-registration)
+  - [Preparing for testing](#preparing-for-testing)
+  - [BDD: Writing and passing user registration spec](#bdd-writing-and-passing-user-registration-spec)
 
 <!-- /MarkdownTOC -->
 
@@ -537,13 +540,21 @@ To support this in the development environment, you'll run two processes:
 1. `bin/rails server` to serve requests for the API coming from the frontend, *and* to deliver the Ember application files to the browser
 2. `bin/ember build` to build your Ember app files into a directory that Rails will serve them from
 
-By default, your Rails app is configured to serve static files, such as `index.html`, from the `public/` directory. Let's configure it to instead serve files from a directory that the Ember application will be built to.
+By default, your Rails app is configured to serve static files, such as `index.html`, `404.html`, `robots.txt`, and `favicon.ico` from the `public/` directory. Let's configure it to instead serve files from a directory that the Ember application will be built to.
 
 The Ember application will be built into the `client/dist` directory. This is the directory we want to replace the Rails `public/` directory with. Create a new initializer script at `your-rails-app/config/initializers/public_path.rb` with the following contents:
 
 ```ruby
 # Set public path to be the Ember-managed client/dist directory:
 Rails.application.config.paths["public"] = File.join("client", "dist")
+```
+
+Move the following files from `public` to `client/public` to migrate them to Ember:
+
+```bash
+cd public
+mv 404.html 422.html 500.html favicon.ico robots.txt ../client/public/
+# Do *not* move public/index.html
 ```
 
 When we briefly ran the Ember server earlier, Ember built files into the `client/dist` directory. This is normal, but for now, to avoid the distraction of some unimportant logging messages, clear out the current contents of the `client/dist/` directory:
@@ -650,7 +661,11 @@ Be sure to *keep* the `{{outlet}}` handlebars expression at the end of `applicat
 {{outlet}}
 ```
 
-Delete `public/index.html`.
+Delete `public/index.html`:
+
+```bash
+rm public/index.html
+```
 
 Run `foreman s` inside the `my-rails-app/` directory, and visit [http://localhost:3000](http://localhost:3000) to check you see these changes.
 
@@ -1066,3 +1081,112 @@ Once deployment has completed, open the browser and refresh your app's productio
 ### Coming Next...
 
 We'll start building out the Ember app to make use of the backend API (served by Rails) to produce a full featured todo application that runs as a web app in the browser and as a native app on smartphones and tablets.
+
+
+## User Registration
+
+Document writing a feature spec and setting up the test environment.
+
+
+### Preparing for testing
+
+Build the ember test environment into client/dist as part of test suite setup.
+
+Use documentation formatter. In `.rspec`, add this line if its not present:
+
+```
+--format documentation
+```
+
+RSpec's documentation formatter gives more detailed feedback than the default formatter.
+
+Write `spec/support/ember_builder.rb` to build the Ember test environment once for each suite run:
+
+```ruby
+TODO: include EmberBuilder source here once its finalized. Temporary source (update to use master): https://raw.githubusercontent.com/eliotsykes/dan-todo/user-registration_example/spec/support/ember_builder.rb
+```
+
+`spec/support/database_cleaner.rb` config to work with Capybara JavaScript-capable drivers, take from https://raw.githubusercontent.com/eliotsykes/rspec-rails-examples/master/spec/support/database_cleaner.rb
+
+```ruby
+# Expand devise_for to be explicit about the Devise controllers it uses, we're going to slowly remove our dependency on these.
+devise_for :users, only: [:sessions, :passwords, :registrations, :confirmations]
+```
+
+### BDD: Writing and passing user registration spec
+
+Run spec:
+
+```bash
+$ bin/rspec spec/features/user_registration_spec.rb 
+```
+
+Incorrect title, with failure like this:
+
+```
+Failures:
+
+  1) User registration successful with valid details
+     Failure/Error: expect(page).to have_title("Please register")
+       expected "Blocitoff" to include "Please register"
+     # ./spec/features/user_registration_spec.rb:12:in `block (2 levels) in <top (required)>'
+
+
+```
+
+Remove `:registrations` from `devise_for` `only:` option.
+
+Run the spec again and see the next spec failure:
+
+```
+Failures:
+
+  1) User registration successful with valid details
+     Failure/Error: visit new_user_registration_path
+     NameError:
+       undefined local variable or method `new_user_registration_path'
+```
+
+The `new_user_registration_path` route no longer exists since we removed the devise :registrations controller from `config/routes.rb`.
+
+Lets add a new route for registration, that'll be at the easily typed, easily remembered path `/register`. 
+
+Our Ember application is a Single Page Application (SPA). This means that all of its pages are effectively served from the single `index.html` file.
+
+To make our jobs easier building a SPA in Rails, we're going to introduce [rails-static-router](https://github.com/eliotsykes/rails-static-router), which is a way to declare the same static file to be served at multiple paths in `config/routes.rb`.
+
+Create a new initializer at `config/initializers/static_router.rb`, and copy and paste in the contents of this file: https://raw.githubusercontent.com/eliotsykes/rails-static-router/master/static_router.rb
+
+Make this line the first route in `config/routes.rb`:
+
+```ruby
+  get "/register", to: static("index.html"), as: :new_user_registration
+```
+
+Thanks to this new route, requests for `/register` will be served Ember's index.html. You can also access the related URL helper methods `new_user_registration_path` and `new_user_registration_url` throughout your Rails app (for example in your tests and in mail templates) whenever you need to generate a URL for registering a new user.
+
+Re-run the spec and see the next failure:
+
+```
+  1) User registration successful with valid details
+     Failure/Error: Unable to find matching line from backtrace
+     AbstractController::ActionNotFound:
+       The action 'new' could not be found for UsersController
+```
+
+Add a `new` action to `UsersController`:
+
+```ruby
+  def new
+  end
+```
+
+Run the spec and review the next failure:
+
+```
+  1) User registration successful with valid details
+     Failure/Error: Unable to find matching line from backtrace
+     ActionView::MissingTemplate:
+       Missing template users/new
+```
+

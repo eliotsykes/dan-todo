@@ -86,3 +86,14 @@ Use a .slugignore with Heroku to ignore files (e.g. development settings like `.
 Source: https://devcenter.heroku.com/articles/slug-compiler#ignoring-files-with-slugignore
 
 ---
+
+Previous devise registrations controller routes
+
+cancel_user_registration GET    /users/cancel(.:format)                    devise/registrations#cancel
+       user_registration POST   /users(.:format)                           devise/registrations#create
+   new_user_registration GET    /users/sign_up(.:format)                   devise/registrations#new
+  edit_user_registration GET    /users/edit(.:format)                      devise/registrations#edit
+                         PATCH  /users(.:format)                           devise/registrations#update
+                         PUT    /users(.:format)                           devise/registrations#update
+                         DELETE /users(.:format)                           devise/registrations#destroy
+
