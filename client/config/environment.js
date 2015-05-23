@@ -3,6 +3,7 @@
 module.exports = function(environment) {
   var ENV = {
     modulePrefix: 'todos',
+    podModulePrefix: 'todos/pods',
     environment: environment,
     baseURL: '/',
     // 'history' locationType not supported in compiled PhoneGap apps, use 'hash':
