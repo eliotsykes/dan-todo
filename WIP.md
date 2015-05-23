@@ -97,3 +97,6 @@ cancel_user_registration GET    /users/cancel(.:format)                    devis
                          PUT    /users(.:format)                           devise/registrations#update
                          DELETE /users(.:format)                           devise/registrations#destroy
 
+---
+
+Introduce --skip-ember-build option for RSpec and EmberBuilder.

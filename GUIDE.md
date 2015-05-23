@@ -44,6 +44,8 @@
 - [User Registration](#user-registration)
   - [Preparing for testing](#preparing-for-testing)
   - [BDD: Writing and passing user registration spec](#bdd-writing-and-passing-user-registration-spec)
+    - [Ember Pods](#ember-pods)
+    - [Ember Route Generation](#ember-route-generation)
 
 <!-- /MarkdownTOC -->
 
@@ -1085,20 +1087,35 @@ We'll start building out the Ember app to make use of the backend API (served by
 
 ## User Registration
 
-Document writing a feature spec and setting up the test environment.
-
+Its time to start building the first feature for the app, user registration. We'll do this using Behaviour Driven Development.
 
 ### Preparing for testing
 
-Build the ember test environment into client/dist as part of test suite setup.
+There's a few tweaks to perform on our testing environment.
 
-Use documentation formatter. In `.rspec`, add this line if its not present:
+Comment out the lines within the `test` environment configuration in `client/config/environment.js` so it looks like so:
+
+```javascript
+if (environment === 'test') {
+    // Testem prefers this...
+    // ENV.baseURL = '/';
+    // ENV.locationType = 'none';
+
+    // keep test console output quieter
+    // ENV.APP.LOG_ACTIVE_GENERATION = false;
+    // ENV.APP.LOG_VIEW_LOOKUPS = false;
+
+    // ENV.APP.rootElement = '#ember-testing';
+  }
+```
+
+This will enable our Rails tests to run in an environment that is more consistent with the development and production environments (nb. this test environment config may be brought back later).
+
+RSpec's documentation formatter gives more detailed feedback than the default formatter, in `.rspec`, add this line if its not present:
 
 ```
 --format documentation
 ```
-
-RSpec's documentation formatter gives more detailed feedback than the default formatter.
 
 Write `spec/support/ember_builder.rb` to build the Ember test environment once for each suite run:
 
@@ -1108,12 +1125,20 @@ TODO: include EmberBuilder source here once its finalized. Temporary source (upd
 
 `spec/support/database_cleaner.rb` config to work with Capybara JavaScript-capable drivers, take from https://raw.githubusercontent.com/eliotsykes/rspec-rails-examples/master/spec/support/database_cleaner.rb
 
+
+Expand `devise_for` in our routes to be explicit about the Devise controllers it uses, we're going to slowly remove our dependency on Devise's built-in controllers. Edit `devise_for` line in `config/routes.rb` to be:
+
 ```ruby
-# Expand devise_for to be explicit about the Devise controllers it uses, we're going to slowly remove our dependency on these.
 devise_for :users, only: [:sessions, :passwords, :registrations, :confirmations]
 ```
 
 ### BDD: Writing and passing user registration spec
+
+Write the registration feature using Behaviour Driven Development. Here's the spec first, `spec/features/user_registration_spec.rb`:
+
+```ruby
+TODO: include spec contents here
+```
 
 Run spec:
 
@@ -1121,20 +1146,107 @@ Run spec:
 $ bin/rspec spec/features/user_registration_spec.rb 
 ```
 
-Incorrect title, with failure like this:
+Here's the first test failure you'll encounter:
 
 ```
-Failures:
+  1) User registration successful with valid details
+     Failure/Error: click_link "Register"
+     Capybara::ElementNotFound:
+       Unable to find link "Register"
+```
 
+There is no "Register" link on the root page of the app. 
+
+Remove `:registrations` from the `devise_for` `only:` option in `config/routes.rb`. This will stop Devise from generating registration routes for the app. You're going to take control of the registration routes from now on.
+
+Open `client/app/templates/application.hbs` and replace the contents with:
+
+```html
+{{#link-to 'register'}}Register{{/link-to}}
+
+{{outlet}}
+```
+
+Here you're using the Ember [`link-to`](http://emberjs.com/api/classes/Ember.Handlebars.helpers.html#method_link-to) helper to build an anchor tag that takes the user to the registration page (the user registration page doesn't exist yet, you'll get to that shortly).
+
+The `'register'` argument passed to `{{#link-to 'register'}}` in `application.hbs` is the name of an Ember route. Soon you're going to use an Ember generator to generate the `register` route. First lets talk about Ember "pods" briefly.
+
+
+#### Ember Pods
+
+To help organize an application as it grows, Ember introduced the "pod" concept, and for now what you should know about a pod is it a loosely defined way for grouping all of the files related to a particular type of resource within a subdirectory.
+
+Think of a pod similarly to how you think of `resources` routes and models in Rails. For example, if we had a "comment" resource or model, we might have a corresponding "comment" pod that would be at the subdirectory `client/app/pods/comment`. This `client/app/pods/comment` directory would hold all of the Ember JavaScript files that are related to viewing and manipulating comments within the Ember application.
+
+For user registrations, the resource is "user", and so the name of our pod is going to be "user".
+
+So our pods are generated in the `client/app/pods/` directory, add the `podModulePrefix` configuration line to the existing `ENV` object in `client/config/environment.js`:
+
+```javascript
+  var ENV = {
+    modulePrefix: 'todos',
+    podModulePrefix: 'todos/pods',
+    ...
+  }
+```
+
+The `podModulePrefix` always has a value that is of the format `module_prefix_goes_here/name_of_directory_to_store_pods`, so ensure the `module_prefix_goes_here` part matches the value you have set as `ENV.modulePrefix`.
+
+Depending on your version of Ember, your `client/app/app.js` *may* be missing a critical line for enabling pods. Ensure `client/app/app.js` has a section like below, and add the `podModulePrefix: config.podModulePrefix,` line if it is missing:
+
+```javascript
+App = Ember.Application.extend({
+  modulePrefix: config.modulePrefix,
+  podModulePrefix: config.podModulePrefix,
+  Resolver: Resolver
+});
+```
+
+The app is now ready to start using pods with Ember's generate command.
+
+
+#### Ember Route Generation
+
+Generate the TODO:user-or-register route with the following command: / Run Ember's generate command to generate a route for `/register`:
+
+```bash
+# Inside your-rails-app/ directory:
+
+# The --pod flag tells the command to generate files in the pods directory.
+bin/ember generate route register --pod
+bin/ember generate route user --pod --path "/register"
+```
+
+This should give you output like:
+
+```
+TODO: insert output from that generate route command here
+```
+
+TODO: Mention/explain/remove/run test files generated by `ember generate route...`
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Run the spec again and see the next spec failure:
+
+```
   1) User registration successful with valid details
      Failure/Error: expect(page).to have_title("Please register")
-       expected "Blocitoff" to include "Please register"
-     # ./spec/features/user_registration_spec.rb:12:in `block (2 levels) in <top (required)>'
-
-
+       expected "Todos" to include "Please register"
 ```
 
-Remove `:registrations` from `devise_for` `only:` option.
 
 Run the spec again and see the next spec failure:
 
@@ -1169,24 +1281,15 @@ Re-run the spec and see the next failure:
 
 ```
   1) User registration successful with valid details
-     Failure/Error: Unable to find matching line from backtrace
-     AbstractController::ActionNotFound:
-       The action 'new' could not be found for UsersController
+     Failure/Error: expect(page).to have_title("Please register")
+       expected "Todos" to include "Please register"
 ```
 
-Add a `new` action to `UsersController`:
+We've defined a Rails route for the registration page, but we also need to define it in Ember.
 
-```ruby
-  def new
-  end
-```
+TODO: figure out how to handle /register in routes.rb so the correct routes are generated in mailer templates. This may effect the static()/rails-static-router use in routes.rb. The URLs in emails need to handle browsers that don't support history API. http://discuss.emberjs.com/t/recommended-ember-locationtype-for-urls-in-emails/8064/1
 
-Run the spec and review the next failure:
 
-```
-  1) User registration successful with valid details
-     Failure/Error: Unable to find matching line from backtrace
-     ActionView::MissingTemplate:
-       Missing template users/new
-```
+
+
 
