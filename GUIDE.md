@@ -46,7 +46,7 @@
   - [BDD: Writing and passing user registration spec](#bdd-writing-and-passing-user-registration-spec)
     - [Ember Pods](#ember-pods)
     - [Ember Route Generation](#ember-route-generation)
-    - [Ember Components](#ember-components)
+    - [Ember Helpers](#ember-helpers)
     - [Ember Form for Registration](#ember-form-for-registration)
 
 <!-- /MarkdownTOC -->
@@ -840,7 +840,17 @@ Save the following lines to the `bin/serve` file:
 
 ```bash
 #!/usr/bin/env sh
-foreman start -f Procfile.development
+
+echo "Usage"
+echo "-----"
+echo "Run all: bin/serve"
+echo "Without phonegap: bin/serve all=1,phonegap=0 or bin/serve rails=1,ember=1"
+echo "Without rails: bin/serve all=1,rails=0"
+echo "Ember only: bin/serve ember"
+echo ""
+
+# Forward args to foreman command with "$@"
+foreman start -f Procfile.development "$@"
 ```
 
 From now on, to start your development processes, just run the new script:
@@ -1254,73 +1264,42 @@ The next spec failure you'll encounter:
 
 When going to the new user page, the `<title>` element in the `<head>` isn't set to "Please register".
 
-We're going to write an Ember component that will set the `document.title` for us.
+We're going to write an Ember helper named `page-title` that will set the `<title>`.
 
+#### Ember Helpers
 
-#### Ember Components
+Ember helpers are like Rails helpers that you use for providing helper methods to the view templates.
 
-Say you're working on an app that needs an input credit card number field that formatted credit card numbers by displaying spaces to the user between every four digits and for the border to turn green once a valid credit card number has been entered. (TODO: Insert sketch image of a working credit card input) You could write this as an Ember component.
-
-Ember components allow you to define HTML and JavaScript behaviour that work together to perform a specific function. Its a bit like being able to write your own HTML elements.
-
-Some potential Ember components:
-
-- Credit card number input field
-- Navigation breadcrumb widget to show where a user is in the site hierarchy, e.g. "Home > Products > Bestsellers"
-- Vote Up/Down button
-
-The Ember component you're about to write is going to be used to set the `<title>` element in the page `<head>` from within an Ember view template, and will be named the `document-title` component.
-
-Here's how I'd *like* to be able to use the component from within `client/app/pods/user/new/template.hbs`:
-
-```html
-<!-- It'd sure be nice to set the document title to "Please Register" this way: -->
-{{document-title title="Please register"}}
-```
-
-Add the above line to the top of `client/app/pods/user/new/template.hbs`.
-
-Generate the skeleton for this component using:
+Generate the `page-title` helper:
 
 ```bash
-bin/ember generate component document-title --pod
+bin/ember g helper page-title --pod
 ```
 
-This will give the following output and files:
+This will create the following output and files:
 
 ```
 installing
-  create app/pods/components/document-title/component.js
-  create app/pods/components/document-title/template.hbs
+  create app/helpers/page-title.js
 installing
-  create tests/unit/pods/components/document-title/component-test.js
+  create tests/unit/helpers/page-title-test.js
 ```
 
-(Notice we've got a new pod named "components".)
-
-Ember components can *optionally* generate HTML markup directly in the view via their associated `template.hbs` file. This component won't need to render HTML, which means we can safely delete the template file at `client/app/pods/components/document-title/template.hbs`.
-
-Open `client/app/pods/components/document-title/component.js` in your text editor. This file is where the behaviour for the component is defined. Change the contents of the file to be the following:
+Edit the existing `pageTitle` function in `app/helpers/page-title.js` to set the current title:
 
 ```javascript
-import Ember from 'ember';
+...
+export function pageTitle(params) {
+  var newTitle = params[0];
+  document.title = newTitle;
+}
+...
+```
 
-export default Ember.Component.extend({
-  // There's no HTML rendered for this component, so make tagName blank:
-  tagName: '',
-  
-  // init() runs when component is first processed by view
-  init: function () {
-    // Read the title attribute from the component declaration in the template.
-    var newTitle = this.get("title");
+To use the `page-title` helper on the registration page, open `client/app/pods/user/new/template.hbs` and add this as its first line:
 
-    // Update the title in the head element using the document.title attribute:
-    document.title = newTitle;
-
-    // Continue with the standard initilization:
-    this._super.apply(this, arguments);
-  },
-});
+```
+{{page-title "Please register"}}
 ```
 
 Run the spec again:
@@ -1329,7 +1308,7 @@ Run the spec again:
 bin/rspec spec/features/user_registration_spec.rb
 ```
 
-Here's the next failure you'll see:
+The title expectation ought to pass. Here's the next failure you'll see:
 
 ```
   1) User registration successful with valid details
@@ -1342,7 +1321,6 @@ There's no email input field.
 
 
 #### Ember Form for Registration
-
 
 
 
@@ -1373,6 +1351,30 @@ We've defined a Rails route for the registration page, but we also need to defin
 TODO: figure out how to handle /register in routes.rb so the correct routes are generated in mailer templates. This may effect the static()/rails-static-router use in routes.rb. The URLs in emails need to handle browsers that don't support history API. http://discuss.emberjs.com/t/recommended-ember-locationtype-for-urls-in-emails/8064/1
 
 
+---
+
+* INSTRUCTION FOR DAN START *
+
+Update `bin/serve` to this and review comments. No need to run phonegap most of the time:
+
+```bash
+#!/usr/bin/env sh
+
+echo "Usage"
+echo "-----"
+echo "Run all: bin/serve"
+echo "Without phonegap: bin/serve all=1,phonegap=0 or bin/serve rails=1,ember=1"
+echo "Without rails: bin/serve all=1,rails=0"
+echo "Ember only: bin/serve ember"
+echo ""
+
+# Forward args to foreman command with "$@"
+foreman start -f Procfile.development "$@"
+```
+
+* INSTRUCTION FOR DAN END *
+
+---
 
 
 
