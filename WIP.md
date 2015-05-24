@@ -100,3 +100,25 @@ cancel_user_registration GET    /users/cancel(.:format)                    devis
 ---
 
 Introduce --skip-ember-build option for RSpec and EmberBuilder.
+
+---
+
+Authentication: ember-simple-auth-devise?
+
+---
+
+Registration: Bulk user registration issues mitigated by email confirmation requirement. Include in spec that non-confirmed user cannot successfully login.
+
+it "requires email confirmation to mitigate bulk user registration"
+
+---
+
+Login: Prevent brute-force with rack-attack or ? Devise num failed attempts? Include in spec.
+
+it "mitigates brute force attacks by locking account after X failed attempts"
+
+
+Try these? route generator accepts paths with slashes (not periods)
+ember g resource user (or users?) --pod
+ember g route users/new --path='/register' --pod
+
