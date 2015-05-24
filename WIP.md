@@ -1,6 +1,12 @@
 Work in progress
 ----------------
 
+Unify .gitignore files (.gitignore and client/.gitignore). --skip-git option when running `ember init`?
+
+---
+
+Make deployment more fault tolerant, output warnings in bin/ember when dependency symlinks for node_modules and bower_components are not in place (and possibly create them as part of it?).
+
 ---
 
 PhoneGap Build: Automate zip create and/or upload and/or download with bash script or rake task?
