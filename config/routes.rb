@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
   
   # get "/login", to: static("index.html")
-  get "/register", to: static("index.html"), as: :new_user_registration
+  # get "/register", to: static("index.html"), as: :new_user_registration
   
   devise_for :users, only: [:sessions, :passwords, :confirmations] # removed: :registrations
   resources :users, only: [:show]
