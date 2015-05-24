@@ -118,7 +118,3 @@ Login: Prevent brute-force with rack-attack or ? Devise num failed attempts? Inc
 it "mitigates brute force attacks by locking account after X failed attempts"
 
 
-Try these? route generator accepts paths with slashes (not periods)
-ember g resource user (or users?) --pod
-ember g route users/new --path='/register' --pod
-
