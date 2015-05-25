@@ -10,7 +10,6 @@ group :development do
   gem 'web-console', '~> 2.0'
   gem 'binding_of_caller'
   gem 'better_errors'
-  gem 'pry-rails'
 end
 
 group :test do
@@ -20,6 +19,11 @@ group :test do
   gem 'capybara'
   gem 'selenium-webdriver'
   gem 'timecop'
+  gem 'email_spec'
+end
+
+group :development, :test do
+  gem 'pry-rails'
 end
 
 gem 'rails', '4.2.0'

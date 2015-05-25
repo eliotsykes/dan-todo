@@ -197,84 +197,6 @@ it "mitigates brute force attacks by locking account after X failed attempts"
 
 ---
 
-# EMBER COMPONENTS
-
-We're going to write an Ember component that will set the `document.title` for us.
-
-
-#### Ember Components
-
-Say you're working on an app that needs an input credit card number field that formatted credit card numbers by displaying spaces to the user between every four digits and for the border to turn green once a valid credit card number has been entered. (TODO: Insert sketch image of a working credit card input) You could write this as an Ember component.
-
-Ember components allow you to define HTML and JavaScript behaviour that work together to perform a specific function. Its a bit like being able to write your own HTML elements.
-
-Some potential Ember components:
-
-- Credit card number input field
-- Navigation breadcrumb widget to show where a user is in the site hierarchy, e.g. "Home > Products > Bestsellers"
-- Vote Up/Down button
-
-The Ember component you're about to write is going to be used to set the `<title>` element in the page `<head>` from within an Ember view template, and will be named the `document-title` component.
-
-Here's how I'd *like* to be able to use the component from within `client/app/pods/user/new/template.hbs`:
-
-```html
-<!-- It'd sure be nice to set the document title to "Please Register" this way: -->
-{{document-title title="Please register"}}
-```
-
-Add the above line to the top of `client/app/pods/user/new/template.hbs`.
-
-Generate the skeleton for this component using:
-
-```bash
-bin/ember generate component document-title --pod
-```
-
-This will give the following output and files:
-
-```
-installing
-  create app/pods/components/document-title/component.js
-  create app/pods/components/document-title/template.hbs
-installing
-  create tests/unit/pods/components/document-title/component-test.js
-```
-
-(Notice we've got a new pod named "components".)
-
-Ember components can *optionally* generate HTML markup directly in the view via their associated `template.hbs` file. This component won't need to render HTML, which means we can safely delete the template file at `client/app/pods/components/document-title/template.hbs`.
-
-Open `client/app/pods/components/document-title/component.js` in your text editor. This file is where the behaviour for the component is defined. Change the contents of the file to be the following:
-
-```javascript
-import Ember from 'ember';
-
-export default Ember.Component.extend({
-  // There's no HTML rendered for this component, so make tagName blank:
-  tagName: '',
-  
-  // init() runs when component is first processed by view
-  init: function () {
-    // Read the title attribute from the component declaration in the template.
-    var newTitle = this.get("title");
-
-    // Update the title in the head element using the document.title attribute:
-    document.title = newTitle;
-
-    // Continue with the standard initilization:
-    this._super.apply(this, arguments);
-  },
-});
-```
-
-
-
-
-
-
----
-
 #### Rails Static Router
 
 
@@ -296,3 +218,29 @@ Re-run the spec and see the next failure.
 
 
 TODO: figure out how to handle /register in routes.rb so the correct routes are generated in mailer templates. This may effect the static()/rails-static-router use in routes.rb. The URLs in emails need to handle browsers that don't support history API. http://discuss.emberjs.com/t/recommended-ember-locationtype-for-urls-in-emails/8064/1
+
+
+
+
+
+
+
+---
+
+# Sass
+
+Reference Sass and Less etc. section in ember-cli docs, but use standard CSS with autoprefixer, allow devs to decide if they want to use a preprocessor and choose their preference. Providing CSS allows them to use it with any preprocessor they choose, including none.
+
+Start this on a new branch sass-setup_example
+
+To use Sass, install the [ember-cli-sass](https://github.com/aexmachina/ember-cli-sass) addon:
+
+```bash
+bin/ember install ember-cli-sass
+```
+
+---
+
+What about PhoneGap Developer App and the apiHost? Test it once 0.16.2 of connect-phonegap is released and add configuration now above if needed. Currently symlink-containing apps not working with 0.16 https://github.com/phonegap/connect-phonegap/pull/116
+
+---

@@ -1,6 +1,6 @@
 import { moduleForComponent, test } from 'ember-qunit';
 
-moduleForComponent('document-title', 'Unit | Component | document title', {
+moduleForComponent('user-form', 'Unit | Component | user form', {
   // Specify the other units that are required for this test
   // needs: ['component:foo', 'helper:bar']
 });

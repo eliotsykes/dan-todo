@@ -1,0 +1,12 @@
+<form {{action "create" on="submit"}}>
+  <label for="email">Email</label>
+  {{input id="email" type="email" placeholder="Enter your email" required="true" value=user.email}}
+
+  <label for="password">Password</label>
+  {{input id="password" type="password" placeholder="Enter password" required="true" value=user.password}}
+
+  <label for="password_confirmation">Confirm password</label>
+  {{input id="password_confirmation" type="password" placeholder="Confirm password" required="true" value=user.passwordConfirmation}}
+
+  <button type="submit">Register</button>
+</form>

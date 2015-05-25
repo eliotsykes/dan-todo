@@ -47,7 +47,16 @@
     - [Ember Pods](#ember-pods)
     - [Ember Route Generation](#ember-route-generation)
     - [Ember Helpers](#ember-helpers)
-    - [Ember Form for Registration](#ember-form-for-registration)
+    - [Ember Model for User](#ember-model-for-user)
+    - [Ember Components](#ember-components)
+    - [Registration Form Component](#registration-form-component)
+    - [Ember Initializers](#ember-initializers)
+    - [API Design and Ember's RESTAdapter](#api-design-and-embers-restadapter)
+    - [User API Request Spec](#user-api-request-spec)
+    - [API Routing](#api-routing)
+    - [API Controller](#api-controller)
+    - [Registration Confirmation Email](#registration-confirmation-email)
+    - [Rails and JSON case conventions](#rails-and-json-case-conventions)
 
 <!-- /MarkdownTOC -->
 
@@ -1131,6 +1140,17 @@ Its time to start building the first feature for the app, user registration. We'
 
 There's a few tweaks to perform on our testing environment.
 
+Our testing is going to need to be able to check emails sent by our application, for example the registration confirmation email. Use the email_spec gem for this as it provides a good selection of understandable matchers and helper methods. Follow instructions here to setup email_spec: https://github.com/eliotsykes/rspec-rails-examples/blob/master/spec/support/email_spec.rb
+
+Set `config.action_mailer.default_url_options` in `config/environment/test.rb` so URLs in emails can be generated with a host, and not raise an error. I recommend putting the config below any existing `config.action_mailer...` configuration you have in `config/environment/test.rb`:
+
+```ruby
+  ...
+  config.action_mailer.delivery_method = :test
+  config.action_mailer.default_url_options = { host: 'localhost:3000' }
+  ...
+```
+
 Comment out the lines within the `test` environment configuration in `client/config/environment.js` to be like this:
 
 ```javascript
@@ -1274,6 +1294,10 @@ To help organize an application as it grows, Ember introduced the "pod" concept,
 
 Think of a pod similarly to how you think of `resources` routes and models in Rails. For example, if we had a "comment" resource or model, we might have a corresponding "comment" pod that would be at the subdirectory `client/app/pods/comment`. This `client/app/pods/comment` pod would hold all of the Ember JavaScript files that are related to viewing and manipulating comments within the Ember application.
 
+Once you've finished building this app, your `client/` directory structure will eventually look like this, and pay attention to the subdirectories within `client/pods/`:
+
+**TODO: Diagram showing eventual/final directory tree of client/pods**
+
 For user registrations, the resource is "user", and so the name of our pod is going to be "user".
 
 So our pods are generated in the `client/app/pods/` directory, add the `podModulePrefix` configuration line to the existing `ENV` object in `client/config/environment.js`:
@@ -1401,12 +1425,492 @@ The title expectation ought to pass. Here's the next failure you'll see:
        Unable to find field "Email"
 ```
 
-There's no email input field.
+There's no email input field. We'll fix that in the following sections.
 
 
-#### Ember Form for Registration
+#### Ember Model for User
 
-Coming soon...
+The registration form is going to be backed by a `User` model. Models in Ember are usually the client-side version of some of the models you'll create on the server-side in the `your-rails-app/app/models` directory.
+
+The first Ember model you'll use is for `User`. The `User` model is going to back the registration form you're going to write shortly.
+
+Perform the following command to generate a `User` model, its syntax may be familiar if you're used to using `rails generate model ...` to generate server-side models:
+
+```bash
+# In your-rails-app/ directory:
+bin/ember g model user email:string password:string passwordConfirmation:string --pod
+```
+
+The command will produce the following output:
+
+```
+installing
+  create app/pods/user/model.js
+installing
+  create tests/unit/pods/user/model-test.js
+```
+
+The `User` model is generated in the user pod at `client/app/pods/user/model.js`. Open up the file and read through it to increase your familiarity with Ember models.
+
+Next you're going to create an Ember component to display and control the registration form.
+
+#### Ember Components
+
+Say you're working on an app that needs an input credit card number field that formats credit card numbers by displaying spaces to the user between every four digits and for the border to turn green once a valid credit card number has been entered. (TODO: Insert sketch image of a working credit card input) You could write this as an Ember component.
+
+Ember components allow you to define HTML *and* JavaScript behaviour that work in unison to perform a specific function. Writing Ember components is akin to being able to write your own HTML elements. Imagine if you could write your own form controls like `<select>` with autocomplete behaviour specially tailored to your application's needs. That's the sort of thing that Ember components can be used for.
+
+All of these could be Ember components:
+
+- Credit card number input field
+- Navigation breadcrumb widget to show where a user is in the site hierarchy, e.g. "Home > Products > Bestsellers"
+- Vote Up/Down button
+- Password input field with corresponding password-strength indicator
+- Entire forms, which is what you're about to make...
+
+#### Registration Form Component
+
+The Ember component you're about to write is going to be used to display the user registration `<form>` and manage its AJAX communication with the server.
+
+The name of this component will be `user-form`. Generate it with this command:
+
+```bash
+bin/ember generate component user-form --pod
+```
+
+You'll see this output:
+
+```
+installing
+  create app/pods/components/user-form/component.js
+  create app/pods/components/user-form/template.hbs
+installing
+  create tests/unit/pods/components/user-form/component-test.js
+```
+
+Notice that the component files `component.js` (for the component's JavaScript behaviour) and `template.hbs` (for the components view) were generated in the `components/user-form` pod.
+
+Edit `client/app/pods/components/user-form/template.hbs`, to be:
+
+```html
+<form {{action "create" on="submit"}}>
+  <label for="email">Email</label>
+  {{input id="email" type="email" placeholder="Enter your email" required="true" value=user.email}}
+
+  <label for="password">Password</label>
+  {{input id="password" type="password" placeholder="Enter password" required="true" value=user.password}}
+
+  <label for="password_confirmation">Confirm password</label>
+  {{input id="password_confirmation" type="password" placeholder="Confirm password" required="true" value=user.passwordConfirmation}}
+
+  <button type="submit">Register</button>
+</form>
+```
+
+Review the above code and note:
+
+- In the opening `<form>` tag, the `create` `action` will be performed when the form is `submit`ted.
+- The three `{{input ...}}` fields: 
+  * The 1st input is for the `user.email` model attribute
+  * The 2nd input is for the `user.password` model attribute
+  * The final input is for the `user.passwordConfirmation` model attribute.
+
+Ember's `{{input ...}}` helper takes many more options for customization than those shown above. I recommend you read about the [`input` helper in the official API docs](http://emberjs.com/api/classes/Ember.Handlebars.helpers.html#method_input).
+
+Next make use of the `{{user-form}}` component in our registration view template. Update `client/app/pods/user/new/template.hbs` to have the contents:
+
+```html
+{{page-title "Please register"}}
+
+<h1>Register</h1>
+
+{{user-form}}
+
+{{outlet}}
+```
+
+Edit `client/app/pods/components/user-form/component.js` to contain:
+
+```javascript
+import Ember from 'ember';
+
+export default Ember.Component.extend({
+  init: function() {
+    // Call the parent init function:
+    this._super.apply(this, arguments);
+
+    // Set up a user to use in the template. Allows user.email, user.password,
+    // etc. to be used in input helpers like: {{input value=user.email}}
+    this.set('user', this.store.createRecord('user'));
+  },
+  actions: {
+    // create() is called when form is submitted
+    create: function() {
+      // Get user model object from component. It will be auto-populated with 
+      // input values from the from:
+      var user = this.get('user');
+
+      // Register/save the user via an AJAX request to the server API:
+      user.save().then(
+        function success() { console.log("User saved!"); },
+        function failure(e) { console.log("Oops, user not saved!", e); }
+      );
+    }
+  }
+});
+```
+
+In the `user-form` javascript, there is a call to `this.store.createRecord('user')` which is used to create a blank `User` object to back the user form. `this.store` is an object provided by the Ember Data library. Ember Data helps to perform CRUD operations for models, and you can think of it being a bit like Rails' ActiveRecord gem. At the time of writing, Ember Data's `store` is not available to components automatically. To make it available, we're going to need to write an initializer.
+
+#### Ember Initializers
+
+Ember initializers can be used to help setup your Ember application when its first loaded. You can think of them as being similar to Rails' initializers.
+
+Ember initializers are often used to make common objects available directly inside components. The initializers do this by "injecting" specified objects into other objects. (You may have heard this ability to inject objects into other objects being described as "dependency injection").
+
+For example, your Ember app might eventually have JavaScript objects representing the `currentUser`, `search`, or `notifications`. Using an initializer, you can inject these objects (and any other objects you can think of) into the Ember components you write. 
+
+Generate an initializer to inject the Ember Data `store` into all components:
+
+```bash
+bin/ember g initializer component-store-injector
+```
+
+This is the output you'll see when generating the initializer:
+
+```
+installing
+  create app/initializers/component-store-injector.js
+installing
+  create tests/unit/initializers/component-store-injector-test.js
+```
+
+Save `client/app/initializers/component-store-injector.js` with these contents:
+
+```javascript
+export function initialize(container, application) {
+  // Injects all Ember components with a store object:
+  application.inject('component', 'store', 'store:main');
+}
+
+export default {
+  name: 'component-store-injector',
+  initialize: initialize
+};
+```
+
+This initializer makes the `store` object available in the `user-form` component, meaning the `this.store.createRecord('user')` call in the component will now work.
+
+
+#### API Design and Ember's RESTAdapter
+
+To avoid expending excessive brain cycles on API design decisions, the user API you'll build here is going to behave very closely to [what Ember's RESTAdapter expects by default](http://guides.emberjs.com/v1.11.0/models/the-rest-adapter/).
+
+Ember's RESTAdapter is used to communicate with the server for persisting model data. When you make a call like `this.store.createRecord('user')`, the RESTAdapter will be used by `this.store` behind-the-scenes by default.
+
+The `RESTAdapter` expects your JSON API to behave conventionally in terms of the way your JSON data is structured, and the way your API URLs are specified. These conventions can be overridden through configuration, though we will try to keep the custom configuration to a minimum.
+
+Re-run the feature spec:
+
+```bash
+bin/rspec spec/features/user_registration_spec.rb
+```
+
+You ought to see the failure:
+
+```
+  1) User registration successful with valid details
+     Failure/Error: Unable to find matching line from backtrace
+     ActionController::RoutingError:
+       No route matches [POST] "/users"
+```
+
+There is no server-side route with the path `/users`. The failure is happening after the registration form has been filled in, once the register button to submit the form is clicked.
+
+By default, Ember's RESTAdapter is `POST`-ing the new user registration data to an API at the URL `/users`, via AJAX, thanks to the `user.save()` call in the `user-form` component.
+
+Looking at `config/routes.rb`, see that API URLs so far have been prefixed with the `/api/v1` namespace. Let's continue with that and configure Ember to be aware of this.
+
+Generate the application's RESTAdapter:
+
+```bash
+bin/ember g adapter application
+```
+
+Expected output and files are:
+
+```
+installing
+  create app/adapters/application.js
+installing
+  create tests/unit/adapters/application-test.js
+```
+
+Its going to be necessary to configure the RESTAdapter to use the `api/v1` namespace for API requests. Its also going to need to be configured to use the correct host when our app is used as a PhoneGap app.
+
+To support these configuration options, edit `client/app/adapters/application.js` to have these contents:
+
+```javascript
+import DS from 'ember-data';
+
+// Make `client/config/environment.js` config available to adapter:
+import config from '../config/environment';
+
+export default DS.RESTAdapter.extend({
+  namespace: 'api/v1',
+  host: config.APP.apiHost
+});
+```
+
+The `host:` option passed to `DS.RESTAdapter` in `application.js` above makes use of a new config option `apiHost` that you'll need to add to `client/config/environment.js` for the `development` and `production` environments:
+
+```javascript
+...
+
+  if (environment === 'development') {
+    
+    ...
+
+    ENV.APP.apiHost = 'http://localhost:3000'
+  }
+
+...
+
+  if (environment === 'production') {
+    ENV.APP.apiHost = 'https://YOUR-HEROKU-APP-NAME.herokuapp.com'
+  }
+
+...
+```
+
+Be sure to use the correct value for `YOUR-HEROKU-APP-NAME`, which you can find by running `heroku info` inside `your-rails-app/` directory at the command line. See the Web URL value it outputs.
+
+
+#### User API Request Spec
+
+Write a request spec defining how the user create API should behave. Save `spec/requests/user_api_spec.rb` with contents:
+
+```ruby
+require 'rails_helper'
+
+RSpec.describe "User API", type: :request do
+  
+  context "POST create" do
+    
+    it "registers a user and requests confirmation" do
+      
+      headers = { "Content-Type": "application/json" }
+      parameters = {
+        user: {
+          email: "jean@xmen.xmansion",
+          password: "mutants rule",
+          passwordConfirmation: "mutants rule"
+        }
+      }.to_json
+      
+      post "/api/v1/users", parameters, headers
+
+      expect(response).to have_http_status(:no_content)
+      
+      expect(all_emails.size).to eq(1)
+      expect(last_email_sent).to be_delivered_to("jean@xmen.xmansion")
+      expect(last_email_sent).to have_subject("Confirmation instructions")
+
+      expect(User.count).to eq(1)
+      user = User.last
+      expect(user.email).to eq("jean@xmen.xmansion")
+      expect(user.confirmed?).to be(false)
+    end
+
+  end
+
+end
+```
+
+---
+
+** INSTRUCTION FOR DAN START **
+
+**Setup email_spec**
+
+Follow instructions here to setup email_spec so that the email spec helpers and matchers are available to the specs: https://github.com/eliotsykes/rspec-rails-examples/blob/master/spec/support/email_spec.rb
+
+Set `config.action_mailer.default_url_options` in `config/environment/test.rb` so URLs in emails can be generated with a host, and not raise an error:
+
+```ruby
+  ...
+  config.action_mailer.delivery_method = :test
+  config.action_mailer.default_url_options = { host: 'localhost:3000' }
+  ...
+```
+
+** INSTRUCTION FOR DAN END **
+
+---
+
+#### API Routing
+
+Run this request spec:
+
+```bash
+bin/rspec spec/requests/user_api_spec.rb
+```
+
+Here's the first failure you'll see:
+
+```
+  1) User API POST create registers a user and requests confirmation
+     Failure/Error: post "/api/v1/users", params
+     ActionController::RoutingError:
+       No route matches [POST] "/api/v1/users"
+     # ./spec/requests/user_api_spec.rb:9:in `block (3 levels) in <top (required)>'
+
+Finished in 0.1945 seconds (files took 3.71 seconds to load)
+1 example, 1 failure
+```
+
+A route is not yet configured for our new JSON API endpoint. Add this to `config/routes.rb`:
+
+```ruby
+  namespace :api do
+    namespace :v1 do
+      resources :users, only: [:create], format: false, defaults: { format: :json }
+    end
+  end
+```
+
+#### API Controller
+
+Re-run the request spec and see next failure:
+
+```
+  1) User API POST create registers a user and requests confirmation
+     Failure/Error: post "/api/v1/users", params
+     ActionController::RoutingError:
+       uninitialized constant Api::V1::UsersController
+     # ./spec/requests/user_api_spec.rb:9:in `block (3 levels) in <top (required)>'
+```
+
+This says it is time to create a new controller. Create file `app/controllers/api/v1/users_controller.rb` with contents:
+
+```ruby
+class Api::V1::UsersController < Api::ApiController
+
+  skip_before_action :authenticate, only: :create
+
+  def create
+  end
+
+end
+```
+
+Re-run the request spec and attend to the next failure:
+
+```
+  1) User API POST create registers a user and requests confirmation
+     Failure/Error: post "/api/v1/users", parameters, headers
+     ActionView::MissingTemplate:
+       Missing template api/v1/users/create, api/api/create ...
+     # ./spec/requests/user_api_spec.rb:18:in `block (3 levels) in <top (required)>'
+```
+
+The empty `Api::V1::UsersController#create` action is looking for a matching template. There's no need for a template for a registration request to a JSON API. You're going to return a successful but empty response if a valid user is registered. An empty and successful response is defined by the ["204 No Content" HTTP status code](http://httpstatus.es/204).
+
+Update the `Api::V1::UsersController#create` action to this so it responds with `204 No Content`:
+
+```ruby
+  def create
+    head :no_content
+  end
+```
+
+#### Registration Confirmation Email
+
+Re-run the request spec. Here's the next failure:
+
+```
+  1) User API POST create registers a user and requests confirmation
+     Failure/Error: expect(all_emails.size).to eq(1)
+       
+       expected: 1
+            got: 0
+       
+       (compared using ==)
+     # ./spec/requests/user_api_spec.rb:22:in `block (3 levels) in <top (required)>'
+```
+
+No confirmation request email is being sent yet.
+
+Thanks to the default behaviour of Devise's `:confirmable` module that is setup for `User` already, you just have to create a `User` and this will trigger sending the confirmation request email.
+
+Update the controller to the following:
+
+```ruby
+class Api::V1::UsersController < Api::ApiController
+
+  skip_before_action :authenticate, only: :create
+
+  def create
+    # Creating a user triggers Devise to send confirmation email:
+    User.create!(registration_params)
+    head :no_content
+  end
+
+  private
+
+  def registration_params
+    params.require(:user).permit(:email, :password, :password_confirmation)
+  end
+
+end
+```
+
+#### Rails and JSON case conventions
+
+Rails and its API-related gems tend to gently nudge you towards using `snake_case` naming conventions in your JSON APIs. This is because Rails (and Ruby) use `snake_case` as a convention for writing Ruby code. However, the output from a JSON API is not Ruby code.
+
+In your JSON APIs, prefer to use the JSON convention of `camelCase` keys as JSON API consumers and clients are likely to find it less taxing to support the JSON `camelCase` convention than the Rails convention of `snake_case` variable names. 
+
+The burden of mapping API key names is more efficiently handled in one place by your app, not in multiple places by each and every client consuming your API in the future. 
+
+Most developers, the majority of whom work outside of the Ruby ecosystem, are likely to expect and hope most RESTful APIs follow JSON `camelCase` naming conventions, and working with your API may make their lives easier if it lives up to this very reasonable expectation.
+
+Thankfully Rails gives us a way to have the two naming conventions live in harmony. We will be able to use the `snake_case` convention throughout our Ruby code, even though the JSON API will be using `camelCase` naming.
+
+To benefit from this harmony, create an initializer at `config/initializers/json_param_key_transform.rb` with these contents:
+
+```ruby
+# Transform JSON request param keys from JSON-conventional camelCase to
+# Rails-conventional snake_case:
+Rails.application.config.middleware.swap(
+  ::ActionDispatch::ParamsParser, ::ActionDispatch::ParamsParser,
+  ::Mime::JSON => Proc.new { |raw_post|
+
+    # Borrowed from action_dispatch/middleware/params_parser.rb except for
+    # data.deep_transform_keys!(&:underscore) :
+    data = ::ActiveSupport::JSON.decode(raw_post)
+    data = {:_json => data} unless data.is_a?(::Hash)
+    data = ::ActionDispatch::Request::Utils.deep_munge(data)
+
+    # Transform camelCase param keys to snake_case:
+    data.deep_transform_keys!(&:underscore)
+
+    data.with_indifferent_access
+  }
+)
+```
+
+This now means that in your API controllers you should use `snake_case` keys with the params hash, e.g. `params[:password_confirmation]`, even though the parameter is submitted in the JSON request with the name `passwordConfirmation`.
+
+Re-run the spec and bear witness to the failure:
+
+```
+Sorry, no failure!
+```
+
+That's right, the request spec should be passing now.
+
+**Coming soon...** Writing CSS in Ember and styling the registration form.
 
 
 
