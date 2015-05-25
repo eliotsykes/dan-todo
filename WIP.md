@@ -3,29 +3,54 @@ Work in progress
 
 Unify .gitignore files (.gitignore and client/.gitignore). --skip-git option when running `ember init`?
 
+
+
+
 ---
 
 Make deployment more fault tolerant, output warnings in bin/ember when dependency symlinks for node_modules and bower_components are not in place (and possibly create them as part of it?).
+
+
+
+
+
 
 ---
 
 PhoneGap Build: Automate zip create and/or upload and/or download with bash script or rake task?
 
+
+
+
+
 ---
 
 Improve performance of `ember build --watch`? Could not find watchman, falling back to NodeWatcher for file system events. Visit http://www.ember-cli.com/#watchman for more info.
+
+
+
+
+
 
 ---
 
 - Use LiveReload with PhoneGap developer app and with Rails server. Use Ember's LiveReload for both and pass `--no-autoreload` option to `phonegap serve`?
 
+
+
+
 ---
 
 - Is `phonegap serve` needed? Can `rails server` do the same job?
 
+
+
+
+
+
 ---
 
-# Preparing for Production
+# RACK REWRITE/Preparing for Production
 
 ## Multiple index pages and rewrite rules
 
@@ -76,6 +101,12 @@ The above change to `config.xml` tells PhoneGap to use `index.phonegap.html` as 
 ```bash
 TODO: put symlink instructions here for index.html -> index.phonegap.html
 ```
+
+
+
+
+
+
 ---
 
 Not ideal using hash location type in non-PhoneGap web app, URLs have visible hashes. Experiment with something like this in environment.js:
@@ -85,11 +116,24 @@ Not ideal using hash location type in non-PhoneGap web app, URLs have visible ha
 ```
 ---
 
+
+
+
+
+
+
+
 Use a .slugignore with Heroku to ignore files (e.g. development settings like `.foreman`):
 
 > The .slugignore file causes files to be removed after you push code to Heroku and before the buildpack runs. This lets you prevent large files from being included in the final slug
 
 Source: https://devcenter.heroku.com/articles/slug-compiler#ignoring-files-with-slugignore
+
+
+
+
+
+
 
 ---
 
@@ -103,13 +147,32 @@ cancel_user_registration GET    /users/cancel(.:format)                    devis
                          PUT    /users(.:format)                           devise/registrations#update
                          DELETE /users(.:format)                           devise/registrations#destroy
 
+
+
+
+
+
+
+
+
+
 ---
 
 Introduce --skip-ember-build option for RSpec and EmberBuilder.
 
+
+
+
+
+
 ---
 
 Authentication: ember-simple-auth-devise?
+
+
+
+
+
 
 ---
 
@@ -117,11 +180,20 @@ Registration: Bulk user registration issues mitigated by email confirmation requ
 
 it "requires email confirmation to mitigate bulk user registration"
 
+
+
+
+
+
+
 ---
 
 Login: Prevent brute-force with rack-attack or ? Devise num failed attempts? Include in spec.
 
 it "mitigates brute force attacks by locking account after X failed attempts"
+
+
+
 
 ---
 
@@ -196,3 +268,31 @@ export default Ember.Component.extend({
 });
 ```
 
+
+
+
+
+
+---
+
+#### Rails Static Router
+
+
+Our Ember application is a Single Page Application (SPA). This means that all of its pages are effectively served from the single `index.html` file.
+
+To make our jobs easier building a SPA in Rails, we're going to introduce [rails-static-router](https://github.com/eliotsykes/rails-static-router), which is a way to declare the same static file to be served at multiple paths in `config/routes.rb`.
+
+Create a new initializer at `config/initializers/static_router.rb`, and copy and paste in the contents of this file: https://raw.githubusercontent.com/eliotsykes/rails-static-router/master/static_router.rb
+
+Make this line the first route in `config/routes.rb`:
+
+```ruby
+  get "/register", to: static("index.html"), as: :new_user_registration
+```
+
+Thanks to this new route, requests for `/register` will be served Ember's index.html. You can also access the related URL helper methods `new_user_registration_path` and `new_user_registration_url` throughout your Rails app (for example in your tests and in mail templates) whenever you need to generate a URL for registering a new user.
+
+Re-run the spec and see the next failure.
+
+
+TODO: figure out how to handle /register in routes.rb so the correct routes are generated in mailer templates. This may effect the static()/rails-static-router use in routes.rb. The URLs in emails need to handle browsers that don't support history API. http://discuss.emberjs.com/t/recommended-ember-locationtype-for-urls-in-emails/8064/1

@@ -1097,6 +1097,32 @@ Once deployment has completed, open the browser and refresh your app's productio
 We'll start building out the Ember app to make use of the backend API (served by Rails) to produce a full featured todo application that runs as a web app in the browser and as a native app on smartphones and tablets.
 
 
+---
+
+* EXTRA INSTRUCTION FOR DAN START *
+
+Update `bin/serve` to this and review comments. No need to run phonegap most of the time:
+
+```bash
+#!/usr/bin/env sh
+
+echo "Usage"
+echo "-----"
+echo "Run all: bin/serve"
+echo "Without phonegap: bin/serve all=1,phonegap=0 or bin/serve rails=1,ember=1"
+echo "Without rails: bin/serve all=1,rails=0"
+echo "Ember only: bin/serve ember"
+echo ""
+
+# Forward args to foreman command with "$@"
+foreman start -f Procfile.development "$@"
+```
+
+* EXTRA INSTRUCTION FOR DAN END *
+
+---
+
+
 ## User Registration
 
 Its time to start building the first feature for the app, user registration. We'll do this using Behaviour Driven Development.
@@ -1105,7 +1131,7 @@ Its time to start building the first feature for the app, user registration. We'
 
 There's a few tweaks to perform on our testing environment.
 
-Comment out the lines within the `test` environment configuration in `client/config/environment.js` so it looks like so:
+Comment out the lines within the `test` environment configuration in `client/config/environment.js` to be like this:
 
 ```javascript
 if (environment === 'test') {
@@ -1132,11 +1158,41 @@ RSpec's documentation formatter gives more detailed feedback than the default fo
 Write `spec/support/ember_builder.rb` to build the Ember test environment once for each suite run:
 
 ```ruby
-TODO: include EmberBuilder source here once its finalized. Temporary source (update to use master): https://raw.githubusercontent.com/eliotsykes/dan-todo/user-registration_example/spec/support/ember_builder.rb
+class EmberBuilder
+  include Singleton
+
+  def initialize
+    @build_count = 0
+  end
+
+  def build_once
+    build if @build_count == 0
+  end
+
+  def build
+    puts "----------------------------------------------"
+    puts "Building Ember test environment..."
+    system "bin/ember build --environment=test"
+    puts "...completed building Ember test environment"
+    puts "----------------------------------------------"
+    @build_count += 1
+  end
+
+  def self.build_once
+    instance.build_once
+  end
+end
+
+RSpec.configure do |config|
+
+  config.before(:each, type: :feature) do
+    EmberBuilder.build_once
+  end
+
+end
 ```
 
-`spec/support/database_cleaner.rb` config to work with Capybara JavaScript-capable drivers, take from https://raw.githubusercontent.com/eliotsykes/rspec-rails-examples/master/spec/support/database_cleaner.rb
-
+Setup `spec/support/database_cleaner.rb` to work with Capybara JavaScript-capable drivers. Copy from https://raw.githubusercontent.com/eliotsykes/rspec-rails-examples/master/spec/support/database_cleaner.rb
 
 Expand `devise_for` in our routes to be explicit about the Devise controllers it uses, we're going to slowly remove our dependency on Devise's built-in controllers. Edit `devise_for` line in `config/routes.rb` to be:
 
@@ -1149,7 +1205,34 @@ devise_for :users, only: [:sessions, :passwords, :registrations, :confirmations]
 Write the registration feature using Behaviour Driven Development. Here's the spec first, `spec/features/user_registration_spec.rb`:
 
 ```ruby
-TODO: include spec contents here
+require 'rails_helper'
+
+feature "User registration", type: :feature, js: true do
+  
+  scenario "successful with valid details" do
+    visit root_path
+
+    click_link "Register"
+
+    expect(page).to have_title("Please register")
+
+    fill_in "Email", with: "clark@dailyplanet.metropolis"
+    fill_in "Password", with: "im superman"
+    fill_in "Confirm password", with: "im superman"
+    click_button "Register"
+
+    expect(page).to have_title("Please confirm")
+    expect(page).to have_text("Please check your inbox and click the link to confirm your account.")
+    
+    open_email "clark@dailyplanet.metropolis", subject: "Confirm your account"
+    click_first_link_in_email
+    
+    expect(page).to have_title("Confirmation successful")
+    expect(page).to have_text("Your account has been confirmed, thank you!")
+  end
+
+end
+
 ```
 
 Run spec:
@@ -1189,7 +1272,7 @@ The `'index'` and `'user.new'` arguments passed to `{{#link-to '...'}}` in `appl
 
 To help organize an application as it grows, Ember introduced the "pod" concept, and for now what you should know about a pod is it a loosely defined way for grouping all of the files related to a particular type of resource within a subdirectory.
 
-Think of a pod similarly to how you think of `resources` routes and models in Rails. For example, if we had a "comment" resource or model, we might have a corresponding "comment" pod that would be at the subdirectory `client/app/pods/comment`. This `client/app/pods/comment` directory would hold all of the Ember JavaScript files that are related to viewing and manipulating comments within the Ember application.
+Think of a pod similarly to how you think of `resources` routes and models in Rails. For example, if we had a "comment" resource or model, we might have a corresponding "comment" pod that would be at the subdirectory `client/app/pods/comment`. This `client/app/pods/comment` pod would hold all of the Ember JavaScript files that are related to viewing and manipulating comments within the Ember application.
 
 For user registrations, the resource is "user", and so the name of our pod is going to be "user".
 
@@ -1203,7 +1286,7 @@ So our pods are generated in the `client/app/pods/` directory, add the `podModul
   }
 ```
 
-The `podModulePrefix` always has a value that is of the format `module_prefix_goes_here/name_of_directory_to_store_pods`, so ensure the `module_prefix_goes_here` part matches the value you have set as `ENV.modulePrefix`.
+The `podModulePrefix` always has a value that is of the format `module_prefix_goes_here/name_of_directory_to_store_pods`, so ensure the `module_prefix_goes_here` part matches the value you have set as `ENV.modulePrefix` in `client/config/environment.js`.
 
 Depending on your version of Ember, your `client/app/app.js` *may* be missing a critical line for enabling pods. Ensure `client/app/app.js` has a section like below, and add the `podModulePrefix: config.podModulePrefix,` line if it is missing:
 
@@ -1225,7 +1308,8 @@ Run Ember's generate command to generate a route for registering new users:
 ```bash
 # Inside your-rails-app/ directory:
 
-# The --pod flag tells the command to generate files in the pods directory.
+# The --pod flag tells the command to generate files in the pods directory. Use
+# the --pod flag with all ember generate commands:
 bin/ember generate route user/new --pod
 ```
 
@@ -1322,59 +1406,7 @@ There's no email input field.
 
 #### Ember Form for Registration
 
-
-
-
-
-
-
-
-Our Ember application is a Single Page Application (SPA). This means that all of its pages are effectively served from the single `index.html` file.
-
-To make our jobs easier building a SPA in Rails, we're going to introduce [rails-static-router](https://github.com/eliotsykes/rails-static-router), which is a way to declare the same static file to be served at multiple paths in `config/routes.rb`.
-
-Create a new initializer at `config/initializers/static_router.rb`, and copy and paste in the contents of this file: https://raw.githubusercontent.com/eliotsykes/rails-static-router/master/static_router.rb
-
-Make this line the first route in `config/routes.rb`:
-
-```ruby
-  get "/register", to: static("index.html"), as: :new_user_registration
-```
-
-Thanks to this new route, requests for `/register` will be served Ember's index.html. You can also access the related URL helper methods `new_user_registration_path` and `new_user_registration_url` throughout your Rails app (for example in your tests and in mail templates) whenever you need to generate a URL for registering a new user.
-
-Re-run the spec and see the next failure:
-
-
-We've defined a Rails route for the registration page, but we also need to define it in Ember.
-
-TODO: figure out how to handle /register in routes.rb so the correct routes are generated in mailer templates. This may effect the static()/rails-static-router use in routes.rb. The URLs in emails need to handle browsers that don't support history API. http://discuss.emberjs.com/t/recommended-ember-locationtype-for-urls-in-emails/8064/1
-
-
----
-
-* INSTRUCTION FOR DAN START *
-
-Update `bin/serve` to this and review comments. No need to run phonegap most of the time:
-
-```bash
-#!/usr/bin/env sh
-
-echo "Usage"
-echo "-----"
-echo "Run all: bin/serve"
-echo "Without phonegap: bin/serve all=1,phonegap=0 or bin/serve rails=1,ember=1"
-echo "Without rails: bin/serve all=1,rails=0"
-echo "Ember only: bin/serve ember"
-echo ""
-
-# Forward args to foreman command with "$@"
-foreman start -f Procfile.development "$@"
-```
-
-* INSTRUCTION FOR DAN END *
-
----
+Coming soon...
 
 
 
