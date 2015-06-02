@@ -1,0 +1,64 @@
+form {
+  width: 18em;
+  margin: auto;
+}
+
+input {
+  font-size: 1em;
+  padding: 2.25em 0.75em 1em;
+  border: 0.125em solid $color-grey-light;
+  color: $color-grey-medium;
+  display: block;
+  width: 100%;
+  margin: 0.25em 0 0;
+}
+
+label {
+  position: relative;
+  top: 2.5em;
+  left: 1em;
+  font-size: 0.8125em;
+  text-transform: uppercase;
+  font-weight: normal;
+  letter-spacing: 0.0625em;
+  text-align: left;
+  color: $color-grey-dark;
+  display: block;
+  margin: 0;
+}
+
+button {
+  display: block;
+  margin-top: 1em;
+  background-color: $color-go;
+  padding: 1.25em 1em;
+  font-size: 1.125em;
+  border: 0;
+  color: $color-white;
+  width: 100%;
+  font-weight: normal;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: $color-go-hover;
+}
+
+form footer {
+  margin-top: 2em;
+  font-size: 1em;
+  color: $color-grey-dark;
+  text-align: center;
+}
+
+form footer a {
+  color: $color-grey-very-dark;
+  text-decoration: none;
+  padding-bottom: 0.0625em;
+  border-bottom: 0.125em solid $color-red;
+  font-size: 1em;
+}
+
+form footer a:hover {
+  background-color: $color-yellow-pale;
+}

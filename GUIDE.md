@@ -57,6 +57,11 @@
     - [API Controller](#api-controller)
     - [Registration Confirmation Email](#registration-confirmation-email)
     - [Rails and JSON case conventions](#rails-and-json-case-conventions)
+    - [Styling CSS in Ember](#styling-css-in-ember)
+    - [Preprocessing CSS in Ember](#preprocessing-css-in-ember)
+      - [Sass](#sass)
+      - [Autoprefixer](#autoprefixer)
+    - [Write the body-class helper](#write-the-body-class-helper)
 
 <!-- /MarkdownTOC -->
 
@@ -1235,11 +1240,12 @@ feature "User registration", type: :feature, js: true do
     click_link "Register"
 
     expect(page).to have_title("Please register")
+    expect(page).to have_css(:h1, text: /\ALet.s get you signed up.\z/)
 
-    fill_in "Email", with: "clark@dailyplanet.metropolis"
-    fill_in "Password", with: "im superman"
-    fill_in "Confirm password", with: "im superman"
-    click_button "Register"
+    fill_in "Enter your email", with: "clark@dailyplanet.metropolis"
+    fill_in "Enter new password", with: "im superman"
+    fill_in "Re-enter password", with: "im superman"
+    click_button "Create your account"
 
     expect(page).to have_title("Please confirm")
     expect(page).to have_text("Please check your inbox and click the link to confirm your account.")
@@ -1252,8 +1258,9 @@ feature "User registration", type: :feature, js: true do
   end
 
 end
-
 ```
+
+**TODO: Walkthrough from here step-by-step and check each failure happens as stated and update the rspec output. The above spec has been updated since the failures were written below.**
 
 Run spec:
 
@@ -1277,13 +1284,15 @@ Remove `:registrations` from the `devise_for` `only:` option in `config/routes.r
 Open `client/app/templates/application.hbs` and replace the contents with:
 
 ```html
+<nav>
 {{#link-to 'index'}}Home{{/link-to}}
 {{#link-to 'user.new'}}Register{{/link-to}}
+</nav>
 
 {{outlet}}
 ```
 
-Here you're using the Ember [`link-to`](http://emberjs.com/api/classes/Ember.Handlebars.helpers.html#method_link-to) helper to build links to the home (`index`) and user registration (`user.new`) pages. Note the registration page doesn't exist yet, you'll get to that shortly.
+Here you're using the Ember [`link-to`](http://emberjs.com/api/classes/Ember.Handlebars.helpers.html#method_link-to) helper to build navigation links to the home (`index`) and user registration (`user.new`) pages. Note the registration page doesn't exist yet, you'll get to that shortly.
 
 The `'index'` and `'user.new'` arguments passed to `{{#link-to '...'}}` in `application.hbs` are the names of Ember routes. Soon you're going to use an Ember generator to generate the `user.new` route. First lets talk about Ember "pods" briefly.
 
@@ -1494,16 +1503,18 @@ Edit `client/app/pods/components/user-form/template.hbs`, to be:
 
 ```html
 <form {{action "create" on="submit"}}>
-  <label for="email">Email</label>
-  {{input id="email" type="email" placeholder="Enter your email" required="true" value=user.email}}
+  <label for="email">Enter your email</label>
+  {{input id="email" type="email" required="true" value=user.email}}
 
-  <label for="password">Password</label>
-  {{input id="password" type="password" placeholder="Enter password" required="true" value=user.password}}
+  <label for="password">Enter new password</label>
+  {{input id="password" type="password" required="true" value=user.password}}
 
-  <label for="password_confirmation">Confirm password</label>
-  {{input id="password_confirmation" type="password" placeholder="Confirm password" required="true" value=user.passwordConfirmation}}
+  <label for="password_confirmation">Re-enter password</label>
+  {{input id="password_confirmation" type="password" required="true" value=user.passwordConfirmation}}
 
-  <button type="submit">Register</button>
+  <button type="submit">Create your account &rarr;</button>
+
+  <footer>Already have an account? <a href="javascript:void(0);">Sign in</a></footer>
 </form>
 ```
 
@@ -1522,7 +1533,7 @@ Next make use of the `{{user-form}}` component in our registration view template
 ```html
 {{page-title "Please register"}}
 
-<h1>Register</h1>
+<h1>Let&rsquo;s get you signed&nbsp;up&hellip;</h1>
 
 {{user-form}}
 
@@ -1910,7 +1921,176 @@ Sorry, no failure!
 
 That's right, the request spec should be passing now.
 
-**Coming soon...** Writing CSS in Ember and styling the registration form.
 
 
 
+
+
+
+
+
+
+
+#### Styling CSS in Ember
+
+---
+
+*INSTRUCTION FOR DAN START*
+
+Update these 4 files in your app with the contents of the files at the given links. The code hasn't changed much, is mostly text and HTML changes to support the new CSS that's being added below. Review the changes with `git diff` and let me know any questions you have:
+
+1. [client/app/templates/application.hbs](https://raw.githubusercontent.com/eliotsykes/dan-todo/style-registration-form_example/client/app/templates/application.hbs)
+2. [client/app/pods/components/user-form/template.hbs](https://raw.githubusercontent.com/eliotsykes/dan-todo/style-registration-form_example/client/app/pods/components/user-form/template.hbs)
+3. [client/app/pods/user/new/template.hbs](https://raw.githubusercontent.com/eliotsykes/dan-todo/style-registration-form_example/client/app/pods/user/new/template.hbs)
+4. [spec/features/user_registration_spec.rb](https://raw.githubusercontent.com/eliotsykes/dan-todo/style-registration-form_example/spec/features/user_registration_spec.rb)
+
+*INSTRUCTION FOR DAN END*
+
+---
+
+Now the registration form is viewable, clearly it is not looking great. It's time to add some styling so we feel a little happier, and maybe a little more motivated every time we have to look at it.
+
+When you created your Ember application, it created an empty stylesheet for you at `client/app/styles/app.css`.
+
+Any CSS you add to `client/app/styles/app.css` will be used throughout your Ember application thanks to the following line in `client/app/index.html`:
+
+```html
+  <link rel="stylesheet" href="assets/todos.css">
+```
+
+Notice how the file referenced in the `href` attribute for the above `<link>` element is *not* named `app.css`. The Ember build process, by default, renames the `app.css` file so its available as `your-app-name.css` inside the `assets/` directory.
+
+
+#### Preprocessing CSS in Ember
+
+
+##### Sass
+
+I did plan on using plain CSS for this application by writing it in `app.css`, but as soon as I needed to copy and paste the same, human-unfriendly color hex code more than a couple of times, I was ready to bring in a CSS preprocessor. CSS preprocessors give us the ability to write more maintainable and understandable stylesheets. A preprocessor allows you to hide color codes behind human-friendly, meaningfully-named variables.
+
+For this app, you'll write your stylesheets with the help of the [Sass](http://sass-lang.com/) CSS preprocessor language. Thankfully Ember makes it very easy to start using Sass ([and other CSS preprocessors](http://www.ember-cli.com/#less)) in your application through the use of Ember addons.
+
+Ember addons are NPM library packages that integrate with little or no work into your Ember app to add functionality. There are many addons available that can save you development time and they are worth getting familiar with soon, but not now, we've got work to do.
+
+Install the [ember-cli-sass addon](https://github.com/aexmachina/ember-cli-sass):
+
+```bash
+# Inside your-rails-app/ directory:
+npm install --save-dev ember-cli-sass
+```
+
+Delete the existing stylesheet:
+
+```bash
+rm client/app/styles/app.css
+```
+
+From now on the stylesheet files are going to use the Sass file extension `.scss`.
+
+Copy over all of the `.scss` files from this [GitHub directory](https://github.com/eliotsykes/dan-todo/tree/style-registration-form_example/client/app/styles) into your `client/app/styles/` directory.
+
+Read through the `client/app/styles/app.scss` file. It contains `@import` statements that will bring in the contents of all your other `.scss` files into the final CSS file when Ember builds your app. If you add any further stylesheets, remember to `@import` them in `app.scss`.
+
+
+##### Autoprefixer
+
+[Autoprefixer](https://github.com/postcss/autoprefixer) is an invaluable tool used by developers who want to preserve their sanity when building applications with cross-browser support. 
+
+Autoprefixer adds missing vendor prefixed properties for any existing CSS properties that need them, to help make your styles cross-browser friendly. Autoprefixer saves you having to remember to add vendor prefixes yourself for the browsers your application supports. It doesn't free you from cross-browser testing but it does make it less likely you'll run into cross-browser styling issues due to missing vendor prefixes.
+
+
+There's an Ember addon for Autoprefixer. Install it in your application:
+
+```bash
+# Inside your-rails-app/ directory
+npm install --save-dev ember-cli-autoprefixer
+```
+
+Installing this addon is all you need to do to start using Autoprefixer. There's no other configuration you need to do, your stylesheets from now on will be autoprefixed.
+
+By default, Autoprefixer is configured to add vendor prefixes to support a reasonable amount of older browsers. If you'd like to customize the browsers targeted by Autoprefixer and to find out more, see the [ember-cli-autoprefixer README](https://github.com/kimroen/ember-cli-autoprefixer).
+
+
+#### Write the body-class helper
+
+To be able to apply the registration form specific styles in `client/app/styles/register.scss`, you'll need to be able to set the CSS class on the `<body>` tag to `register`. 
+
+You're going to write a helper called `body-class` to allow you to write a line of code like this in any view template to set the current body class:
+
+```html
+<!-- Call the body-class helper to set <body class="whatever-body-class-you-want"> -->
+{{body-class "whatever-body-class-you-want"}}
+```
+
+Add a `body-class` line to the top of the user registration template file `client/app/pods/user/new/template.hbs` so the contents of the file are:
+
+```html
+{{body-class "register"}}
+{{page-title "Please register"}}
+
+<h1>Let&rsquo;s get you signed&nbsp;up&hellip;</h1>
+
+{{user-form}}
+
+{{outlet}}
+```
+
+When the user registration page is shown, the body CSS class needs to be set to `register`.
+
+Generate the body-class helper:
+
+```bash
+# Inside your-rails-app/ directory:
+bin/ember g helper body-class
+```
+
+Open the generated `client/app/helpers/body-class.js` and save the file with these contents:
+
+```javascript
+import Ember from 'ember';
+
+export function bodyClass(params) {
+  var cssClass = params[0];
+  var body = Ember.$('body');
+  if (!body.hasClass(cssClass)) {
+    body.addClass(cssClass);
+  }
+}
+
+export function bodyClassReset() {
+  var defaultBodyClass = 'ember-application';
+  // Remove all body classes except for the default ember-application class.
+  Ember.$('body').attr('class', defaultBodyClass);
+}
+
+export function modifyRouteModuleForBodyClassHelper() {
+  Ember.Route.reopen({
+    // deactivate runs when a route is exited. This will reset the body class
+    // when a route is exited, so old body classes don't pile up.
+    deactivate: bodyClassReset
+  });
+}
+
+export default Ember.HTMLBars.makeBoundHelper(bodyClass);
+```
+
+Add these 2 lines that `import` and call the `modifyRouteModuleForBodyClassHelper` function  to just below the existing imports in `client/app/router.js`:
+
+```
+// Existing imports in router.js
+...
+import { modifyRouteModuleForBodyClassHelper } from './helpers/body-class';
+
+modifyRouteModuleForBodyClassHelper();
+
+// Rest of router.js
+...
+```
+
+Run `bin/serve`, visit the registration form, which should look like this:
+
+![Styled Registration Form](http://cl.ly/image/2p172x0V232L/Image%202015-06-05%20at%207.26.49%20pm.png)
+
+
+
+**Coming Soon...** Finish registering a new user

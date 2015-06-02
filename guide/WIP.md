@@ -6,14 +6,6 @@ Unify .gitignore files (.gitignore and client/.gitignore). --skip-git option whe
 
 
 
----
-
-Make deployment more fault tolerant, output warnings in bin/ember when dependency symlinks for node_modules and bower_components are not in place (and possibly create them as part of it?).
-
-
-
-
-
 
 ---
 
@@ -32,16 +24,10 @@ Improve performance of `ember build --watch`? Could not find watchman, falling b
 
 
 
----
-
-- Use LiveReload with PhoneGap developer app and with Rails server. Use Ember's LiveReload for both and pass `--no-autoreload` option to `phonegap serve`?
-
-
-
 
 ---
 
-- Is `phonegap serve` needed? Can `rails server` do the same job?
+- Is `phonegap serve` needed? Can `rails server` do the same job? Write rack middleware that does what connect-phonegap does? e.g. serve zip at /__app_zip__
 
 
 
@@ -224,23 +210,13 @@ TODO: figure out how to handle /register in routes.rb so the correct routes are 
 
 
 
-
----
-
-# Sass
-
-Reference Sass and Less etc. section in ember-cli docs, but use standard CSS with autoprefixer, allow devs to decide if they want to use a preprocessor and choose their preference. Providing CSS allows them to use it with any preprocessor they choose, including none.
-
-Start this on a new branch sass-setup_example
-
-To use Sass, install the [ember-cli-sass](https://github.com/aexmachina/ember-cli-sass) addon:
-
-```bash
-bin/ember install ember-cli-sass
-```
-
 ---
 
 What about PhoneGap Developer App and the apiHost? Test it once 0.16.2 of connect-phonegap is released and add configuration now above if needed. Currently symlink-containing apps not working with 0.16 https://github.com/phonegap/connect-phonegap/pull/116
 
+
+
+
+
 ---
+

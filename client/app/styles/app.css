@@ -1,7 +1,0 @@
-$serifs: "Linux Libertine", Georgia, Times, serif;
-$sans-serifs: "Helvetica Neue", Helvetica, "Nimbus Sans L", Arial, "Liberation Sans", FreeSans, sans-serif;
-
-body {
-  font-family: $sans-serifs;
-  background-color: pink;
-}

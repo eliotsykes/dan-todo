@@ -8,11 +8,12 @@ feature "User registration", type: :feature, js: true do
     click_link "Register"
 
     expect(page).to have_title("Please register")
+    expect(page).to have_css(:h1, text: /\ALet.s get you signed up.\z/)
 
-    fill_in "Email", with: "clark@dailyplanet.metropolis"
-    fill_in "Password", with: "im superman"
-    fill_in "Confirm password", with: "im superman"
-    click_button "Register"
+    fill_in "Enter your email", with: "clark@dailyplanet.metropolis"
+    fill_in "Enter new password", with: "im superman"
+    fill_in "Re-enter password", with: "im superman"
+    click_button "Create your account"
 
     expect(page).to have_title("Please confirm")
     expect(page).to have_text("Please check your inbox and click the link to confirm your account.")

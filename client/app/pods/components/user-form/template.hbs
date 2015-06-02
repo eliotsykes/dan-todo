@@ -1,12 +1,14 @@
 <form {{action "create" on="submit"}}>
-  <label for="email">Email</label>
-  {{input id="email" type="email" placeholder="Enter your email" required="true" value=user.email}}
+  <label for="email">Enter your email</label>
+  {{input id="email" type="email" required="true" value=user.email}}
 
-  <label for="password">Password</label>
-  {{input id="password" type="password" placeholder="Enter password" required="true" value=user.password}}
+  <label for="password">Enter new password</label>
+  {{input id="password" type="password" required="true" value=user.password}}
 
-  <label for="password_confirmation">Confirm password</label>
-  {{input id="password_confirmation" type="password" placeholder="Confirm password" required="true" value=user.passwordConfirmation}}
+  <label for="password_confirmation">Re-enter password</label>
+  {{input id="password_confirmation" type="password" required="true" value=user.passwordConfirmation}}
 
-  <button type="submit">Register</button>
+  <button type="submit">Create your account &rarr;</button>
+
+  <footer>Already have an account? <a href="javascript:void(0);">Sign in</a></footer>
 </form>
