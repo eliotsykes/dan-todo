@@ -62,6 +62,7 @@
       - [Sass](#sass)
       - [Autoprefixer](#autoprefixer)
     - [Write the body-class helper](#write-the-body-class-helper)
+    - [Form Submit & Transitioning Routes](#form-submit--transitioning-routes)
 
 <!-- /MarkdownTOC -->
 
@@ -1390,7 +1391,7 @@ Ember helpers are like Rails helpers that you use for providing helper methods t
 Generate the `page-title` helper:
 
 ```bash
-bin/ember g helper page-title --pod
+bin/ember generate helper page-title --pod
 ```
 
 This will create the following output and files:
@@ -1447,7 +1448,7 @@ Perform the following command to generate a `User` model, its syntax may be fami
 
 ```bash
 # In your-rails-app/ directory:
-bin/ember g model user email:string password:string passwordConfirmation:string --pod
+bin/ember generate model user email:string password:string passwordConfirmation:string --pod
 ```
 
 The command will produce the following output:
@@ -1552,7 +1553,7 @@ export default Ember.Component.extend({
 
     // Set up a user to use in the template. Allows user.email, user.password,
     // etc. to be used in input helpers like: {{input value=user.email}}
-    this.set('user', this.store.createRecord('user'));
+    this.set('user', this.get('store').createRecord('user'));
   },
   actions: {
     // create() is called when form is submitted
@@ -1562,16 +1563,17 @@ export default Ember.Component.extend({
       var user = this.get('user');
 
       // Register/save the user via an AJAX request to the server API:
-      user.save().then(
-        function success() { console.log("User saved!"); },
-        function failure(e) { console.log("Oops, user not saved!", e); }
-      );
+      user.save()
+        .then(function { console.log("User saved!"); })
+        .catch(
+          function(reason) { window.alert("Oops, user not saved! "  + reason); }
+        );
     }
   }
 });
 ```
 
-In the `user-form` javascript, there is a call to `this.store.createRecord('user')` which is used to create a blank `User` object to back the user form. `this.store` is an object provided by the Ember Data library. Ember Data helps to perform CRUD operations for models, and you can think of it being a bit like Rails' ActiveRecord gem. At the time of writing, Ember Data's `store` is not available to components automatically. To make it available, we're going to need to write an initializer.
+In the `user-form` javascript, there is a call to `this.get('store').createRecord('user')` which is used to create a blank `User` object to back the user form. `this.get('store')` is an object provided by the Ember Data library. Ember Data helps to perform CRUD operations for models, and you can think of it being a bit like Rails' ActiveRecord gem. At the time of writing, Ember Data's `store` is not available to components automatically. To make it available, we're going to need to write an initializer.
 
 #### Ember Initializers
 
@@ -1584,7 +1586,7 @@ For example, your Ember app might eventually have JavaScript objects representin
 Generate an initializer to inject the Ember Data `store` into all components:
 
 ```bash
-bin/ember g initializer component-store-injector
+bin/ember generate initializer component-store-injector
 ```
 
 This is the output you'll see when generating the initializer:
@@ -1610,14 +1612,14 @@ export default {
 };
 ```
 
-This initializer makes the `store` object available in the `user-form` component, meaning the `this.store.createRecord('user')` call in the component will now work.
+This initializer makes the `store` object available in the `user-form` component, meaning the `this.get('store').createRecord('user')` call in the component will now work.
 
 
 #### API Design and Ember's RESTAdapter
 
 To avoid expending excessive brain cycles on API design decisions, the user API you'll build here is going to behave very closely to [what Ember's RESTAdapter expects by default](http://guides.emberjs.com/v1.11.0/models/the-rest-adapter/).
 
-Ember's RESTAdapter is used to communicate with the server for persisting model data. When you make a call like `this.store.createRecord('user')`, the RESTAdapter will be used by `this.store` behind-the-scenes by default.
+Ember's RESTAdapter is used to communicate with the server for persisting model data. When you make a call like `this.get('store').createRecord('user')`, the RESTAdapter will be used by `this.get('store')` behind-the-scenes by default.
 
 The `RESTAdapter` expects your JSON API to behave conventionally in terms of the way your JSON data is structured, and the way your API URLs are specified. These conventions can be overridden through configuration, though we will try to keep the custom configuration to a minimum.
 
@@ -1645,7 +1647,7 @@ Looking at `config/routes.rb`, see that API URLs so far have been prefixed with 
 Generate the application's RESTAdapter:
 
 ```bash
-bin/ember g adapter application
+bin/ember generate adapter application
 ```
 
 Expected output and files are:
@@ -2041,7 +2043,7 @@ Generate the body-class helper:
 
 ```bash
 # Inside your-rails-app/ directory:
-bin/ember g helper body-class
+bin/ember generate helper body-class
 ```
 
 Open the generated `client/app/helpers/body-class.js` and save the file with these contents:
@@ -2093,4 +2095,196 @@ Run `bin/serve`, visit the registration form, which should look like this:
 
 
 
-**Coming Soon...** Finish registering a new user
+
+
+
+
+
+
+
+
+#### Form Submit & Transitioning Routes
+
+---
+
+*INSTRUCTIONS FOR DAN START*
+
+Replace `spec/features/user_registration_spec.rb` contents with contents from here: 
+
+https://github.com/eliotsykes/dan-todo/blob/form-submit-and-transition-route_example/spec/features/user_registration_spec.rb
+
+`git diff` to review the line that changed in the spec.
+
+Create the `client/app/styles/confirmation.scss` stylesheet file and copy the contents from this file into it:
+
+https://github.com/eliotsykes/dan-todo/blob/form-submit-and-transition-route_example/client/app/styles/confirmation.scss
+
+Add this line to the end of `client/app/styles/app.scss` to import the new stylesheet:
+
+```
+@import 'confirmation';
+```
+
+*INSTRUCTIONS FOR DAN END*
+
+---
+
+
+Its that time again - to re-run the feature spec:
+
+```bash
+# Inside your-rails-app/ directory:
+bin/rspec spec/features/user_registration_spec.rb
+```
+
+The failure you'll see will be:
+
+```
+  1) User registration successful with valid details
+     Failure/Error: expect(page).to have_title("Please confirm")
+       expected "Please register" to include "Please confirm"
+     # ./spec/features/user_registration_spec.rb:18:in `block (2 levels) in <top (required)>'
+```
+
+This failure is happening after the registration form has been successfully submitted. Even though the form is submitted, the page title hasn't updated and the view hasn't changed, the registration form is still shown to the user.
+
+You're going to make this part of the spec pass by taking the user to a confirmation pending page after they submit the registration form.
+
+When a user submits the registration form, we currently don't do anything other than log a `"User saved!"` message to the browser console:
+
+```javascript
+  // Taken from client/app/pods/components/user-form/component.js
+  user.save().then(
+    function success() { console.log("User saved!"); },
+    ...
+  );
+```
+
+What you want to do instead of logging to the console, is to send the user to the page that tells them to go check their inbox for the registration confirmation email.
+
+Create a new route for this confirmation pending page:
+
+```bash
+# Inside your-rails-app/ directory:
+
+bin/ember generate route confirmation/pending --pod
+```
+
+This will generate the following output and files:
+
+```
+installing
+  create app/pods/confirmation/pending/route.js
+  create app/pods/confirmation/pending/template.hbs
+installing
+  create tests/unit/pods/confirmation/pending/route-test.js
+```
+
+It will also add a new route to your `client/app/router.js` file. The `Router.map ...` section of `client/app/router.js` ought to now look like this:
+
+```javascript
+...
+Router.map(function() {
+  this.route('user.new', { path: '/register' });
+
+  this.route('confirmation', function() {
+    this.route('pending');
+  });
+});
+...
+```
+
+Ember provides a `transitionTo` function to take the user to a new route. You'll want to use this in the `user-form` component to take the user to the `confirmation.pending` route when they've successfully submitted their registration details. In the `client/app/pods/components/user-form/component.js` file, update the contents to the following:
+
+```javascript
+import Ember from 'ember';
+
+export default Ember.Component.extend({
+  init: function() {
+    // Call the parent init function:
+    this._super.apply(this, arguments);
+
+    // Set up a user to use in the template. Allows user.email, user.password,
+    // etc. to be used in input helpers like: {{input value=user.email}}
+    this.set('user', this.get('store').createRecord('user'));
+  },
+  actions: {
+    // create() is called when form is submitted
+    create: function() {
+      // Get user model object from component. It will be auto-populated with 
+      // input values from the from:
+      var user = this.get('user');
+
+      // Use ES6 arrow function => syntax to avoid having to call .bind(this)
+      // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions
+      var transitionToConfirmationPending = () => {
+        this.get('router').transitionTo('confirmation.pending');
+      };
+
+      // Register/save the user via an AJAX request to the server API:
+      user.save()
+        .then(transitionToConfirmationPending)
+        .catch(
+          function(reason) { window.alert("Oops, user not saved! "  + reason); }
+        );
+    }
+  }
+});
+```
+
+Notice the new `transitionToConfirmationPending` function that will be called when the user is successfully saved. This is what will transition to the `confirmation.pending` route.
+
+Also notice the call to `this.get('router')` in the `transitionToConfirmationPending` function. This is a reference to Ember's `Router` object.
+
+At time of writing, the router is not available by default in components. This means that we need to write an initializer that will inject the router into components (you may remember we did something similar before to inject the `store` into components).
+
+Create a router injector initializer:
+
+```bash
+bin/ember generate initializer component-router-injector
+```
+
+This will output the following files:
+
+```
+installing
+  create app/initializers/component-router-injector.js
+installing
+  create tests/unit/initializers/component-router-injector-test.js
+```
+
+Edit `client/app/initializers/component-router-injector.js` to have the following contents:
+
+```javascript
+export function initialize(container, application) {
+  // Injects all Ember components with a router object:
+  application.inject('component', 'router', 'router:main');
+}
+
+export default {
+  name: 'component-router-injector',
+  initialize: initialize
+};
+```
+
+The router will now be available inside components as `this.get('router')`.
+
+
+Next you'll modify the confirmation pending page template `client/app/pods/confirmation/pending/template.hbs`. You're going to set the body CSS class, the page title, and the body paragraph text to match what is expected in the feature spec. Save the template with these contents:
+
+```html
+{{body-class 'confirmation'}}
+{{page-title 'Please confirm'}}
+
+<p>
+  Please check your inbox, open the email we&rsquo;ve just sent you, and click 
+  the link inside it to confirm your new account.
+</p>
+
+{{outlet}}
+```
+
+Re-run the `user_registration_spec.rb` feature spec and you should see a new error in the test failure output, which we'll fix shortly!
+
+
+**Coming next...Show a confirmation success page and prompting the user to login with their shiny new account**

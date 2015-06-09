@@ -10,6 +10,10 @@ var Router = Ember.Router.extend({
 
 Router.map(function() {
   this.route('user.new', { path: '/register' });
+
+  this.route('confirmation', function() {
+    this.route('pending');
+  });
 });
 
 export default Router;
