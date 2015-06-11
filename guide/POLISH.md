@@ -56,3 +56,10 @@ Check all symlinks as there are a number of ways they can be accidentally broken
 - Add to instructions a script that creates the symlinks or checks they're created and stored in repo. If the symlinks are not as expected then Heroku deploy will fail.
 
 
+## UI response
+
+- FastClick to remove tap delay
+
+
+## Thorough testing of CSS across browsers
+
