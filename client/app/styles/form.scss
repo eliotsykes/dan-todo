@@ -11,6 +11,13 @@ input {
   display: block;
   width: 100%;
   margin: 0.25em 0 0;
+  box-shadow: none;
+
+  &:focus {
+    border-color: $color-focus-outline;
+    outline: 0.3125em solid $color-focus-outline;
+    outline-offset: 0;
+  }
 }
 
 label {
@@ -38,6 +45,11 @@ button {
   width: 100%;
   font-weight: normal;
   cursor: pointer;
+
+  &:focus {
+    outline: 0.4375em solid $color-focus-outline;
+    outline-offset: 0;
+  }
 }
 
 button:hover {

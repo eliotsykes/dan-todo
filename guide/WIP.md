@@ -195,15 +195,30 @@ Create a new initializer at `config/initializers/static_router.rb`, and copy and
 Make this line the first route in `config/routes.rb`:
 
 ```ruby
-  get "/register", to: static("index.html"), as: :new_user_registration
+  get "/register", to: static("index.html"), as: :register
+```
+OR this?
+```ruby
+  # def static_index_route(name)
+    # Define the anchor (#fragment-identifier) so the generated URLs are
+    # supported by Ember for browsers that need to use the locationType:hash
+    # configuration (i.e. browsers that don't have complete support of HTML5
+    # History API).
+    # get "/#{name}", as: name, to: static("index.html"), defaults: { anchor: "/#{name}" }
+  # end
+
+  # These path+anchor routes are tolerant URLs that'll work in a range of browsers. They ought to be used
+  # in links in emails.
+  # get '/register', as: :register, to: static("index.html"), defaults: { anchor: "/register" }
+  # get '/login', as: :login, to: static("index.html"), defaults: { anchor: "/login" }
+  # static_index_route :register
+  # static_index_route :login
 ```
 
-Thanks to this new route, requests for `/register` will be served Ember's index.html. You can also access the related URL helper methods `new_user_registration_path` and `new_user_registration_url` throughout your Rails app (for example in your tests and in mail templates) whenever you need to generate a URL for registering a new user.
+Thanks to this new route, requests for `/register/` will be served Ember's index.html. You can also access the related URL helper methods `register_path` and `register_url` throughout your Rails app (for example in your tests and in mail templates) whenever you need to generate a URL for registering a new user.
 
 Re-run the spec and see the next failure.
 
-
-TODO: figure out how to handle /register in routes.rb so the correct routes are generated in mailer templates. This may effect the static()/rails-static-router use in routes.rb. The URLs in emails need to handle browsers that don't support history API. http://discuss.emberjs.com/t/recommended-ember-locationtype-for-urls-in-emails/8064/1
 
 
 
@@ -219,4 +234,18 @@ What about PhoneGap Developer App and the apiHost? Test it once 0.16.2 of connec
 
 
 ---
+
+# Build login before registration
+
+Move login (feature spec & form) chapter to *before* registration chapter. Acceptable to have login only available to manually created users initially. Then the registration spec can include login at the end more smoothly.
+
+
+
+
+
+
+
+
+
+
 

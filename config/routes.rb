@@ -1,9 +1,18 @@
 Rails.application.routes.draw do
   
-  # get "/login", to: static("index.html")
-  # get "/register", to: static("index.html"), as: :new_user_registration
+  # def static_index_route(name)
+    # get "/#{name}", as: name, to: static("index.html"), defaults: { anchor: "/#{name}" }
+  # end
+
+  # get '/register', as: :register, to: static("index.html"), defaults: { anchor: "/register" }
+  # get '/login', as: :login, to: static("index.html"), defaults: { anchor: "/login" }
+  # static_index_route :register
+  # static_index_route :login
+
+  devise_for :users,
+    only: [:passwords, :confirmations], # removed: :registrations, :sessions
+    controllers: { confirmations: :confirmations }
   
-  devise_for :users, only: [:sessions, :passwords, :confirmations] # removed: :registrations
   resources :users, only: [:show]
 
   resources :lists do
@@ -25,4 +34,5 @@ Rails.application.routes.draw do
   end
 
   root to: 'welcome#index'
+  get '/' => 'welcome#index', as: :login, defaults: { anchor: "/login" }
 end

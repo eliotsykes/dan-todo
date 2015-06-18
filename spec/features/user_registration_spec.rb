@@ -21,8 +21,15 @@ feature "User registration", type: :feature, js: true do
     open_email "clark@dailyplanet.metropolis", subject: "Confirm your account"
     click_first_link_in_email
     
-    expect(page).to have_title("Confirmation successful")
+    expect(page).to have_title("Sign In")
     expect(page).to have_text("Your account has been confirmed, thank you!")
+
+    fill_in "Enter your email", with: "clark@dailyplanet.metropolis"
+    fill_in "Enter your password", with: "im superman"
+    click_button "Sign In"
+
+    expect(page).to have_text("You are signed in")
+    expect(page).to have_text("Hello clark@dailyplanet.metropolis")
   end
 
 end
