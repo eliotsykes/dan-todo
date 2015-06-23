@@ -14,6 +14,8 @@ Router.map(function() {
   this.route('confirmation', function() {
     this.route('pending');
   });
+
+  this.route('session.new', { path: '/login' });
 });
 
 export default Router;

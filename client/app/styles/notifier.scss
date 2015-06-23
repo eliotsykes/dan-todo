@@ -1,0 +1,43 @@
+.notifier {
+  background-color: $color-go;
+  color: white;
+  padding: 1em 5em 2em 1em;
+  text-align: left;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  opacity: 0.85;
+  font-size: 1.125em;
+  margin: 0.5em;
+
+  button {
+    margin: 0;
+    padding: 0 0.825em;
+    width: auto;
+    font-size: 0.875em;
+    text-transform: uppercase;
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background-color: $color-grey-very-dark;
+
+    &::after {
+      content: '\2715';
+      font-size: 3em;
+      line-height: 1.5em;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      right: 0;
+      left: 0;
+      background-color: $color-grey-very-dark;
+    }
+
+    &:hover::after {
+      background-color: $color-white;
+      color: $color-red;
+    }
+  }
+}

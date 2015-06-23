@@ -1,6 +1,14 @@
 # Polish
 
-Finishing touches to optionally apply after MVP/first draft.
+Finishing touches to apply after MVP/first draft.
+
+## Accessibility explainers
+
+Explain accessibility choices in main flow of book as they're taken:
+
+- `role='status'` on `div.notice` with `aria-live='polite'`
+- Close button/link includes text, not just X in `div.notice`
+
 
 ## Code conventions
 
@@ -17,6 +25,17 @@ Finishing touches to optionally apply after MVP/first draft.
   * Password strength indicator component
   * Client-side inline validation messages
   * Password + Password confirmation component
+
+
+## Confirm Registration
+
+- Behaviour & test coverage for unknown confirmation token
+
+
+## Notifier component
+
+- Use component name without hyphen, without `x-` prefix (supported in Ember 2.0 IIRC)
+- Alter isVisible to be a computed property or a function that returns showNotifier. Fixed by https://github.com/emberjs/ember.js/pull/11235
 
 
 ## API
@@ -62,4 +81,7 @@ Check all symlinks as there are a number of ways they can be accidentally broken
 
 
 ## Thorough testing of CSS across browsers
+
+
+
 
