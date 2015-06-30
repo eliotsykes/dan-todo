@@ -2598,5 +2598,61 @@ The next failure you'll see will be about one of the sign in form fields being m
 
 #### Login form
 
+Earlier you created a `user-form` component responsible for handling user registration. Now you'll create a `session-form` component responsible for handling user session login. The component will be a form containing an email input field, a password input field, and a login button.
 
-**Coming next...Adding login form fields**
+Begin by generating the `session-form` component files:
+
+```bash
+# Inside your-rails-app/ directory:
+bin/ember generate component session-form --pod
+```
+
+The generated files reported in the output will be:
+
+```
+installing
+  create app/pods/components/session-form/component.js
+  create app/pods/components/session-form/template.hbs
+installing
+  create tests/unit/pods/components/session-form/component-test.js
+```
+
+In `client/app/pods/session/new/template.hbs` make use of the new component. Add `{{session-form}}` directly below the `<h1>` heading:
+
+```html
+...
+<h1>Sign In</h1>
+
+{{session-form}}
+
+...
+```
+
+Write the form for the component, save `client/app/pods/components/session-form/template.hbs` with these contents:
+
+```html
+TODO: Get latest from the template and put here:
+<form {{action "create" on="submit"}}>
+  <label for="email">Enter your email</label>
+  {{input id="email" type="email" required="true" value=session.email}}
+
+  <label for="password">Enter your password</label>
+  {{input id="password" type="password" required="true" value=session.password}}
+
+  <button type="submit">Sign in &rarr;</button>
+
+  <footer>Need a new account? {{#link-to 'user.new'}}Sign up{{/link-to}}</footer>
+</form>
+```
+
+Notice the opening `<form>` tag references a `create` action that will be called when the form is submitted. This `create` action is yet to be written. `create` will need to submit the email and password entered in the form to the Rails app. The Rails app will respond with an API authentication token that will be stored in the browser and used to authenticate all subsequent requests from the user.
+
+Write the following in `client/app/pods/components/session-form/component.js`:
+
+```javascript
+TODO
+```
+
+Generate a session model? Use a session model or ? Review, research auth approaches.
+
+
