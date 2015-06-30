@@ -83,5 +83,14 @@ Check all symlinks as there are a number of ways they can be accidentally broken
 ## Thorough testing of CSS across browsers
 
 
+## Lockdown node version
+
+Include instructions for:
+
+- Installing nvm 
+- Installing specific node version with nvm
+- Create `.nvmrc` file containing node version
+- Running `nvm use` to set node version (automate this?)
+- Specifying node version in `package.json` `engines` option
 
 
