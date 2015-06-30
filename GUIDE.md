@@ -2653,6 +2653,6 @@ Write the following in `client/app/pods/components/session-form/component.js`:
 TODO
 ```
 
-Generate a session model? Use a session model or ? Review, research auth approaches.
+Use https://github.com/simplabs/ember-cli-simple-auth
 
 
