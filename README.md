@@ -29,7 +29,8 @@ curl -H "X-Api-Key: TCwrsTTMp8C2H1vIHPNX4wtt" -X DELETE http://localhost:3000/ap
 
 # Developer Setup
 
-- `npm install` (automatically triggers `bower install` via postinstall script in `package.json`)
+- `nvm use` to use correct node version specified in `.nvmrc` (should be same as in `package.json`)
+- `npm install` (automatically triggers `bower install` via postinstall script in `package.json` `engines` option)
 - Specify ruby version in `.ruby-version`
 - `bundle install --without production`
 
