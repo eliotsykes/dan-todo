@@ -2653,6 +2653,10 @@ Write the following in `client/app/pods/components/session-form/component.js`:
 TODO
 ```
 
-Use https://github.com/simplabs/ember-cli-simple-auth
+Use https://github.com/simplabs/ember-cli-simple-auth and see ember-simple-auth/examples/ apps.
 
+```bash
+# Inside your-rails-app/ directory:
+npm install ember-cli-simple-auth
+```
 
