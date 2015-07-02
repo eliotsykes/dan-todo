@@ -68,6 +68,7 @@
       - [Notifier component](#notifier-component)
     - [Login form](#login-form)
       - [Safety Net `npm_setup`](#safety-net-npm_setup)
+    - [Login form (continued)](#login-form-continued)
 
 <!-- /MarkdownTOC -->
 
@@ -2633,17 +2634,6 @@ Write the form for the component, save `client/app/pods/components/session-form/
 
 ```html
 TODO: Get latest from the template and put here:
-<form {{action "create" on="submit"}}>
-  <label for="email">Enter your email</label>
-  {{input id="email" type="email" required="true" value=session.email}}
-
-  <label for="password">Enter your password</label>
-  {{input id="password" type="password" required="true" value=session.password}}
-
-  <button type="submit">Sign in &rarr;</button>
-
-  <footer>Need a new account? {{#link-to 'user.new'}}Sign up{{/link-to}}</footer>
-</form>
 ```
 
 Notice the opening `<form>` tag references a `create` action that will be called when the form is submitted. This `create` action is yet to be written. `create` will need to submit the email and password entered in the form to the Rails app. The Rails app will respond with an API authentication token that will be stored in the browser and used to authenticate all subsequent requests from the user.
@@ -2654,7 +2644,9 @@ Write the following in `client/app/pods/components/session-form/component.js`:
 TODO
 ```
 
-Use https://github.com/simplabs/ember-cli-simple-auth and see ember-simple-auth/examples/ apps.
+There is an Ember addon that helps provide common functionality required for apps that have users who can login. The addon is [ember-simple-auth](https://github.com/simplabs/ember-simple-auth) and is provided by a thin wrapper addon named ember-cli-simple-auth. Lets use it.
+
+Install the `ember-cli-simple-auth` addon:
 
 ```bash
 # Inside your-rails-app/ directory:
@@ -2679,13 +2671,13 @@ ls -al client/package.json
 client/package.json -> ../package.json
 ```
 
-It is too easy to trip up on this `package.json`-symlink issue whenever you install an Ember addon. It is a compromise worth living with when you want to have your Ember app and Rails app co-exist in the same project, as we currently do. 
+It is too easy to trip up on this `package.json`-symlink issue whenever you install an Ember addon. It is a small compromise worth making do with when you want to have your Ember app and Rails app co-exist in the same project. 
 
-However, lets make this compromise more comfortable for your future self by setting up a safety net to catch this issue as soon you install an Ember addon.
+However, lets make this compromise more comfortable for your future self by setting up a safety net to catch and fix this issue anytime you install an Ember addon.
 
 ##### Safety Net `npm_setup`
 
-You're going to write a script `bin/npm_setup` that will check the npm environment is setup correctly before and after `bin/ember` runs. You'll also be able to call `bin/npm_setup` anytime you want to validate or fix your npm environment. This will ensure the double `package.json` issue described earlier won't bite you again.
+You're going to write a shell script `bin/npm_setup` that will check the npm environment is setup correctly before and after `bin/ember` runs. You'll also be able to call `bin/npm_setup` anytime you want to validate or fix your npm environment. This will ensure the double `package.json` issue described earlier won't bite you again.
 
 Note that `bin/npm_setup` will be called in your production environment indirectly via the `bin/ember build ...` that is called during deployment (see the `scripts > postinstall` config option in `package.json` which is called by Heroku during deployment). This is a good thing as it provides an extra validation step that our production environment is setup as we need it to be.
 
@@ -2757,10 +2749,22 @@ source bin/npm_setup
 Notice the `source bin/npm_setup` lines added to `bin/ember`. These lines invoke our safety net before and after the `ember` command runs. If something happens to create another `package.json` file, `npm_setup` will fix it before it becomes a problem.
 
 
+#### Login form (continued)
 
+Its time to setup the ember-simple-auth addon. Create a route that all other routes will inherit from. Its the Ember convention that this route is named `application`. Run the generator:
 
+```bash
+# Inside your-rails-app/ directory. 
 
+# Generate the Ember application route:
+bin/ember generate route application
+```
 
+This will ask if you'd like to "Overwrite app/templates/application.hbs?" - answer `n` for no. You want to keep the existing file.
 
+The generator will create a new file at `client/app/routes/application.js`. Open the file and give it the following contents:
 
+```javascript
+
+```
 

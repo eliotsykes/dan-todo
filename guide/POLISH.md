@@ -99,3 +99,41 @@ Include instructions for:
 - Colorize echo output from npm_setup (and other scripts?)
 - Introduce bin/npm_setup the first time an addon is installed. Currently instructions use npm install early on for installing ember-cli-sass and ember-cli-autoprefixer to avoid tackling the package.json-symlink issue.
 
+
+## bin/ember COMMAND consistency
+
+- Use the expanded bin/ember COMMAND rather than shorthand throughout. E.g. bin/ember generate not bin/ember g.
+
+
+## application.js route and router.js customizations
+
+Move the body-class helper customization out of router.js and into the application.js route:
+
+
+Delete this from router.js:
+```javascript
+...
+import { modifyRouteModuleForBodyClassHelper } from './helpers/body-class';
+
+modifyRouteModuleForBodyClassHelper();
+...
+```
+
+Add this to client/app/routes/application.js (preliminary experiment shows it works):
+
+```javascript
+...
+import { modifyRouteModuleForBodyClassHelper } from '../helpers/body-class';
+
+modifyRouteModuleForBodyClassHelper();
+...
+```
+
+Notice the `..` change in the `import` line above.
+
+
+## Secure by default routes
+
+Assume all routes require login unless explicitly excluded on a per-route basis:
+
+http://discuss.emberjs.com/t/specifying-whether-or-not-routes-should-check-for-authentication/4097/3
