@@ -94,3 +94,8 @@ Include instructions for:
 - Specifying node version in `package.json` `engines` option
 
 
+## bin/npm_setup
+
+- Colorize echo output from npm_setup (and other scripts?)
+- Introduce bin/npm_setup the first time an addon is installed. Currently instructions use npm install early on for installing ember-cli-sass and ember-cli-autoprefixer to avoid tackling the package.json-symlink issue.
+

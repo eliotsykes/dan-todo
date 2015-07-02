@@ -1,0 +1,21 @@
+#!/usr/bin/env sh
+
+# Ensures npm environment is setup correctly for all environments.
+
+if [ ! -f "package.json" ]; then
+  echo "Warning: package.json does not exist"
+  cp client/package.json ./
+  echo "  Fixed: client/package.json copied to ./package.json"
+fi
+
+
+if ! diff client/package.json package.json >/dev/null ; then
+  echo "Warning: ./package.json and client/package.json differ"
+  echo " Fixing: client/package.json is being copied to ./package.json"
+  cp client/package.json ./
+  echo "  Fixed: client/package.json copied to ./package.json"
+fi
+
+# Symlink node_modules and package.json from client/ so ember operates without error:
+ln -sfn ../node_modules client/node_modules
+ln -sfn ../package.json client/package.json
