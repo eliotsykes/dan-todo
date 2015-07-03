@@ -137,3 +137,10 @@ Notice the `..` change in the `import` line above.
 Assume all routes require login unless explicitly excluded on a per-route basis:
 
 http://discuss.emberjs.com/t/specifying-whether-or-not-routes-should-check-for-authentication/4097/3
+
+## Why Ruby for acceptance tests? Why not JS?
+
+See App Store Rails notebook note "Why using Capybara (or other ruby-based) acceptance tests?". TLDR: speed, control, power, DRY. HTTP-based dependent solutions are poor when compared to talking to model layer directly.
+
+This PR also makes some relevant points: https://github.com/jfirebaugh/konacha/pull/60#issuecomment-7790134
+
