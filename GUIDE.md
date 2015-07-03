@@ -67,8 +67,9 @@
       - [Redirect to login page after confirmation](#redirect-to-login-page-after-confirmation)
       - [Notifier component](#notifier-component)
     - [Login form](#login-form)
-      - [Safety Net `npm_setup`](#safety-net-npm_setup)
-    - [Login form (continued)](#login-form-continued)
+    - [Install ember-cli-simple-auth](#install-ember-cli-simple-auth)
+    - [Safety Net `npm_setup`](#safety-net-npm_setup)
+    - [Setup ember-simple-auth](#setup-ember-simple-auth)
 
 <!-- /MarkdownTOC -->
 
@@ -2644,7 +2645,9 @@ Write the following in `client/app/pods/components/session-form/component.js`:
 TODO
 ```
 
-There is an Ember addon that helps provide common functionality required for apps that have users who can login. The addon is [ember-simple-auth](https://github.com/simplabs/ember-simple-auth) and is provided by a thin wrapper addon named ember-cli-simple-auth. Lets use it.
+#### Install ember-cli-simple-auth
+
+There is a library that helps provide common functionality required for Ember apps that have users who can login. The library is [Ember Simple Auth](https://github.com/simplabs/ember-simple-auth) and is provided by an addon named ember-cli-simple-auth. Lets use it.
 
 Install the `ember-cli-simple-auth` addon:
 
@@ -2675,7 +2678,7 @@ It is too easy to trip up on this `package.json`-symlink issue whenever you inst
 
 However, lets make this compromise more comfortable for your future self by setting up a safety net to catch and fix this issue anytime you install an Ember addon.
 
-##### Safety Net `npm_setup`
+#### Safety Net `npm_setup`
 
 You're going to write a shell script `bin/npm_setup` that will check the npm environment is setup correctly before and after `bin/ember` runs. You'll also be able to call `bin/npm_setup` anytime you want to validate or fix your npm environment. This will ensure the double `package.json` issue described earlier won't bite you again.
 
@@ -2749,7 +2752,7 @@ source bin/npm_setup
 Notice the `source bin/npm_setup` lines added to `bin/ember`. These lines invoke our safety net before and after the `ember` command runs. If something happens to create another `package.json` file, `npm_setup` will fix it before it becomes a problem.
 
 
-#### Login form (continued)
+#### Setup ember-simple-auth
 
 Its time to setup the ember-simple-auth addon. Create a route that all other routes will inherit from. Its the Ember convention that this route is named `application`. Run the generator:
 
@@ -2765,6 +2768,41 @@ This will ask if you'd like to "Overwrite app/templates/application.hbs?" - answ
 The generator will create a new file at `client/app/routes/application.js`. Open the file and give it the following contents:
 
 ```javascript
-
+TODO: Copy from client/app/routes/application.js
 ```
 
+Ember Simple Auth provides three types of route mixin:
+
+| Ember Simple Auth Route Mixin | Purpose |
+|-------------------------------|---------|
+| ApplicationRouteMixin         | Defines the default (but configurable) behaviour that most routes will want in various authentication scenarios, e.g. authentication required, authentication succeeds, authentication fails. ||
+| AuthenticatedRouteMixin       | For routes that require authentication. Redirects users to the login page if they're not authenticated |
+| UnauthenticatedRouteMixin     | For routes that are only for anonymous or guest users (i.e. users who are not logged in). Typically a login page would use this route. Redirects authenticated users to another (configurable) route. |
+
+**TODO: Aside: Explain: What is a mixin. What is a route mixin.**
+
+Notice that the `ApplicationRouteMixin` was used in the application's top-level route that all other routes inherit from.
+
+```javascript
+TODO: UnauthenticatedRouteMixin usage. Only introduce after a failing spec for authenticated user visiting login page? Copy from client/app/pods/session/new/routes.js
+```
+
+```bash
+bin/ember g authenticator api-v1
+```
+
+Output:
+
+```
+installing
+  create app/authenticators/api-v1.js
+```
+
+// POST /api/v1/auth
+
+Look at ember-simple-auth-devise authenticator source for request and token handling:
+https://github.com/simplabs/ember-simple-auth/blob/master/packages/ember-simple-auth-devise/lib/simple-auth-devise/authenticators/devise.js#L116
+
+Security note: invoke devise locking for excessive attempts - add feature spec for locking in polish.md
+
+Config for simple auth in environment.js. More here: https://github.com/simplabs/ember-cli-simple-auth#configuration

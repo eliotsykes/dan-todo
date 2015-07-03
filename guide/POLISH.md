@@ -144,3 +144,8 @@ See App Store Rails notebook note "Why using Capybara (or other ruby-based) acce
 
 This PR also makes some relevant points: https://github.com/jfirebaugh/konacha/pull/60#issuecomment-7790134
 
+
+## Use Ember Simple Auth name consistently
+
+Use either "Ember Simple Auth" or ember-simple-auth. See what the README does https://github.com/simplabs/ember-simple-auth.
+

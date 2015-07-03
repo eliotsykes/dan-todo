@@ -1,11 +1,11 @@
-<form {{action "create" on="submit"}}>
+<form {{action "authenticate" on="submit"}}>
   <label for="email">Enter your email</label>
-  {{input id="email" type="email" required="true" value=session.email}}
+  {{input id="email" type="email" required="true" value=credentials.email}}
 
   <label for="password">Enter your password</label>
-  {{input id="password" type="password" required="true" value=session.password}}
+  {{input id="password" type="password" required="true" value=credentials.password}}
 
-  <button type="submit">Sign in &rarr;</button>
+  <button type="submit">Sign In &rarr;</button>
 
   <footer>Need a new account? {{#link-to 'user.new'}}Sign up{{/link-to}}</footer>
 </form>
