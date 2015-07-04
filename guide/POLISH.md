@@ -136,7 +136,8 @@ Notice the `..` change in the `import` line above.
 
 Assume all routes require login unless explicitly excluded on a per-route basis:
 
-http://discuss.emberjs.com/t/specifying-whether-or-not-routes-should-check-for-authentication/4097/3
+https://github.com/simplabs/ember-simple-auth/issues/578
+
 
 ## Why Ruby for acceptance tests? Why not JS?
 
