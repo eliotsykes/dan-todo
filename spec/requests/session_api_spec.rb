@@ -31,17 +31,17 @@ RSpec.describe "Session API", :type => :request do
       expect(json).to eq(token: "ApiKeyForSessionApiTesting")
     end
 
-    xit "reponds with error for unrecognized email" do
+    xit "responds with error for unrecognized email" do
       post "/api/v1/sessions", parameters, headers
       flunk
     end
 
-    xit "reponds with error for incorrect password" do
+    xit "responds with error for incorrect password" do
       post "/api/v1/sessions", parameters, headers
       flunk
     end
 
-    xit "reponds with error for no credential params" do
+    xit "responds with error for no credential params" do
       post "/api/v1/sessions", parameters, headers
       flunk
     end
