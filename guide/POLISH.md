@@ -141,7 +141,7 @@ https://github.com/simplabs/ember-simple-auth/issues/578
 
 ## Why Ruby for acceptance tests? Why not JS?
 
-See App Store Rails notebook note "Why using Capybara (or other ruby-based) acceptance tests?". TLDR: speed, control, power, DRY. HTTP-based dependent solutions are poor when compared to talking to model layer directly.
+See App Store Rails notebook note "Why using Capybara (or other ruby-based) acceptance tests?". TLDR: speed, control, power, DRY. HTTP-based dependent solutions are poor when compared to talking to model layer directly. Remember experiences with HTTP fixtures in Selenium IDE.
 
 This PR also makes some relevant points: https://github.com/jfirebaugh/konacha/pull/60#issuecomment-7790134
 
