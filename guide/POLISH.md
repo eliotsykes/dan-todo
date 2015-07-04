@@ -145,6 +145,8 @@ See App Store Rails notebook note "Why using Capybara (or other ruby-based) acce
 
 This PR also makes some relevant points: https://github.com/jfirebaugh/konacha/pull/60#issuecomment-7790134
 
+Also helps keep amount of new things to learn (for Rails-focused developers) in check.
+
 
 ## Use Ember Simple Auth name consistently
 
