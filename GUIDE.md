@@ -70,6 +70,7 @@
     - [Install ember-cli-simple-auth](#install-ember-cli-simple-auth)
     - [Safety Net `npm_setup`](#safety-net-npm_setup)
     - [Setup ember-simple-auth](#setup-ember-simple-auth)
+    - [Session Authentication API](#session-authentication-api)
 
 <!-- /MarkdownTOC -->
 
@@ -2804,3 +2805,18 @@ https://github.com/simplabs/ember-simple-auth/blob/master/packages/ember-simple-
 Security note: invoke devise locking for excessive attempts - add feature spec for locking in polish.md - will need to enable lockable module in `User` and add associated migration.
 
 Config for simple auth in environment.js. More here: https://github.com/simplabs/ember-cli-simple-auth#configuration
+
+ASDF TODO: TDD request spec for /api/v1/sessions#create. Returns api_key as token param when auth successful.
+
+#### Session Authentication API
+
+**INSTRUCTION FOR DAN START**
+
+There's a new sessions controller and API endpoint for returning the user's api key/token when the correct email and password credentials are POSTed to it. Add it with the following and let me know if you've got any questions:
+
+- Copy `spec/requests/session_api_spec.rb` from TODO URL HERE.
+- Copy `app/controllers/api/v1/sessions_controller.rb` from TODO URL HERE.
+- Update `config/routes.rb` from TODO URL HERE.
+- Update `app/models/user.rb` from TODO URL HERE.
+
+**INSTRUCTION FOR DAN END**

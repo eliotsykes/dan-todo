@@ -9,7 +9,7 @@ class User < ActiveRecord::Base
   before_create :assign_key
 
   def assign_key
-    self.api_key = self.generate_api_key
+    self.api_key = self.generate_api_key if api_key.blank?
   end
 
   def admin?
