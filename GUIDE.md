@@ -2798,11 +2798,9 @@ installing
   create app/authenticators/api-v1.js
 ```
 
-// POST /api/v1/auth
-
 Look at ember-simple-auth-devise authenticator source for request and token handling:
 https://github.com/simplabs/ember-simple-auth/blob/master/packages/ember-simple-auth-devise/lib/simple-auth-devise/authenticators/devise.js#L116
 
-Security note: invoke devise locking for excessive attempts - add feature spec for locking in polish.md
+Security note: invoke devise locking for excessive attempts - add feature spec for locking in polish.md - will need to enable lockable module in `User` and add associated migration.
 
 Config for simple auth in environment.js. More here: https://github.com/simplabs/ember-cli-simple-auth#configuration
