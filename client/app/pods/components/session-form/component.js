@@ -16,9 +16,7 @@ export default Ember.Component.extend({
       // Get credentials object from component. It will be auto-populated with 
       // input values from the form:
       var credentials = this.get('credentials');
-      console.log("about to auth with credentials", credentials, "on session", this.get('session'));
 
-      // POST /api/v1/auth
       this.get('session').authenticate('authenticator:api-v1', credentials).then(function() {      
         // authentication was successful
         console.log("auth successful");
@@ -29,9 +27,9 @@ export default Ember.Component.extend({
 
       // Use ES6 arrow function => syntax to avoid having to call .bind(this)
       // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions
-      var transitionToListIndex = () => {
-        this.get('router').transitionTo('list.index');
-      };
+      // var transitionToListIndex = () => {
+      //   this.get('router').transitionTo('list.index');
+      // };
     }
   }
 });

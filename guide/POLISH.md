@@ -145,7 +145,9 @@ See App Store Rails notebook note "Why using Capybara (or other ruby-based) acce
 
 This PR also makes some relevant points: https://github.com/jfirebaugh/konacha/pull/60#issuecomment-7790134
 
-Also helps keep amount of new things to learn (for Rails-focused developers) in check.
++ helps keep amount of new things to learn (for Rails-focused developers) in check.
++ emails can be accessed easily for testing, doesn't need an HTTP layer
++ Avoids test assertions and test data setup being conducted over HTTP and introduce an extra layer in to the testing stack. Avoiding this layer tends to make writing tests quicker.
 
 
 ## Use Ember Simple Auth name consistently
