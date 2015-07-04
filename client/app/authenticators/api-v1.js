@@ -54,7 +54,7 @@ export default Base.extend({
   */
   makeRequest(data, resolve, reject) {
     return Ember.$.ajax({
-      url:        '/api/v1/auth',
+      url:        '/api/v1/sessions',
       type:       'POST',
       data:       data,
       dataType:   'json',
