@@ -109,17 +109,33 @@ RSpec.describe "Session API", :type => :request do
       expect(response.body).to be_empty
     end
 
-    xit "responds with error for unrecognized email" do
-      post "/api/v1/sessions", parameters, json_request_headers
-      flunk
+    it "responds with 404 Not Found for unknown email" do
+      user = create(:user,
+        password: "unreasonable power",
+        password_confirmation: "unreasonable power"
+      )
+
+      parameters_with_unknown_email = {
+        user: {
+          email: "not.#{user.email}",
+          password: "unreasonable power"
+        }
+      }.to_json
+
+      respond_without_detailed_exceptions do
+        post "/api/v1/sessions", parameters_with_unknown_email, json_request_headers
+      end
+
+      expect(response).to have_http_status(:not_found)
+      expect(response.content_type).to eq("application/json")
+
+      expect(json).to eq(status: "404", error: "Not Found")
     end
 
     xit "responds with error for incorrect password" do
       post "/api/v1/sessions", parameters, json_request_headers
       flunk
     end
-
-
 
     xit "brute force password attack locks user" do
       flunk

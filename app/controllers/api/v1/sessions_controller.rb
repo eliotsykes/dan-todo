@@ -7,12 +7,10 @@ class Api::V1::SessionsController < Api::ApiController
     
     respond_to do |format|
       format.json do
-        user = User.find_by_email(user_params[:email])
+        user = User.find_by!(email: user_params[:email])
      
         if user && user.valid_password?(user_params[:password])
           render json: { token: user.api_key }, status: :created
-        else
-          raise "Unexpected condition in api sessions controller"
         end
       end
     end
