@@ -109,7 +109,7 @@ RSpec.describe "Session API", :type => :request do
       expect(response.body).to be_empty
     end
 
-    it "responds with 404 Not Found for unknown email" do
+    it "responds with 401 Unauthorized for unknown email" do
       user = create(:user,
         password: "unreasonable power",
         password_confirmation: "unreasonable power"
@@ -126,15 +126,33 @@ RSpec.describe "Session API", :type => :request do
         post "/api/v1/sessions", parameters_with_unknown_email, json_request_headers
       end
 
-      expect(response).to have_http_status(:not_found)
+      expect(response).to have_http_status(:unauthorized)
       expect(response.content_type).to eq("application/json")
 
-      expect(json).to eq(status: "404", error: "Not Found")
+      expect(json).to eq(status: "401", error: "Unauthorized")
     end
 
-    xit "responds with error for incorrect password" do
-      post "/api/v1/sessions", parameters, json_request_headers
-      flunk
+    it "responds with 401 Unauthorized for incorrect password" do
+      user = create(:user,
+        password: "unreasonable power",
+        password_confirmation: "unreasonable power"
+      )
+
+      parameters_with_incorrect_password = {
+        user: {
+          email: user.email,
+          password: "not unreasonable power"
+        }
+      }.to_json
+
+      respond_without_detailed_exceptions do
+        post "/api/v1/sessions", parameters_with_incorrect_password, json_request_headers
+      end
+
+      expect(response).to have_http_status(:unauthorized)
+      expect(response.content_type).to eq("application/json")
+
+      expect(json).to eq(status: "401", error: "Unauthorized")
     end
 
     xit "brute force password attack locks user" do

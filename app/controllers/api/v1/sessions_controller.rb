@@ -7,16 +7,18 @@ class Api::V1::SessionsController < Api::ApiController
     
     respond_to do |format|
       format.json do
-        user = User.find_by!(email: user_params[:email])
-     
-        if user && user.valid_password?(user_params[:password])
-          render json: { token: user.api_key }, status: :created
-        end
+        render json: { token: authenticate_user.api_key }, status: :created
       end
     end
   end
 
   private
+
+  def authenticate_user
+    user = User.find_by(email: user_params[:email])
+    return user if user && user.valid_password?(user_params[:password])
+    raise UnauthorizedAccess
+  end
 
   def assert_request_content_type(content_type)
     raise UnsupportedMediaType unless request.content_type == content_type
