@@ -44,17 +44,10 @@ RSpec.describe "Session API", :type => :request do
 
     it "responds with 400 Bad Request HTTP status for missing password" do
 
-      user = create(:user, 
-        email: "barry@goldbergs.tv", 
-        password: "unreasonable power",
-        password_confirmation: "unreasonable power",
-        api_key: "ApiKeyForSessionApiTesting"
-      )
+      user = create(:user)
 
       parameters_without_password = {
-        user: {
-          email: "barry@goldbergs.tv"
-        }
+        user: { email: user.email }
       }.to_json
 
       respond_without_detailed_exceptions do
@@ -69,11 +62,9 @@ RSpec.describe "Session API", :type => :request do
 
     it "responds with 400 Bad Request HTTP status for missing email" do
 
-      user = create(:user, 
-        email: "barry@goldbergs.tv", 
+      user = create(:user,  
         password: "unreasonable power",
         password_confirmation: "unreasonable power",
-        api_key: "ApiKeyForSessionApiTesting"
       )
 
       parameters_without_email = {
@@ -96,8 +87,6 @@ RSpec.describe "Session API", :type => :request do
       # ActionController::UnknownFormat
       flunk      
     end
-
-
 
     xit "responds with error for unrecognized email" do
       post "/api/v1/sessions", parameters, json_request_headers
