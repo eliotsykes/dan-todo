@@ -8,7 +8,7 @@ class Api::V1::SessionsController < Api::ApiController
     if user && user.valid_password?(user_params[:password])
       render json: { token: user.api_key }, status: :created
     else
-      head :no_content
+      raise "Unexpected"
     end
     
   end
@@ -16,13 +16,12 @@ class Api::V1::SessionsController < Api::ApiController
   private
 
   def user_params
-    if @user_params.nil?
+    @user_params ||= if @user_params.nil?
       user_parameters = params.require(:user)
       user_parameters.require(:email)
       user_parameters.require(:password)
-      @user_params = user_parameters.permit(:email, :password)
+      user_parameters.permit(:email, :password)
     end
-    @user_params
   end
 
 end
