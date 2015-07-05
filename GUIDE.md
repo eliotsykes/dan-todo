@@ -2802,11 +2802,7 @@ installing
 Look at ember-simple-auth-devise authenticator source for request and token handling:
 https://github.com/simplabs/ember-simple-auth/blob/master/packages/ember-simple-auth-devise/lib/simple-auth-devise/authenticators/devise.js#L116
 
-Security note: invoke devise locking for excessive attempts - add feature spec for locking in polish.md - will need to enable lockable module in `User` and add associated migration.
-
 Config for simple auth in environment.js. More here: https://github.com/simplabs/ember-cli-simple-auth#configuration
-
-ASDF TODO: TDD request spec for /api/v1/sessions#create. Returns api_key as token param when auth successful.
 
 #### Session Authentication API
 
@@ -2825,10 +2821,12 @@ There's a new sessions controller and API endpoint for returning the user's api 
 - Copy `db/migrate/20150705194250_add_lockable_columns_to_users.rb` from TODO URL HERE.
 - Run `rake db:migrate`
 
-```ruby
-config.action_dispatch.show_exceptions = true
-```
 
-Review the changes made to each updated file before committing, with `git diff`. Let me know if you'd like to discuss any of the changes.
+Review the changes made to each updated file before committing, with `git diff`.
+
+See `spec/requests/session_api_spec.rb` for tests that explain the new behaviour introduced by the sessions controller.
+
+Let me know if you'd like to discuss any of the changes.
 
 **INSTRUCTION FOR DAN END**
+
