@@ -16,11 +16,13 @@ class Api::V1::SessionsController < Api::ApiController
   private
 
   def user_params
-    user_params = params.require(:user)
-    user_params.require(:email)
-    user_params.require(:password)
-    user_params.permit(:email, :password)
-    # @user_params ||= params.require(:user).permit(:email, :password)
+    if @user_params.nil?
+      user_parameters = params.require(:user)
+      user_parameters.require(:email)
+      user_parameters.require(:password)
+      @user_params = user_parameters.permit(:email, :password)
+    end
+    @user_params
   end
 
 end
