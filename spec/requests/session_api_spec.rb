@@ -32,7 +32,7 @@ RSpec.describe "Session API", :type => :request do
 
       no_parameters = {}.to_json
 
-      without_error_debugging do
+      respond_without_detailed_exceptions do
         post "/api/v1/sessions", no_parameters, json_request_headers
       end
 
