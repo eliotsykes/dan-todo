@@ -26,8 +26,6 @@ RSpec.describe "Session API", :type => :request do
       expect(response).to have_http_status(:created)
       expect(response.content_type).to eq("application/json")
       
-      # TODO: Introduce JSON helper in spec/support.
-      json = JSON.parse(response.body, symbolize_names: true)
       expect(json).to eq(token: "ApiKeyForSessionApiTesting")
     end
 

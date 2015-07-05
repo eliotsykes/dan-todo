@@ -2818,5 +2818,8 @@ There's a new sessions controller and API endpoint for returning the user's api 
 - Copy `app/controllers/api/v1/sessions_controller.rb` from TODO URL HERE.
 - Update `config/routes.rb` from TODO URL HERE.
 - Update `app/models/user.rb` from TODO URL HERE.
+- Copy `spec/support/json_helper.rb` from TODO URL HERE.
+
+Review the changes made to each updated file before committing, with `git diff`. Let me know if you'd like to discuss any of the changes.
 
 **INSTRUCTION FOR DAN END**
