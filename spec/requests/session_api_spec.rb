@@ -42,16 +42,29 @@ RSpec.describe "Session API", :type => :request do
       expect(json).to eq(status: "400", error: "Bad Request")
     end
 
-    xit "responds with 400 Bad Request HTTP status for missing password" do
+    it "responds with 400 Bad Request HTTP status for missing password" do
 
-      no_parameters = {}.to_json
-      post "/api/v1/sessions", no_parameters, json_request_headers
+      user = create(:user, 
+        email: "barry@goldbergs.tv", 
+        password: "unreasonable power",
+        password_confirmation: "unreasonable power",
+        api_key: "ApiKeyForSessionApiTesting"
+      )
+
+      parameters_without_password = {
+        user: {
+          email: "barry@goldbergs.tv"
+        }
+      }.to_json
+
+      respond_without_detailed_exceptions do
+        post "/api/v1/sessions", parameters_without_password, json_request_headers
+      end
 
       expect(response).to have_http_status(:bad_request)
       expect(response.content_type).to eq("application/json")
 
-      expect(response.body).to be_empty
-      flunk
+      expect(json).to eq(status: "400", error: "Bad Request")
     end
 
     xit "responds with 400 Bad Request HTTP status for missing email" do
