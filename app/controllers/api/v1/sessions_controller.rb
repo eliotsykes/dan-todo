@@ -8,7 +8,7 @@ class Api::V1::SessionsController < Api::ApiController
     if user && user.valid_password?(user_params[:password])
       render json: { token: user.api_key }, status: :created
     else
-      raise "Unexpected"
+      raise "Unexpected condition in api sessions controller"
     end
     
   end
