@@ -28,7 +28,7 @@ RSpec.describe "Session API", :type => :request do
       expect(json).to eq(token: "ApiKeyForSessionApiTesting")
     end
 
-    it "responds with 400 Bad Request HTTP status for no params" do
+    it "responds with 400 Bad Request for no params" do
 
       no_parameters = {}.to_json
 
@@ -42,7 +42,7 @@ RSpec.describe "Session API", :type => :request do
       expect(json).to eq(status: "400", error: "Bad Request")
     end
 
-    it "responds with 400 Bad Request HTTP status for missing password" do
+    it "responds with 400 Bad Request for missing password" do
 
       user = create(:user)
 
@@ -60,7 +60,7 @@ RSpec.describe "Session API", :type => :request do
       expect(json).to eq(status: "400", error: "Bad Request")
     end
 
-    it "responds with 400 Bad Request HTTP status for missing email" do
+    it "responds with 400 Bad Request for missing email" do
 
       user = create(:user,  
         password: "unreasonable power",
@@ -85,19 +85,18 @@ RSpec.describe "Session API", :type => :request do
 
     it "responds with 406 Not Acceptable for non-JSON Accept header" do
       headers = { "Content-Type" => "application/json", "Accept" => "text/html" }
+      parameters = {}
 
       respond_without_detailed_exceptions do
-        post "/api/v1/sessions", {}, headers
+        post "/api/v1/sessions", parameters, headers
       end
 
       expect(response).to have_http_status(:not_acceptable)
       expect(response.content_type).to eq("text/html")
-      
       expect(response.body).to be_empty
     end
 
-    xit "responds with 40? for non-JSON request Content-Type header" do
-      # ActionController::UnknownFormat
+    it "responds with 415 Unsupported Media Type for non-JSON request content type" do
 
       headers = { "Content-Type" => "text/html; charset=utf-8", "Accept" => "application/json" }
 
@@ -105,7 +104,9 @@ RSpec.describe "Session API", :type => :request do
         post "/api/v1/sessions", {}
       end
 
-      flunk
+      expect(response).to have_http_status(:unsupported_media_type)
+      expect(response.content_type).to eq("text/html")
+      expect(response.body).to be_empty
     end
 
     xit "responds with error for unrecognized email" do

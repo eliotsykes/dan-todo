@@ -3,6 +3,8 @@ class Api::V1::SessionsController < Api::ApiController
   skip_before_action :authenticate, only: :create
 
   def create
+    assert_request_content_type Mime::JSON
+    
     respond_to do |format|
       format.json do
         user = User.find_by_email(user_params[:email])
@@ -17,6 +19,10 @@ class Api::V1::SessionsController < Api::ApiController
   end
 
   private
+
+  def assert_request_content_type(content_type)
+    raise UnsupportedMediaType unless request.content_type == content_type
+  end
 
   def user_params
     @user_params ||= if @user_params.nil?
