@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe "Session API", :type => :request do
 
-  describe "POST /api/v1/sessions" do
+  describe "POST create" do
     
     it "responds with the authenticated API token" do
 
@@ -13,7 +13,6 @@ RSpec.describe "Session API", :type => :request do
         api_key: "ApiKeyForSessionApiTesting"
       )
 
-      headers = { "Content-Type": "application/json" }
       parameters = {
         user: {
           email: "barry@goldbergs.tv",
@@ -21,7 +20,7 @@ RSpec.describe "Session API", :type => :request do
         }
       }.to_json
 
-      post "/api/v1/sessions", parameters, headers
+      post "/api/v1/sessions", parameters, json_request_headers
 
       expect(response).to have_http_status(:created)
       expect(response.content_type).to eq("application/json")
@@ -29,20 +28,76 @@ RSpec.describe "Session API", :type => :request do
       expect(json).to eq(token: "ApiKeyForSessionApiTesting")
     end
 
+    # See: https://github.com/rails/rails/pull/11289#issuecomment-118612393
+    # TODO: Move to spec/support/error_helper.rb
+    def without_error_debugging
+      env_config = Rails.application.env_config
+      original_show_exceptions = env_config["action_dispatch.show_exceptions"]
+      original_show_detailed_exceptions = env_config["action_dispatch.show_detailed_exceptions"]
+      env_config["action_dispatch.show_exceptions"] = true
+      env_config["action_dispatch.show_detailed_exceptions"] = false
+      yield
+    ensure
+      env_config["action_dispatch.show_exceptions"] = original_show_exceptions
+      env_config["action_dispatch.show_detailed_exceptions"] = original_show_detailed_exceptions
+    end
+
+    it "responds with 400 Bad Request HTTP status for no params" do
+
+      no_parameters = {}.to_json
+
+      without_error_debugging do
+        post "/api/v1/sessions", no_parameters, json_request_headers
+      end
+
+      expect(response).to have_http_status(:bad_request)
+      expect(response.content_type).to eq("application/json")
+
+      expect(json).to eq(status: "400", error: "Bad Request")
+    end
+
+    xit "responds with 400 Bad Request HTTP status for missing password" do
+
+      no_parameters = {}.to_json
+      post "/api/v1/sessions", no_parameters, json_request_headers
+
+      expect(response).to have_http_status(:bad_request)
+      expect(response.content_type).to eq("application/json")
+
+      expect(response.body).to be_empty
+      flunk
+    end
+
+    xit "responds with 400 Bad Request HTTP status for missing email" do
+
+      no_parameters = {}.to_json
+      post "/api/v1/sessions", no_parameters, json_request_headers
+
+      expect(response).to have_http_status(:bad_request)
+      expect(response.content_type).to eq("application/json")
+
+      expect(response.body).to be_empty
+      flunk
+    end
+
+    xit "responds with 406 Not Acceptable for wrong request format headers" do
+      # ActionController::UnknownFormat
+      flunk      
+    end
+
+
+
     xit "responds with error for unrecognized email" do
-      post "/api/v1/sessions", parameters, headers
+      post "/api/v1/sessions", parameters, json_request_headers
       flunk
     end
 
     xit "responds with error for incorrect password" do
-      post "/api/v1/sessions", parameters, headers
+      post "/api/v1/sessions", parameters, json_request_headers
       flunk
     end
 
-    xit "responds with error for no credential params" do
-      post "/api/v1/sessions", parameters, headers
-      flunk
-    end
+
 
     xit "brute force password attack locks user" do
       flunk

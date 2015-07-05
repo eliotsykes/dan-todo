@@ -2819,6 +2819,11 @@ There's a new sessions controller and API endpoint for returning the user's api 
 - Update `config/routes.rb` from TODO URL HERE.
 - Update `app/models/user.rb` from TODO URL HERE.
 - Copy `spec/support/json_helper.rb` from TODO URL HERE.
+- Copy `spec/support/error_handler.rb` from TODO URL HERE.
+
+```ruby
+config.action_dispatch.show_exceptions = true
+```
 
 Review the changes made to each updated file before committing, with `git diff`. Let me know if you'd like to discuss any of the changes.
 
