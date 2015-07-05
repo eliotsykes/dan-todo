@@ -83,9 +83,29 @@ RSpec.describe "Session API", :type => :request do
       expect(json).to eq(status: "400", error: "Bad Request")
     end
 
-    xit "responds with 406 Not Acceptable for wrong request format headers" do
+    it "responds with 406 Not Acceptable for non-JSON Accept header" do
+      headers = { "Content-Type" => "application/json", "Accept" => "text/html" }
+
+      respond_without_detailed_exceptions do
+        post "/api/v1/sessions", {}, headers
+      end
+
+      expect(response).to have_http_status(:not_acceptable)
+      expect(response.content_type).to eq("text/html")
+      
+      expect(response.body).to be_empty
+    end
+
+    xit "responds with 40? for non-JSON request Content-Type header" do
       # ActionController::UnknownFormat
-      flunk      
+
+      headers = { "Content-Type" => "text/html; charset=utf-8", "Accept" => "application/json" }
+
+      respond_without_detailed_exceptions do
+        post "/api/v1/sessions", {}
+      end
+
+      flunk
     end
 
     xit "responds with error for unrecognized email" do
