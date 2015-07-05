@@ -190,12 +190,58 @@ RSpec.describe "Session API", :type => :request do
         post "/api/v1/sessions", parameters_with_correct_password, json_request_headers
 
       end
-      
+
+      expect(user.reload.failed_attempts).to eq(10)
+      expect(user.reload.access_locked?).to eq(true)
+
       expect(response).to have_http_status(:unauthorized)
       expect(response.content_type).to eq("application/json")
       expect(json).to eq(status: "401", error: "Unauthorized")
+    end
 
-      expect(user.reload.access_locked?).to eq(true)
+    it "resets previously failed attempts when user authenticates successfully" do
+      user = create(:user,
+        password: "unreasonable power",
+        password_confirmation: "unreasonable power"
+      )
+      
+      respond_without_detailed_exceptions do
+        9.times do
+          expect(user.reload.access_locked?).to eq(false)
+
+          parameters_with_guessed_password = {
+            user: {
+              email: user.email,
+              password: SecureRandom.hex
+            }
+          }.to_json
+
+          post "/api/v1/sessions", parameters_with_guessed_password, json_request_headers
+
+          expect(response).to have_http_status(:unauthorized)
+          expect(response.content_type).to eq("application/json")
+          expect(json).to eq(status: "401", error: "Unauthorized")
+        end
+      
+        expect(user.reload.access_locked?).to eq(false)
+        expect(user.reload.failed_attempts).to eq(9)
+
+        parameters_with_correct_password = {
+          user: {
+            email: user.email,
+            password: "unreasonable power"
+          }
+        }.to_json
+      
+        post "/api/v1/sessions", parameters_with_correct_password, json_request_headers
+
+      end
+
+      expect(user.reload.failed_attempts).to eq(0)
+      expect(user.reload.access_locked?).to eq(false)
+      
+      expect(response).to have_http_status(:created)
+      expect(response.content_type).to eq("application/json")
     end
 
   end

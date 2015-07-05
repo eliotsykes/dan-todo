@@ -16,7 +16,12 @@ class Api::V1::SessionsController < Api::ApiController
 
   def authenticate_user
     user = User.find_for_database_authentication(email: user_params[:email])
-    return user if user && user.valid_for_authentication? { user.valid_password?(user_params[:password]) }
+    
+    if user && user.valid_for_authentication? { user.valid_password?(user_params[:password]) }
+      user.update_attribute(:failed_attempts, 0) unless user.failed_attempts.zero?
+      return user
+    end
+    
     raise UnauthorizedAccess
   end
 
