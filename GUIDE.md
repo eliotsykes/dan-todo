@@ -2821,6 +2821,9 @@ There's a new sessions controller and API endpoint for returning the user's api 
 - Copy `spec/support/json_helper.rb` from TODO URL HERE.
 - Copy `spec/support/error_responses.rb` from TODO URL HERE.
 - Copy `config/initializers/rescue_responses.rb` from TODO URL HERE.
+- Update `config/initializers/devise.rb` from TODO URL HERE.
+- Copy `db/migrate/20150705194250_add_lockable_columns_to_users.rb` from TODO URL HERE.
+- Run `rake db:migrate`
 
 ```ruby
 config.action_dispatch.show_exceptions = true

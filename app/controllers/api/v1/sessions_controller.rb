@@ -4,7 +4,7 @@ class Api::V1::SessionsController < Api::ApiController
 
   def create
     assert_request_content_type Mime::JSON
-    
+
     respond_to do |format|
       format.json do
         render json: { token: authenticate_user.api_key }, status: :created
@@ -15,8 +15,8 @@ class Api::V1::SessionsController < Api::ApiController
   private
 
   def authenticate_user
-    user = User.find_by(email: user_params[:email])
-    return user if user && user.valid_password?(user_params[:password])
+    user = User.find_for_database_authentication(email: user_params[:email])
+    return user if user && user.valid_for_authentication? { user.valid_password?(user_params[:password]) }
     raise UnauthorizedAccess
   end
 

@@ -151,12 +151,51 @@ RSpec.describe "Session API", :type => :request do
 
       expect(response).to have_http_status(:unauthorized)
       expect(response.content_type).to eq("application/json")
-
       expect(json).to eq(status: "401", error: "Unauthorized")
     end
 
-    xit "brute force password attack locks user" do
-      flunk
+    it "locks user when potential brute force password attack detected after 10 attempts" do
+      user = create(:user,
+        password: "unreasonable power",
+        password_confirmation: "unreasonable power"
+      )
+      
+      respond_without_detailed_exceptions do
+        10.times do
+          expect(user.reload.access_locked?).to eq(false)
+
+          parameters_with_guessed_password = {
+            user: {
+              email: user.email,
+              password: SecureRandom.hex
+            }
+          }.to_json
+
+          post "/api/v1/sessions", parameters_with_guessed_password, json_request_headers
+
+          expect(response).to have_http_status(:unauthorized)
+          expect(response.content_type).to eq("application/json")
+          expect(json).to eq(status: "401", error: "Unauthorized")
+        end
+      
+        expect(user.reload.access_locked?).to eq(true)
+
+        parameters_with_correct_password = {
+          user: {
+            email: user.email,
+            password: "unreasonable power"
+          }
+        }.to_json
+      
+        post "/api/v1/sessions", parameters_with_correct_password, json_request_headers
+
+      end
+      
+      expect(response).to have_http_status(:unauthorized)
+      expect(response.content_type).to eq("application/json")
+      expect(json).to eq(status: "401", error: "Unauthorized")
+
+      expect(user.reload.access_locked?).to eq(true)
     end
 
   end
