@@ -17,13 +17,18 @@ export default Ember.Component.extend({
       // input values from the form:
       var credentials = this.get('credentials');
 
-      this.get('session').authenticate('authenticator:api-v1', credentials).then(function() {      
-        // authentication was successful
+      this.get('session')
+        .authenticate('authenticator:api-v1', credentials)
+        .then(onAuthentication, onAuthenticationFailed);
+
+      function onAuthentication() {
         console.log("auth successful");
-      }, function() {
-        // authentication failed
-        console.log("auth failed");
-      });
+      }
+
+      function onAuthenticationFailed(error) {
+        console.log("auth failed", error);
+      }
+
 
       // Use ES6 arrow function => syntax to avoid having to call .bind(this)
       // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions

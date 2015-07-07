@@ -32,14 +32,10 @@ export default Base.extend({
         }
       };
 
-      authenticator.makeRequest(data).then(function(response) {
-        Ember.run(function() {
-          resolve(response);
-        });
+      return authenticator.makeRequest(data).then(function(response) {
+        return resolve(response);
       }, function(xhr, status, error) {
-        Ember.run(function() {
-          reject(xhr.responseJSON || xhr.responseText);
-        });
+        return reject(xhr.responseJSON || xhr.responseText);
       });
     });
   },
