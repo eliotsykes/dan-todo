@@ -154,3 +154,7 @@ This PR also makes some relevant points: https://github.com/jfirebaugh/konacha/p
 
 Use either "Ember Simple Auth" or ember-simple-auth. See what the README does https://github.com/simplabs/ember-simple-auth.
 
+
+## Fix no-gutter styling on confirmation page
+
+Post-registration, the "Please check your inbox, open the email we’ve just sent you, and click the link inside it to confirm your new account." message styling pushes the text up against the browser window. Introduce some spacing on narrow screens. May be happening on other similar pages.
