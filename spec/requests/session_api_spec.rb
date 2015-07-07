@@ -83,6 +83,28 @@ RSpec.describe "Session API", :type => :request do
       expect(json).to eq(status: "400", error: "Bad Request")
     end
 
+    it "responds with 400 Bad Request for params not formatted as JSON" do
+
+      user = create(:user)
+
+      non_json_parameters = {
+        user: {
+          email: user.email,
+          password: user.password
+        }
+      }
+
+      respond_without_detailed_exceptions do
+        post "/api/v1/sessions", non_json_parameters, json_request_headers
+      end
+
+      expect(response).to have_http_status(:bad_request)
+      expect(response.content_type).to eq("application/json")
+
+      expect(json).to eq(status: "400", error: "Bad Request")
+    end
+
+
     it "responds with 406 Not Acceptable for non-JSON Accept header" do
       headers = { "Content-Type" => "application/json", "Accept" => "text/html" }
       parameters = {}
@@ -141,7 +163,7 @@ RSpec.describe "Session API", :type => :request do
       parameters_with_incorrect_password = {
         user: {
           email: user.email,
-          password: "not unreasonable power"
+          password: "not #{user.password}"
         }
       }.to_json
 
@@ -183,7 +205,7 @@ RSpec.describe "Session API", :type => :request do
         parameters_with_correct_password = {
           user: {
             email: user.email,
-            password: "unreasonable power"
+            password: user.password
           }
         }.to_json
       
