@@ -21,8 +21,6 @@ export default Base.extend({
   authenticate(credentials) {
     var authenticator = this;
 
-    // TODO: Replace authenticator with using ES6 arrow function => syntax so
-    // this can be referenced inside instead of authenticator:
     return new Ember.RSVP.Promise(function(resolve, reject) {
 
       var data = {

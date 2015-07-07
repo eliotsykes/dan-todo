@@ -2830,3 +2830,12 @@ Let me know if you'd like to discuss any of the changes.
 
 **INSTRUCTION FOR DAN END**
 
+
+In `client/config/environment.js` set the Ember route to take the user to after a successful authentication:
+
+```javascript
+TODO: Make this snippet clearer as to where this config goes
+ENV['simple-auth'] = {
+  routeAfterAuthentication: 'list.index'
+};
+```
