@@ -48,7 +48,7 @@ export default Base.extend({
     @method makeRequest
     @private
   */
-  makeRequest(data, resolve, reject) {
+  makeRequest(data) {
     return Ember.$.ajax({
       url:        '/api/v1/sessions',
       type:       'POST',
