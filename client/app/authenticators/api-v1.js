@@ -56,9 +56,9 @@ export default Base.extend({
     return Ember.$.ajax({
       url:        '/api/v1/sessions',
       type:       'POST',
-      data:       data,
+      contentType: 'application/json; charset=utf-8',
       dataType:   'json',
-      contentType: 'application/json',
+      data:       JSON.stringify(data),
       beforeSend: function(xhr, settings) {
         xhr.setRequestHeader('Accept', settings.accepts.json);
       }
