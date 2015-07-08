@@ -2,7 +2,7 @@ import Ember from 'ember';
 import Base from 'simple-auth/authenticators/base';
 
 export default Base.extend({
-  restore(_data) {
+  restore(/*data*/) {
     return Ember.RSVP.reject();
   },
 
@@ -20,13 +20,13 @@ export default Base.extend({
 
       return authenticator.makeRequest(data).then(function(response) {
         return resolve(response);
-      }, function(xhr, _status, _error) {
+      }, function(xhr /*, status, error*/) {
         return reject(xhr.responseJSON || xhr.responseText);
       });
     });
   },
 
-  invalidate(_data) {
+  invalidate(/*data*/) {
     return Ember.RSVP.resolve();
   },
 

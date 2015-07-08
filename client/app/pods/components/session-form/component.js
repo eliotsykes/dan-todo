@@ -27,7 +27,7 @@ export default Ember.Component.extend({
         notifier.setMessage("You are signed in.");
       }
 
-      function onAuthenticationFailed(_error) {
+      function onAuthenticationFailed(/*error*/) {
         notifier.setMessage("Sorry, we failed to sign you in, please try again.");
       }
     }
