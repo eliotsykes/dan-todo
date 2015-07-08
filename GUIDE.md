@@ -2788,6 +2788,8 @@ Notice that the `ApplicationRouteMixin` was used in the application's top-level 
 TODO: UnauthenticatedRouteMixin usage. Only introduce after a failing spec for authenticated user visiting login page? Copy from client/app/pods/session/new/routes.js
 ```
 
+TODO: Instructions for `client/app/routes/application.js`
+
 ```bash
 bin/ember g authenticator api-v1
 ```
@@ -2906,4 +2908,3 @@ TODO: Document making changes to the following files (see Pull Request for summa
 
 
 
-  
