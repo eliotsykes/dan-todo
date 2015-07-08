@@ -158,3 +158,12 @@ Use either "Ember Simple Auth" or ember-simple-auth. See what the README does ht
 ## Fix no-gutter styling on confirmation page
 
 Post-registration, the "Please check your inbox, open the email we’ve just sent you, and click the link inside it to confirm your new account." message styling pushes the text up against the browser window. Introduce some spacing on narrow screens. May be happening on other similar pages.
+
+
+## Choose an Initializer Injector Convention
+
+Research existing conventions. Be consistent with an initializer injector convention, and choose a sensible one. Consider having one of these:
+
+- An injector initializer for each object type that receives the injection (e.g. component-injector.js)
+- An injector initializer for each object that is injected, (e.g. store-injector.js, router-injector.js, notifier-injector.js)
+- Something else from research
