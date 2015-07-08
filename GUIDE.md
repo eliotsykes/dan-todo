@@ -2839,3 +2839,71 @@ ENV['simple-auth'] = {
   routeAfterAuthentication: 'list.index'
 };
 ```
+
+TODO write restore function of ap1-v1.js (and test in feature specs) that page reload persists authenticated session?
+
+
+Generate notifier service:
+
+```bash
+bin/ember generate service notifier
+```
+
+Output from command and created files:
+
+```
+installing
+  create app/services/notifier.js
+installing
+  create tests/unit/services/notifier-test.js
+```
+
+Generate component notifier injector's initializer:
+
+```bash
+bin/ember generate initializer component-notifier-injector
+```
+
+Results in this output and generated files:
+
+```
+installing
+  create app/initializers/component-notifier-injector.js
+installing
+  create tests/unit/initializers/component-notifier-injector-test.js
+```
+
+Generate notifier's initializer:
+
+```bash
+bin/ember generate initializer notifier
+```
+
+Files and output from command:
+
+```
+installing
+  create app/initializers/notifier.js
+installing
+  create tests/unit/initializers/notifier-test.js
+```
+
+TODO: Explain `Ember.computed`.
+
+TODO: Document making changes to the following files (see Pull Request for summary of changes):
+
+- `client/app/authenticators/api-v1.js`
+- `client/app/pods/components/session-form/component.js`
+- `client/app/pods/components/x-notifier/component.js`
+- `client/app/pods/components/x-notifier/template.hbs`
+- `client/config/environment.js`
+- `client/app/initializers/component-notifier-injector.js`
+- `client/app/initializers/notifier.js`
+- `client/app/services/notifier.js`
+  
+
+
+
+
+
+  

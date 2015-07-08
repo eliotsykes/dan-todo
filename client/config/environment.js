@@ -22,7 +22,8 @@ module.exports = function(environment) {
   };
 
   ENV['simple-auth'] = {
-    routeAfterAuthentication: 'list.index'
+    routeAfterAuthentication: 'confirmation.pending'
+    // routeAfterAuthentication: 'list.index'
   };
 
   if (environment === 'development') {

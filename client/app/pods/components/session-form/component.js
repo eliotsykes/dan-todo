@@ -21,20 +21,15 @@ export default Ember.Component.extend({
         .authenticate('authenticator:api-v1', credentials)
         .then(onAuthentication, onAuthenticationFailed);
 
+      var notifier = this.get('notifier');
+
       function onAuthentication() {
-        console.log("auth successful");
+        notifier.setMessage("You are signed in.");
       }
 
-      function onAuthenticationFailed(error) {
-        console.log("auth failed", error);
+      function onAuthenticationFailed(_error) {
+        notifier.setMessage("Sorry, we failed to sign you in, please try again.");
       }
-
-
-      // Use ES6 arrow function => syntax to avoid having to call .bind(this)
-      // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions
-      // var transitionToListIndex = () => {
-      //   this.get('router').transitionTo('list.index');
-      // };
     }
   }
 });
