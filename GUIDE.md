@@ -68,6 +68,7 @@
       - [Notifier component](#notifier-component)
 - [How login will work](#how-login-will-work)
 - [Session Authentication API](#session-authentication-api)
+- [Login Form Component](#login-form-component)
 
 <!-- /MarkdownTOC -->
 
@@ -2667,3 +2668,159 @@ bin/rspec spec/requests/session_api_spec.rb
 
 **INSTRUCTIONS FOR DAN END**
 
+
+## Login Form Component
+
+Earlier you created a `user-form` component responsible for handling user registration. Now you'll create a `login-form` component responsible for handling signing in. The component will be a form containing an email input field, a password input field, and a login button.
+
+Begin by generating the `login-form` component files:
+
+```bash
+# Inside your-rails-app/ directory:
+bin/ember generate component login-form --pod
+```
+
+The generated files reported in the output will be:
+
+```
+installing
+  create app/pods/components/login-form/component.js
+  create app/pods/components/login-form/template.hbs
+installing
+  create tests/unit/pods/components/login-form/component-test.js
+```
+
+In `client/app/pods/session/new/template.hbs` make use of the new component. Add `{{login-form}}` directly below the `<h1>` heading:
+
+```html
+...
+<h1>Sign In</h1>
+
+{{login-form}}
+
+{{outlet}}
+```
+
+Write the form for the component, save `client/app/pods/components/login-form/template.hbs` with these contents:
+
+```html
+<form {{action "authenticate" on="submit"}}>
+  <label for="email">Enter your email</label>
+  {{input id="email" type="email" required="true" value=credentials.email}}
+
+  <label for="password">Enter your password</label>
+  {{input id="password" type="password" required="true" value=credentials.password}}
+
+  <button type="submit">Sign In &rarr;</button>
+
+  <footer>Need a new account? {{#link-to 'user.new'}}Sign up{{/link-to}}</footer>
+</form>
+```
+
+Notice the opening `<form>` tag references an `authenticate` action that will be called when the form is submitted. This `authenticate` action is yet to be written. 
+
+`authenticate` will need to submit the email and password entered in the form to the Rails app. The Rails app will respond with an API authentication token, and eventually you'll store this token in the browser and use it to authenticate all subsequent requests from the user.
+
+Write the following in `client/app/pods/components/session-form/component.js`:
+
+```javascript
+import Ember from 'ember';
+
+export default Ember.Component.extend({
+  init: function() {
+    // Call the parent init function:
+    this._super.apply(this, arguments);
+
+    // Set up a credentials object to use in the template. Allows credentials.email and 
+    // credentials.password to be used in input helpers, e.g.:
+    // {{input value=credentials.email}}
+    this.set('credentials', {});
+  },
+  actions: {
+    // authenticate() is called when form is submitted
+    authenticate: function() {
+      // Get credentials object from component. It will be auto-populated with 
+      // input values from the form:
+      var credentials = this.get('credentials');
+
+      // Use ES6 arrow function => syntax to avoid having to call .bind(this)
+      // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions
+      var onAuthentication = () => {
+        window.alert("You are signed in.");
+
+        // Show the list index when login is successful:
+        this.get('router').transitionTo('list.index');
+      };
+
+      function onAuthenticationFailed(/*error*/) {
+        window.alert("Sorry, we failed to sign you in, please try again.");
+      }
+
+      // Temporary insecure auth check to help setup the login flow.
+      function veryInsecureAuthenticationSucceeds(credentials) {
+        return credentials.email === "a@b.c" && credentials.password === "password";
+      }
+
+      if (veryInsecureAuthenticationSucceeds(credentials)) {
+        onAuthentication();
+      } else {
+        onAuthenticationFailed();
+      }
+    }
+  }
+});
+```
+
+Notice that the above authentication check is using a hard-coded email and password. These hard-coded values are a *temporary* measure to help setup the login flow through the app. You will be removing this shortly. Never deploy code like this to a live production environment. Storing hard-coded sensitive data in JavaScript code that is consumed by the browser (as above) is fundamentally insecure. All of the JavaScript code you are writing is readable by your users so it should not contain any hard-coded sensitive data. No usernames, no passwords, no API tokens.
+
+Also note that the use of `window.alert` in the component is temporary. Later you'll be creating a new Ember service `notifier` to help with displaying alert messages to the user.
+
+Upon successful authentication, the component transitions the user to the `list.index` route.
+
+The `list.index` route will eventually show all of the todo lists belonging to the authenticated user. For now you'll just show a mostly blank page with a "Your Lists" heading at this route.
+
+Create the new route:
+
+```bash
+bin/ember generate route list/index --pod
+```
+
+This generates the following files:
+
+```
+installing
+  create app/pods/list/index/route.js
+  create app/pods/list/index/template.hbs
+installing
+  create tests/unit/pods/list/index/route-test.js
+```
+
+The generate command should have also modified your `client/app/router.js` file. Check this route has been added to `router.js`:
+
+```javascript
+  this.route('list', function() {});
+```
+
+Open `client/app/pods/list/index/template.hbs` and save it with these contents:
+
+```html
+{{page-title "Your Lists"}}
+
+<h1>Your Lists</h1>
+
+{{outlet}}
+```
+
+Now you'll exercise the *deliberately & temporarily* very insecure login flow.
+
+Run the Ember server:
+
+```bash
+bin/ember serve
+```
+
+Visit the sign in page at [http://localhost:4200/#/login](http://localhost:4200/#/login) and try logging in with incorrect details, such as `a@b.c` for the email and `foo` as the password. When you click the sign in button you ought to get an alert popup with the message "Sorry, we failed to sign you in, please try again". Click OK on the alert popup.
+
+Next, change the password input value from `foo` to `password` (this is the value you hard-coded in the `login-form` component earlier). Click the sign in button. You ought to get an alert popup with the message "You are signed in". Click OK on the alert popup and the page should change to show the "Your Lists" page.
+
+**Coming next...** write a notifier service to replace window.alert usage.

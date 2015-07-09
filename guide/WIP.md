@@ -247,5 +247,20 @@ Move login (feature spec & form) chapter to *before* registration chapter. Accep
 
 
 
+---
 
+# Ember Simple Auth
 
+In login-form component.js: 
+
+```javascript
+      // this.get('session')
+      //   .authenticate('authenticator:api-v1', credentials)
+      //   .then(onAuthentication, onAuthenticationFailed);
+```
+
+Have you seen that the above code introduces `notifier`? This is an Ember service you're going to write shortly. The `notifier` service is going to provide a way for you to show a message to your user easily from any component.
+
+```
+var notifier = this.get('notifier');
+```

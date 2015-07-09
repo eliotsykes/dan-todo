@@ -16,6 +16,7 @@ Router.map(function() {
   });
 
   this.route('session.new', { path: '/login' });
+  this.route('list', function() {});
 });
 
 export default Router;
