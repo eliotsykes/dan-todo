@@ -66,7 +66,8 @@
     - [Confirm Registration & Login](#confirm-registration--login)
       - [Redirect to login page after confirmation](#redirect-to-login-page-after-confirmation)
       - [Notifier component](#notifier-component)
-    - [Login form](#login-form)
+- [How login will work](#how-login-will-work)
+- [Session Authentication API](#session-authentication-api)
 
 <!-- /MarkdownTOC -->
 
@@ -2596,7 +2597,73 @@ The next failure you'll see will be about one of the sign in form fields being m
 ```
 
 
-#### Login form
+## How login will work
+
+The frontend will show the user a login form with an email input field, a password input field, and a sign in button.
+
+For a successful login the following steps will occur:
+
+1. Non-signed-in user enters their correct email and password
+2. User clicks sign in button
+3. Ember application asks the backend API for an authentication token for the given email and password
+4. The backend API responds with the user's authentication token (i.e. `User#api_token`)
+5. Ember application stores the token in the browser. This signfies the user is signed in.
+6. Ember application sends the token as a header in subsequent requests to the API
 
 
-**Coming next...Adding login form fields**
+## Session Authentication API
+
+**INSTRUCTIONS FOR DAN START**
+
+The API doesn't yet have a way for a user to give their email and password and receive their API token back in return.
+
+You're going to write the `Api::V1::SessionsController` that will be responsible for authenticating users and responding with tokens.
+
+- Copy `spec/requests/session_api_spec.rb` from https://raw.githubusercontent.com/eliotsykes/dan-todo/sessions-controller_example/spec/requests/session_api_spec.rb
+- Copy `app/controllers/api/v1/sessions_controller.rb` from https://raw.githubusercontent.com/eliotsykes/dan-todo/sessions-controller_example/app/controllers/api/v1/sessions_controller.rb
+- Update `config/routes.rb` from https://raw.githubusercontent.com/eliotsykes/dan-todo/sessions-controller_example/config/routes.rb (this change adds a new route for the sessions controller and combines a couple of similar routes)
+
+To remove one way of performing a brute force attack on the new sessions controller, a user's account will be locked if the wrong password is entered 10 or more times for the same email address. 
+
+The following changes help add this protection by taking advantage of Devise's existing lockable module. Use `git diff` before committing to review the changes and please ask if you have any questions:
+
+- Update `app/models/user.rb` from https://raw.githubusercontent.com/eliotsykes/dan-todo/sessions-controller_example/app/models/user.rb
+- Copy `db/migrate/20150705194250_add_lockable_columns_to_users.rb` from https://raw.githubusercontent.com/eliotsykes/dan-todo/sessions-controller_example/db/migrate/20150705194250_add_lockable_columns_to_users.rb
+- Run `rake db:migrate`
+
+In `config/initializers/devise.rb`, uncomment and update these three configs:
+
+```ruby
+    ...
+
+    config.lock_strategy = :failed_attempts
+
+    ...
+
+    config.unlock_strategy = :none
+
+    ...
+
+    config.maximum_attempts = 10
+```
+
+To provide some of the error responses in the sessions controller, you'll need to define some custom exceptions and configure what Rails should respond with when the application raises these custom exceptions. The custom exceptions and the handling configuration is defined in this one initializer script:
+
+- Copy `config/initializers/rescue_responses.rb` from https://raw.githubusercontent.com/eliotsykes/dan-todo/sessions-controller_example/config/initializers/rescue_responses.rb
+
+To help with testing, add these support files, review their contents, and review how they're used in `spec/requests/session_api_spec.rb`:
+
+- Copy `spec/support/json_helper.rb` from https://raw.githubusercontent.com/eliotsykes/dan-todo/sessions-controller_example/spec/support/json_helper.rb
+- Copy `spec/support/error_responses.rb` from https://raw.githubusercontent.com/eliotsykes/dan-todo/sessions-controller_example/spec/support/error_responses.rb
+
+
+Read through `spec/requests/session_api_spec.rb` for tests that explain the new behaviour introduced by the sessions controller.
+
+Run the new spec and be sure it passes before moving on:
+
+```bash
+bin/rspec spec/requests/session_api_spec.rb
+```
+
+**INSTRUCTIONS FOR DAN END**
+

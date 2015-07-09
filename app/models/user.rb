@@ -1,15 +1,16 @@
 class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
-  # :confirmable, :lockable, :timeoutable and :omniauthable
+  # :confirmable, :timeoutable and :omniauthable
   devise :database_authenticatable, :registerable, :confirmable,
-         :recoverable, :rememberable, :trackable, :validatable
+         :recoverable, :rememberable, :trackable, :validatable,
+         :lockable
 
   has_many :lists
   validates :api_key, uniqueness: true
   before_create :assign_key
 
   def assign_key
-    self.api_key = self.generate_api_key
+    self.api_key = self.generate_api_key if api_key.blank?
   end
 
   def admin?
