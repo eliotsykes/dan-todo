@@ -2606,7 +2606,7 @@ For a successful login the following steps will occur:
 1. Non-signed-in user enters their correct email and password
 2. User clicks sign in button
 3. Ember application asks the backend API for an authentication token for the given email and password
-4. The backend API responds with the user's authentication token (i.e. `User#api_token`)
+4. The backend API responds with the user's authentication token (i.e. `User#api_key`)
 5. Ember application stores the token in the browser. This signfies the user is signed in.
 6. Ember application sends the token as a header in subsequent requests to the API
 
