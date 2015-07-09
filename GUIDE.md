@@ -2906,5 +2906,6 @@ TODO: Document making changes to the following files (see Pull Request for summa
 
 
 
+Consider redoing this login-form_example branch from scratch on a new branch.
 
-
+Figure out secure by default solution based on this and then contribute documentation back to project: https://github.com/simplabs/ember-simple-auth/issues/578#issuecomment-118947003
