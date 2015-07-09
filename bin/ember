@@ -5,6 +5,9 @@
 # to change directories, just run `bin/ember ...` from the project root. All
 # ember commands will work. For usage enter `bin/ember --help`
 
+# Ensure npm setup OK
+source bin/npm_setup
+
 # ember command working directory must be client/:
 cd client
 
@@ -13,3 +16,7 @@ ember "$@"
 
 # Return to project root:
 cd ..
+
+# Ensure npm setup *still* OK. Fixes issue where `ember install`-ing an addon
+# forks the shared package.json.
+source bin/npm_setup

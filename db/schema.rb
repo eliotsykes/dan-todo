@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150414152237) do
+ActiveRecord::Schema.define(version: 20150705194250) do
 
   create_table "items", force: :cascade do |t|
     t.text     "name"
@@ -51,6 +51,8 @@ ActiveRecord::Schema.define(version: 20150414152237) do
     t.datetime "updated_at"
     t.string   "role"
     t.string   "api_key"
+    t.integer  "failed_attempts",        default: 0,  null: false
+    t.datetime "locked_at"
   end
 
   add_index "users", ["api_key"], name: "index_users_on_api_key", unique: true

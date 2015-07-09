@@ -21,6 +21,11 @@ module.exports = function(environment) {
     }
   };
 
+  ENV['simple-auth'] = {
+    routeAfterAuthentication: 'confirmation.pending'
+    // routeAfterAuthentication: 'list.index'
+  };
+
   if (environment === 'development') {
     // ENV.APP.LOG_RESOLVER = true;
     // ENV.APP.LOG_ACTIVE_GENERATION = true;

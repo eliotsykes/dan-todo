@@ -67,6 +67,10 @@
       - [Redirect to login page after confirmation](#redirect-to-login-page-after-confirmation)
       - [Notifier component](#notifier-component)
     - [Login form](#login-form)
+    - [Install ember-cli-simple-auth](#install-ember-cli-simple-auth)
+    - [Safety Net `npm_setup`](#safety-net-npm_setup)
+    - [Setup ember-simple-auth](#setup-ember-simple-auth)
+    - [Session Authentication API](#session-authentication-api)
 
 <!-- /MarkdownTOC -->
 
@@ -1570,7 +1574,7 @@ export default Ember.Component.extend({
     // create() is called when form is submitted
     create: function() {
       // Get user model object from component. It will be auto-populated with 
-      // input values from the from:
+      // input values from the form:
       var user = this.get('user');
 
       // Register/save the user via an AJAX request to the server API:
@@ -2223,7 +2227,7 @@ export default Ember.Component.extend({
     // create() is called when form is submitted
     create: function() {
       // Get user model object from component. It will be auto-populated with 
-      // input values from the from:
+      // input values from the form:
       var user = this.get('user');
 
       // Use ES6 arrow function => syntax to avoid having to call .bind(this)
@@ -2598,5 +2602,310 @@ The next failure you'll see will be about one of the sign in form fields being m
 
 #### Login form
 
+Earlier you created a `user-form` component responsible for handling user registration. Now you'll create a `session-form` component responsible for handling user session login. The component will be a form containing an email input field, a password input field, and a login button.
 
-**Coming next...Adding login form fields**
+Begin by generating the `session-form` component files:
+
+```bash
+# Inside your-rails-app/ directory:
+bin/ember generate component session-form --pod
+```
+
+The generated files reported in the output will be:
+
+```
+installing
+  create app/pods/components/session-form/component.js
+  create app/pods/components/session-form/template.hbs
+installing
+  create tests/unit/pods/components/session-form/component-test.js
+```
+
+In `client/app/pods/session/new/template.hbs` make use of the new component. Add `{{session-form}}` directly below the `<h1>` heading:
+
+```html
+...
+<h1>Sign In</h1>
+
+{{session-form}}
+
+...
+```
+
+Write the form for the component, save `client/app/pods/components/session-form/template.hbs` with these contents:
+
+```html
+TODO: Get latest from the template and put here:
+```
+
+Notice the opening `<form>` tag references a `create` action that will be called when the form is submitted. This `create` action is yet to be written. `create` will need to submit the email and password entered in the form to the Rails app. The Rails app will respond with an API authentication token that will be stored in the browser and used to authenticate all subsequent requests from the user.
+
+Write the following in `client/app/pods/components/session-form/component.js`:
+
+```javascript
+TODO
+```
+
+#### Install ember-cli-simple-auth
+
+There is a library that helps provide common functionality required for Ember apps that have users who can login. The library is [Ember Simple Auth](https://github.com/simplabs/ember-simple-auth) and is provided by an addon named ember-cli-simple-auth. Lets use it.
+
+Install the `ember-cli-simple-auth` addon:
+
+```bash
+# Inside your-rails-app/ directory:
+bin/ember install ember-cli-simple-auth
+```
+
+Unfortunately, installing an Ember addon using `ember install` generates an extra (unwanted) `package.json` file for your app. `ember install` runs an `npm install` command that overwrites the symlink at `client/package.json` with a new file. Your app will now have two different `package.json` files which isn't what we want. Rectify this with:
+
+```bash
+# Inside your-rails-app/ directory:
+
+# Copy the new package.json to overwrite the original package.json:
+cp client/package.json package.json
+
+# Bring back the symlink at client/package.json:
+git checkout -- client/package.json
+
+# Check symlink is correct:
+ls -al client/package.json 
+
+# Ensure the ls command outputs this symlink:
+client/package.json -> ../package.json
+```
+
+It is too easy to trip up on this `package.json`-symlink issue whenever you install an Ember addon. It is a small compromise worth making do with when you want to have your Ember app and Rails app co-exist in the same project. 
+
+However, lets make this compromise more comfortable for your future self by setting up a safety net to catch and fix this issue anytime you install an Ember addon.
+
+#### Safety Net `npm_setup`
+
+You're going to write a shell script `bin/npm_setup` that will check the npm environment is setup correctly before and after `bin/ember` runs. You'll also be able to call `bin/npm_setup` anytime you want to validate or fix your npm environment. This will ensure the double `package.json` issue described earlier won't bite you again.
+
+Note that `bin/npm_setup` will be called in your production environment indirectly via the `bin/ember build ...` that is called during deployment (see the `scripts > postinstall` config option in `package.json` which is called by Heroku during deployment). This is a good thing as it provides an extra validation step that our production environment is setup as we need it to be.
+
+Create the new script:
+
+```bash
+# Inside your-rails-app/ directory:
+touch bin/npm_setup
+
+# Make it executable:
+chmod +x bin/npm_setup
+```
+
+Open `bin/npm_setup` in your editor and save it with these contents:
+
+```bash
+#!/usr/bin/env sh
+
+# Ensures npm environment is setup correctly for all environments.
+
+if [ ! -f "package.json" ]; then
+  echo "Warning: package.json does not exist"
+  cp client/package.json ./
+  echo "  Fixed: client/package.json copied to ./package.json"
+fi
+
+
+if ! diff client/package.json package.json >/dev/null ; then
+  echo "Warning: ./package.json and client/package.json differ"
+  echo " Fixing: client/package.json is being copied to ./package.json"
+  cp client/package.json ./
+  echo "  Fixed: client/package.json copied to ./package.json"
+fi
+
+# Symlink node_modules and package.json from client/ so ember operates without error:
+ln -sfn ../node_modules client/node_modules
+ln -sfn ../package.json client/package.json
+```
+
+Review the new script so you're aware of what its doing.
+
+Lets install the `npm_setup` safety net in our existing `bin/ember` script. Open `bin/ember` and save it with the following contents:
+
+```bash
+#!/usr/bin/env sh
+
+# Thin wrapper script to execute ember commands in the correct working directory. 
+# All ember commands need to be run inside the client/ dir. To save remembering
+# to change directories, just run `bin/ember ...` from the project root. All
+# ember commands will work. For usage enter `bin/ember --help`
+
+# Ensure npm setup OK
+source bin/npm_setup
+
+# ember command working directory must be client/:
+cd client
+
+# Forward args to npm-installed ember command:
+ember "$@"
+
+# Return to project root:
+cd ..
+
+# Ensure npm setup *still* OK. Fixes issue where `ember install`-ing an addon
+# forks the shared package.json.
+source bin/npm_setup
+```
+
+Notice the `source bin/npm_setup` lines added to `bin/ember`. These lines invoke our safety net before and after the `ember` command runs. If something happens to create another `package.json` file, `npm_setup` will fix it before it becomes a problem.
+
+
+#### Setup ember-simple-auth
+
+Its time to setup the ember-simple-auth addon. Create a route that all other routes will inherit from. Its the Ember convention that this route is named `application`. Run the generator:
+
+```bash
+# Inside your-rails-app/ directory. 
+
+# Generate the Ember application route:
+bin/ember generate route application
+```
+
+This will ask if you'd like to "Overwrite app/templates/application.hbs?" - answer `n` for no. You want to keep the existing file.
+
+The generator will create a new file at `client/app/routes/application.js`. Open the file and give it the following contents:
+
+```javascript
+TODO: Copy from client/app/routes/application.js
+```
+
+Ember Simple Auth provides three types of route mixin:
+
+| Ember Simple Auth Route Mixin | Purpose |
+|-------------------------------|---------|
+| ApplicationRouteMixin         | Defines the default (but configurable) behaviour that most routes will want in various authentication scenarios, e.g. authentication required, authentication succeeds, authentication fails. ||
+| AuthenticatedRouteMixin       | For routes that require authentication. Redirects users to the login page if they're not authenticated |
+| UnauthenticatedRouteMixin     | For routes that are only for anonymous or guest users (i.e. users who are not logged in). Typically a login page would use this route. Redirects authenticated users to another (configurable) route. |
+
+**TODO: Aside: Explain: What is a mixin. What is a route mixin.**
+
+Notice that the `ApplicationRouteMixin` was used in the application's top-level route that all other routes inherit from.
+
+```javascript
+TODO: UnauthenticatedRouteMixin usage. Only introduce after a failing spec for authenticated user visiting login page? Copy from client/app/pods/session/new/routes.js
+```
+
+TODO: Instructions for `client/app/routes/application.js`
+
+```bash
+bin/ember g authenticator api-v1
+```
+
+Output:
+
+```
+installing
+  create app/authenticators/api-v1.js
+```
+
+Look at ember-simple-auth-devise authenticator source for request and token handling:
+https://github.com/simplabs/ember-simple-auth/blob/master/packages/ember-simple-auth-devise/lib/simple-auth-devise/authenticators/devise.js#L116
+
+Config for simple auth in environment.js. More here: https://github.com/simplabs/ember-cli-simple-auth#configuration
+
+#### Session Authentication API
+
+**INSTRUCTION FOR DAN START**
+
+There's a new sessions controller and API endpoint for returning the user's api key/token when the correct email and password credentials are POSTed to it. Add it with the following and let me know if you've got any questions:
+
+- Copy `spec/requests/session_api_spec.rb` from TODO URL HERE.
+- Copy `app/controllers/api/v1/sessions_controller.rb` from TODO URL HERE.
+- Update `config/routes.rb` from TODO URL HERE.
+- Update `app/models/user.rb` from TODO URL HERE.
+- Copy `spec/support/json_helper.rb` from TODO URL HERE.
+- Copy `spec/support/error_responses.rb` from TODO URL HERE.
+- Copy `config/initializers/rescue_responses.rb` from TODO URL HERE.
+- Update `config/initializers/devise.rb` from TODO URL HERE.
+- Copy `db/migrate/20150705194250_add_lockable_columns_to_users.rb` from TODO URL HERE.
+- Run `rake db:migrate`
+
+
+Review the changes made to each updated file before committing, with `git diff`.
+
+See `spec/requests/session_api_spec.rb` for tests that explain the new behaviour introduced by the sessions controller.
+
+Let me know if you'd like to discuss any of the changes.
+
+**INSTRUCTION FOR DAN END**
+
+
+In `client/config/environment.js` set the Ember route to take the user to after a successful authentication:
+
+```javascript
+TODO: Make this snippet clearer as to where this config goes
+ENV['simple-auth'] = {
+  routeAfterAuthentication: 'list.index'
+};
+```
+
+TODO write restore function of ap1-v1.js (and test in feature specs) that page reload persists authenticated session?
+
+
+Generate notifier service:
+
+```bash
+bin/ember generate service notifier
+```
+
+Output from command and created files:
+
+```
+installing
+  create app/services/notifier.js
+installing
+  create tests/unit/services/notifier-test.js
+```
+
+Generate component notifier injector's initializer:
+
+```bash
+bin/ember generate initializer component-notifier-injector
+```
+
+Results in this output and generated files:
+
+```
+installing
+  create app/initializers/component-notifier-injector.js
+installing
+  create tests/unit/initializers/component-notifier-injector-test.js
+```
+
+Generate notifier's initializer:
+
+```bash
+bin/ember generate initializer notifier
+```
+
+Files and output from command:
+
+```
+installing
+  create app/initializers/notifier.js
+installing
+  create tests/unit/initializers/notifier-test.js
+```
+
+TODO: Explain `Ember.computed`.
+
+TODO: Document making changes to the following files (see Pull Request for summary of changes):
+
+- `client/app/authenticators/api-v1.js`
+- `client/app/pods/components/session-form/component.js`
+- `client/app/pods/components/x-notifier/component.js`
+- `client/app/pods/components/x-notifier/template.hbs`
+- `client/config/environment.js`
+- `client/app/initializers/component-notifier-injector.js`
+- `client/app/initializers/notifier.js`
+- `client/app/services/notifier.js`
+  
+
+
+
+Consider redoing this login-form_example branch from scratch on a new branch.
+
+Figure out secure by default solution based on this and then contribute documentation back to project: https://github.com/simplabs/ember-simple-auth/issues/578#issuecomment-118947003
