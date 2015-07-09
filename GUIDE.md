@@ -2721,7 +2721,7 @@ Notice the opening `<form>` tag references an `authenticate` action that will be
 
 `authenticate` will need to submit the email and password entered in the form to the Rails app. The Rails app will respond with an API authentication token, and eventually you'll store this token in the browser and use it to authenticate all subsequent requests from the user.
 
-Write the following in `client/app/pods/components/session-form/component.js`:
+Write the following in `client/app/pods/components/login-form/component.js`:
 
 ```javascript
 import Ember from 'ember';
