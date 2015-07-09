@@ -1571,7 +1571,7 @@ export default Ember.Component.extend({
     // create() is called when form is submitted
     create: function() {
       // Get user model object from component. It will be auto-populated with 
-      // input values from the from:
+      // input values from the form:
       var user = this.get('user');
 
       // Register/save the user via an AJAX request to the server API:
@@ -2224,7 +2224,7 @@ export default Ember.Component.extend({
     // create() is called when form is submitted
     create: function() {
       // Get user model object from component. It will be auto-populated with 
-      // input values from the from:
+      // input values from the form:
       var user = this.get('user');
 
       // Use ES6 arrow function => syntax to avoid having to call .bind(this)
