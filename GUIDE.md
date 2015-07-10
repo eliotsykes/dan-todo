@@ -69,6 +69,11 @@
 - [How login will work](#how-login-will-work)
 - [Session Authentication API](#session-authentication-api)
 - [Login Form Component](#login-form-component)
+- [Notifier Ember Service](#notifier-ember-service)
+- [Design the Notifier Service](#design-the-notifier-service)
+- [Write the Notifier Service](#write-the-notifier-service)
+- [Notifier Initializers](#notifier-initializers)
+- [Feature Spec Check-in](#feature-spec-check-in)
 
 <!-- /MarkdownTOC -->
 
@@ -2823,4 +2828,253 @@ Visit the sign in page at [http://localhost:4200/#/login](http://localhost:4200/
 
 Next, change the password input value from `foo` to `password` (this is the value you hard-coded in the `login-form` component earlier). Click the sign in button. You ought to get an alert popup with the message "You are signed in". Click OK on the alert popup and the page should change to show the "Your Lists" page.
 
-**Coming next...** write a notifier service to replace window.alert usage.
+
+## Notifier Ember Service
+
+To get us to this point, we've relied on `window.alert` to show login success and failure message to the user. `window.alert` isn't a very satisfying solution for showing messages as it doesn't allow us to style the messages. Now you'll write an Ember service to help handle showing these messages. 
+
+Ember services are singletons (i.e. only one instance of the service exists) that allow different parts of the same Ember application instance to communicate with each other.
+
+The notifier service will allow any component to specify a message string to show to the user. Ember services don't render HTML directly in the page. The HTML rendering will be done by the `x-notifier` component you wrote earlier.
+
+
+## Design the Notifier Service
+
+What is going to make a well designed notifier service? What methods should it provide as an interface to its client objects in our application?
+
+One tactic that helps with designing a new service is to dream up and write the code that would call the service in an ideal world. This can help reveal what a simple, usable interface for the service might be.
+
+First of all let's dream up some ideal code in the `login-form` component to replace `window.alert`.
+
+Open `client/app/pods/components/login-form/component.js` and update the `authenticate` function to the following:
+
+```javascript
+    authenticate: function() {
+      // Get credentials object from component. It will be auto-populated with 
+      // input values from the form:
+      var credentials = this.get('credentials');
+
+      // Get the notifier service:
+      var notifier = this.get('notifier');
+
+      // Use ES6 arrow function => syntax to avoid having to call .bind(this)
+      // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions
+      var onAuthentication = () => {
+        notifier.setMessage("You are signed in.");
+
+        // Show the list index when login is successful:
+        this.get('router').transitionTo('list.index');
+      };
+
+      function onAuthenticationFailed(/*error*/) {
+        notifier.setMessage("Sorry, we failed to sign you in, please try again.");
+      }
+
+      // Temporary insecure auth check to help setup the login flow.
+      function veryInsecureAuthenticationSucceeds(credentials) {
+        return credentials.email === "a@b.c" && credentials.password === "password";
+      }
+
+      if (veryInsecureAuthenticationSucceeds(credentials)) {
+        onAuthentication();
+      } else {
+        onAuthenticationFailed();
+      }
+    }
+```
+
+Notice we replaced `window.alert` with calls to the imaginary `notifier.setMessage` function.
+
+For now let's assume we're eventually going to be able to figure out how to get the `notifier.setMessage` function to work as this code desires.
+
+Next, we'll dream up the code in the `x-notifier` component that we'd like to see work.
+
+Open `client/app/pods/components/x-notifier/template.hbs` and remove the hard-coded message as we need it to be flexible by making the message variable. Replace it with a call to `{{ notifier.message }}`. Eventually `notifier.message` will get the current message from the notifier service. Here's how the template will look once you've made this change:
+
+```html
+<div class="notifier" aria-live="polite" role="status">
+  {{ notifier.message }}
+  <button {{action "close"}}>Close</button>
+</div>
+```
+
+Now open up `client/app/pods/components/x-notifier/component.js`. Edit it so it has the following contents, and review all of the changes we've made to use the to-be-written notifier service:
+
+```javascript
+import Ember from 'ember';
+
+export default Ember.Component.extend({
+  // Ember will hide component when isVisible is false.
+  isVisible: Ember.computed.readOnly('notifier.hasMessage'),
+  
+  actions: {
+    // close action is called when `<button {{action "close"}}>Close</button>`
+    // is pressed.
+    close: function() {
+      this.get('notifier').clear();
+    }
+  }
+});
+```
+
+Summarizing the changes we made to this file:
+
+- The `x-notifier` component is no longer responsible for inspecting the query string for 'notifications=confirmed'. We're going to move this responsibility to the notifier service.
+- The `close` action no longer controls the visibility of the component directly. Instead it calls the notifier's `clear` function which will clear the current message.
+- The `isVisible` property is no longer controlled by this component alone. Instead `isViaible` is now an `Ember.computed` property. `Ember.computed` properties are used to determine the value of one property from the result of another property. Computed properties are a powerful, flexible concept that you'll want to dive into deeper later. Here the `isVisible` property for the component will correspond to the value of `hasMessage` on the `notifier` service. In other words, when the notifier has a message, the component will be displayed. When the notifier does not have a message, the component will be hidden.
+
+Given the above idealized code changes, we now have an idea of what a good interface for the notifier service would look like:
+
+- `notifer.setMessage(message)` sets the current notifier message string to show to the user
+- `notifier.message` gets the current notifier message
+- `notifier.hasMessage()` returns a boolean: `true` if the notifier has a message
+- `notifier.clear()` removes the current notifier message
+
+The idealized code also tells us that you're going to need the notifier service available to the `x-notifier` and `login-form` components. To make a service available to a component, it has to be injected by an Ember initializer. You'll write an initializer shortly that will inject the notifier service into all components.
+
+## Write the Notifier Service
+
+Use the Ember service generator:
+
+```bash
+# Inside your-rails-app/ directory:
+bin/ember generate service notifier
+```
+
+This will generate the following output and files:
+
+```
+installing
+  create app/services/notifier.js
+installing
+  create tests/unit/services/notifier-test.js
+```
+
+Open `client/app/services/notifier.js`. Write the code to fulfil the interface you designed in the previous section:
+
+```javascript
+import Ember from 'ember';
+
+export default Ember.Service.extend({
+  // init function is a hook provided to Ember Services that you can optionally
+  // override. It is run once when the Ember application first loads.
+  init: function() {
+    this.initMessageFromAnyNotificationKeysInUrl();
+  },
+
+  message: '',
+  
+  // Thanks to computed properties, hasMessage will return true when the 
+  // notifier message is not empty:
+  hasMessage: Ember.computed.notEmpty('message'),
+  
+  setMessage: function(message) {
+    this.set('message', message);
+  },
+
+  clear: function() {
+    this.setMessage('');
+  },
+
+  initMessageFromAnyNotificationKeysInUrl: function() {
+    var currentUrl = this.get('router.location.location.href');
+    var hasNotificationKeysInUrl = currentUrl.indexOf('notifications=confirmed') >= 0;
+    if (hasNotificationKeysInUrl) {
+      this.setMessage('Your account has been confirmed, thank you!');
+    }
+  }
+});
+```
+
+Review the code and comments above line-by-line to understand what its doing. Notice in particular the use of a computed property again (for `hasMessage`) and that the URL `notifications=confirmed` detection is now done in this service (previously it was done in the `x-notifier` `component.js`).
+
+
+## Notifier Initializers
+
+The `login-form` and `x-notifier` components are dependent on the `notifier` service. Generate the initializer that you'll use to inject this dependency:
+
+```bash
+bin/ember generate initializer component-notifier-injector
+```
+
+The generate command will output these files:
+
+```
+installing
+  create app/initializers/component-notifier-injector.js
+installing
+  create tests/unit/initializers/component-notifier-injector-test.js
+```
+
+Open `client/app/initializers/component-notifier-injector.js` and modify it so that it injects the notifier service into all components:
+
+```js
+export function initialize(container, application) {
+  // Injects all Ember components with the notifier service:
+  application.inject('component', 'notifier', 'service:notifier');
+}
+
+export default {
+  name: 'component-notifier-injector',
+  initialize: initialize
+};
+```
+
+Take another look at the `notifier` service you just wrote - open `client/app/services/notifier.js` and see the line that depends on the `router`:
+
+```js
+  var currentUrl = this.get('router.location.location.href');
+```
+
+The `router` is not available to Ember services, like our `notifier` service, by default. You'll need to inject the `router` dependency otherwise the above line of code will fail. Generate another initializer to take care of this, run:
+
+```bash
+bin/ember generate initializer notifier-router-injector
+```
+
+This should generate the following:
+
+```
+installing
+  create app/initializers/notifier-router-injector.js
+installing
+  create tests/unit/initializers/notifier-router-injector-test.js
+```
+
+Put the following injection code into `client/app/initializers/notifier-router-injector.js`:
+
+```js
+export function initialize(container, application) {
+  // Injects router into the notifier service:
+  application.inject('service:notifier', 'router', 'router:main');
+}
+
+export default {
+  name: 'notifier-router-injector',
+  initialize: initialize
+};
+```
+
+From now on, thanks to this initializer, you'll be able to make use of the `router` within the `notifier` service.
+
+## Feature Spec Check-in
+
+Run the user registration feature spec to see how we're progressing:
+
+```bash
+bin/rspec spec/features/user_registration_spec.rb
+```
+
+The failure you'll see ought to be:
+
+```
+Failures:
+
+  1) User registration successful with valid details
+     Failure/Error: expect(page).to have_text("You are signed in")
+       expected to find text "You are signed in" in "Sorry, we failed to sign you in, please try again. CLOSE Sign In ENTER YOUR EMAIL ENTER YOUR PASSWORD Sign In → Need a new account? Sign up"
+     # ./spec/features/user_registration_spec.rb:31:in `block (2 levels) in <top (required)>'
+```
+
+The spec is complaining that the "You are signed in" message was not shown to the user. As the app stands, this is correct, there's nothing hooked up to authenticate a user - yet. Next you'll connect the client-side login form to submit the user's email and password to the sessions controller running server-side.
+

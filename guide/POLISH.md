@@ -169,6 +169,24 @@ Research existing conventions. Be consistent with an initializer injector conven
 - Something else from research
 
 
+## Ember Notifier Service notice vs alert
 
+- Handle notice and alerts
+- Example alert would be login failure (wrong password)
+- Example notice would be login success
+- Show differing styles (and icon?) for notice vs alert
+
+
+## Naming notifier component and service
+
+- Rename x-notifier component to noticeboard component?
+- Keep notifier service named as notifier?
+
+
+## Dependency Injection Clarity for Readers
+
+I've started out doing dependency injection using initializers, though I'm not sure this is the clearest method...
+
+On reflection, for at least some cases, it would be clearer for the reader to have the dependency and its injection, documented in code right there in the file its used. For example, it'd be more understandable to inject the `router` inside the notifier service in `client/app/services/notifier.js` rather than having a separate initializer script for that purpose. Perhaps for other dependencies it makes sense to use an initializer, e.g. when the injection would need to happen multiple times, like pretty much always injecting components with the `store`.
 
 

@@ -17,17 +17,20 @@ export default Ember.Component.extend({
       // input values from the form:
       var credentials = this.get('credentials');
 
+      // Get the notifier service:
+      var notifier = this.get('notifier');
+
       // Use ES6 arrow function => syntax to avoid having to call .bind(this)
       // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions
       var onAuthentication = () => {
-        window.alert("You are signed in.");
+        notifier.setMessage("You are signed in.");
 
         // Show the list index when login is successful:
         this.get('router').transitionTo('list.index');
       };
 
       function onAuthenticationFailed(/*error*/) {
-        window.alert("Sorry, we failed to sign you in, please try again.");
+        notifier.setMessage("Sorry, we failed to sign you in, please try again.");
       }
 
       // Temporary insecure auth check to help setup the login flow.
