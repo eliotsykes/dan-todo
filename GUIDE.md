@@ -3211,6 +3211,19 @@ Notice the `source bin/npm_setup` lines added to `bin/ember`. These lines invoke
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## Setup Simple Auth
 
 ### The Browser Sees All
@@ -3234,3 +3247,45 @@ You're going to setup Simple Auth so routes will default to being viewable only 
 For a route to be viewable by an anonymous user, you will have to explicitly configure that route to be publicly viewable.
 
 By choosing this default it means if we introduce a new route to the app, its harder for us to accidentally expose that route to anonymous users. To make a route publicly accessible, you'll have to take deliberate steps to expose that route to anonymous visitors.
+
+
+TODO: mixin simple auth's ApplicationRouteMixin, followed by customizing with my own beforeModel that calls super - check that ApplicationRouteMixin.beforeModel is called with my customizations to BeforeModel.
+
+
+```
+import Ember from 'ember';
+import ApplicationRouteMixin from 'simple-auth/mixins/application-route-mixin';
+
+export default Ember.Route.extend(ApplicationRouteMixin, AuthenciatedRouteMixin, {
+  
+  // authenticatedOnly *default*
+  // unauthenticatedOnly
+  // none or open or openToAll
+  authenticationPolicy: "authenticatedOnly"
+  
+  beforeModel: function(transition) {
+
+    // Check this _super calls ApplicationRouteMixin#beforeModel:
+
+    // refactor to strategy
+    if (authenticationPolicy === "openToAll") {
+
+    }
+    else if (authenticationPolicy === "unauthenticatedOnly") {
+  
+    } else {
+      var superResult = this._super(transition);  
+    }
+    
+
+    ...
+
+    return superResult;
+  }
+});
+
+
+```
+
+
+
