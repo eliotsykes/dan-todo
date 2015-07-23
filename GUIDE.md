@@ -74,6 +74,7 @@
 - [Write the Notifier Service](#write-the-notifier-service)
 - [Notifier Initializers](#notifier-initializers)
 - [Feature Spec Check-in](#feature-spec-check-in)
+- [Install Simple Auth Addon](#install-simple-auth-addon)
 
 <!-- /MarkdownTOC -->
 
@@ -3077,4 +3078,52 @@ Failures:
 ```
 
 The spec is complaining that the "You are signed in" message was not shown to the user. As the app stands, this is correct, there's nothing hooked up to authenticate a user - yet. Next you'll connect the client-side login form to submit the user's email and password to the sessions controller running server-side.
+
+
+## Install Simple Auth Addon
+
+There is a library that helps provide common functionality required for Ember apps that have users who can login. The library is [Ember Simple Auth](https://github.com/simplabs/ember-simple-auth) and is provided by an addon named ember-cli-simple-auth. Lets use it.
+
+Install the `ember-cli-simple-auth` addon:
+
+```bash
+# Inside your-rails-app/ directory:
+bin/ember install ember-cli-simple-auth
+```
+
+If the addon is installed successfully you'll see the following message at the end of the installation:
+
+```
+Installed addon package.
+```
+
+Unfortunately, installing an Ember addon using `ember install` generates an extra (unwanted) `package.json` file for your app (run `git status` if you want to check for yourself). 
+
+`ember install` runs an `npm install` command that overwrites the symlink at `client/package.json` with a new file. Your app will now have two different `package.json` files which isn't what we want. Rectify this with:
+
+```bash
+# Inside your-rails-app/ directory:
+
+# Copy the new package.json to overwrite the original package.json:
+cp client/package.json package.json
+
+# Bring back the symlink at client/package.json:
+git checkout -- client/package.json
+
+# Check symlink is correct...
+ls -al client/package.json
+
+# ...ensure the ls command outputs this symlink:
+client/package.json -> ../package.json
+
+# You can now commit these changes to your repo.
+git add .
+git commit -m "Installed simple auth addon"
+```
+
+It is too easy to trip up on this `package.json`-symlink issue whenever you install an Ember addon. It is a small compromise worth making do with when you want to have your Ember app and Rails app co-exist in the same project. 
+
+However, lets make this compromise more comfortable for your future self by setting up a safety net to catch and fix this issue anytime you install an Ember addon. Its time to add some automation and invoke your shell script superpowers.
+
+
 
