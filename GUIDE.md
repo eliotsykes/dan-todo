@@ -75,6 +75,7 @@
 - [Notifier Initializers](#notifier-initializers)
 - [Feature Spec Check-in](#feature-spec-check-in)
 - [Install Simple Auth Addon](#install-simple-auth-addon)
+- [Safety Net `npm_setup`](#safety-net-npm_setup)
 
 <!-- /MarkdownTOC -->
 
@@ -3126,4 +3127,76 @@ It is too easy to trip up on this `package.json`-symlink issue whenever you inst
 However, lets make this compromise more comfortable for your future self by setting up a safety net to catch and fix this issue anytime you install an Ember addon. Its time to add some automation and invoke your shell script superpowers.
 
 
+## Safety Net `npm_setup`
+
+You're going to write a shell script `bin/npm_setup` that will check the npm environment is setup correctly before and after `bin/ember` runs. You'll also be able to call `bin/npm_setup` anytime you want to validate or fix your npm environment. This will ensure the double `package.json` issue described earlier won't haunt your future self.
+
+Note that `bin/npm_setup` will be called in your production environment indirectly via the `bin/ember build ...` that is called during deployment (see the `scripts > postinstall` config option in `package.json` which is called by Heroku during deployment). This is a good thing as it provides an extra validation step that our production environment is setup as we need it to be.
+
+Create the new script:
+
+```bash
+# Inside your-rails-app/ directory:
+touch bin/npm_setup
+
+# Make it executable:
+chmod +x bin/npm_setup
+```
+
+Open `bin/npm_setup` in your editor and save it with these contents:
+
+```bash
+#!/usr/bin/env sh
+
+# Ensures npm environment is setup correctly for all environments.
+
+if [ ! -f "package.json" ]; then
+  echo "Warning: package.json does not exist"
+  cp client/package.json ./
+  echo "  Fixed: client/package.json copied to ./package.json"
+fi
+
+
+if ! diff client/package.json package.json >/dev/null ; then
+  echo "Warning: ./package.json and client/package.json differ"
+  echo " Fixing: client/package.json is being copied to ./package.json"
+  cp client/package.json ./
+  echo "  Fixed: client/package.json copied to ./package.json"
+fi
+
+# Symlink node_modules and package.json from client/ so ember operates without error:
+ln -sfn ../node_modules client/node_modules
+ln -sfn ../package.json client/package.json
+```
+
+Review the new script so you're aware of what its doing.
+
+Next install the `npm_setup` safety net in the existing `bin/ember` script. Open `bin/ember` and save it with the following contents:
+
+```bash
+#!/usr/bin/env sh
+
+# Thin wrapper script to execute ember commands in the correct working directory. 
+# All ember commands need to be run inside the client/ dir. To save remembering
+# to change directories, just run `bin/ember ...` from the project root. All
+# ember commands will work. For usage enter `bin/ember --help`
+
+# Ensure npm setup OK
+source bin/npm_setup
+
+# ember command working directory must be client/:
+cd client
+
+# Forward args to npm-installed ember command:
+ember "$@"
+
+# Return to project root:
+cd ..
+
+# Ensure npm setup *still* OK. Fixes issue where `ember install`-ing an addon
+# forks the shared package.json.
+source bin/npm_setup
+```
+
+Notice the `source bin/npm_setup` lines added to `bin/ember`. These lines invoke our safety net before and after the `ember` command runs. If something happens to create another `package.json` file, `npm_setup` will fix it before it becomes a problem.
 
