@@ -3229,6 +3229,8 @@ So we're agreed, don't send sensitive data to a user unless you're certain its O
 
 ### Block all routes by default
 
-You're going to setup Simple Auth so it all routes will default to being viewable only by logged-in users. For a route to be viewable by an anonymous user, you will have to explicitly configure that route to be publicly viewable.
+You're going to setup Simple Auth so routes will default to being viewable only by logged-in users. 
+
+For a route to be viewable by an anonymous user, you will have to explicitly configure that route to be publicly viewable.
 
 By choosing this default it means if we introduce a new route to the app, its harder for us to accidentally expose that route to anonymous users. To make a route publicly accessible, you'll have to take deliberate steps to expose that route to anonymous visitors.
