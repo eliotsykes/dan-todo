@@ -76,6 +76,9 @@
 - [Feature Spec Check-in](#feature-spec-check-in)
 - [Install Simple Auth Addon](#install-simple-auth-addon)
 - [Safety Net `npm_setup`](#safety-net-npm_setup)
+- [Setup Simple Auth](#setup-simple-auth)
+  - [The Browser Sees All](#the-browser-sees-all)
+  - [Block all routes by default](#block-all-routes-by-default)
 
 <!-- /MarkdownTOC -->
 
@@ -3200,3 +3203,32 @@ source bin/npm_setup
 
 Notice the `source bin/npm_setup` lines added to `bin/ember`. These lines invoke our safety net before and after the `ember` command runs. If something happens to create another `package.json` file, `npm_setup` will fix it before it becomes a problem.
 
+
+
+
+
+
+
+
+
+## Setup Simple Auth
+
+### The Browser Sees All
+
+When doing client-side authentication as you're about to, remember that any code and data that is sent to the client can be viewed by a determined user even if you take precautions to block them from seeing certain parts of the app. 
+
+Assume anything (javascript, data, files, etc.) you send from the server to the client is viewable by the user. 
+
+Your users have a number of tools at their disposal to help them figure out how you've tried to hide any resources you're sending to and storing in their browser and given enough time a user can outsmart your client-side-only security measures.
+
+Client-side authentication needs to be paired with server-side authentication, which is what we're about to do. 
+
+This may remind you of the strongly recommended practice of performing server-side validation and sanitization for all user-submitted data. Its not a good idea to rely only on client-side validation and sanitization. Client-side authentication, validation, and sanitization can fail and be avoided in a number of predictable and unpredictable ways and so its smart to write server-side code defensively that acknowledges this reality.
+
+So we're agreed, don't send sensitive data to a user unless you're certain its OK if they see it.
+
+### Block all routes by default
+
+You're going to setup Simple Auth so it all routes will default to being viewable only by logged-in users. For a route to be viewable by an anonymous user, you will have to explicitly configure that route to be publicly viewable.
+
+By choosing this default it means if we introduce a new route to the app, its harder for us to accidentally expose that route to anonymous users. To make a route publicly accessible, you'll have to take deliberate steps to expose that route to anonymous visitors.
