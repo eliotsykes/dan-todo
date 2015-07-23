@@ -76,6 +76,9 @@
 - [Feature Spec Check-in](#feature-spec-check-in)
 - [Install Simple Auth Addon](#install-simple-auth-addon)
 - [Safety Net `npm_setup`](#safety-net-npm_setup)
+- [Setup Simple Auth](#setup-simple-auth)
+  - [The Browser Sees All](#the-browser-sees-all)
+  - [Block all routes by default](#block-all-routes-by-default)
 
 <!-- /MarkdownTOC -->
 
@@ -163,7 +166,7 @@ phonegap serve
 
 Open the PhoneGap Developer app on your device. Enter the IP address and port given in the output from the PhoneGap server. You can enter these details by tapping on the "Server Address" field displayed in the PhoneGap Developer app. Then tap the Connect button.
 
-Assuming there are no network issues (check the device and the computer are on the same network), your app will appear on your device. You should see the `index.html` you created on your device, congratulations! 
+Assuming there are no network issues (check the device and the computer are on the same network), your app will appear on your device. You should see the `index.html` you created on your device, congratulations!
 
 This is your basic development environment. Any changes you make to `public/index.html` will be detected by PhoneGap which will tell your device to reload your app.
 
@@ -197,7 +200,7 @@ Open `bin/phonegap` in your editor and save it with these contents:
 ```bash
 #!/usr/bin/env sh
 
-# Thin wrapper script to execute phonegap commands in the correct working directory. 
+# Thin wrapper script to execute phonegap commands in the correct working directory.
 # All phonegap commands need to be run inside the client/wrap dir. To save remembering
 # to change directories, just run `bin/phonegap ...` from the project root. All
 # phonegap commands will work. For usage enter `bin/phonegap --help`
@@ -269,9 +272,9 @@ Log on to PhoneGap Build to setup and build your app:
 - Click the "Upload a .zip file" button
 - Select the zip file to upload: `my-rails-app/client/wrap/phonegap-build-source-app.zip`
 - Once upload completes, change the name of the app to something descriptive (e.g. Todos App)
-- Click the "Ready to build" button. 
+- Click the "Ready to build" button.
 
-PhoneGap Build will start building the platform versions of your app. 
+PhoneGap Build will start building the platform versions of your app.
 
 The iOS version will fail which is normal, more setup and joining the Apple Developer Program is needed for iOS (which we'll dive into later). However, the Android and Windows builds should complete successfully!
 
@@ -315,13 +318,13 @@ Now you've setup a workflow for developing your app for real devices, we can beg
 
 [Ember](http://emberjs.com/) is an established, open-source JavaScript framework that has been influenced in its design and community philosophy by Rails. Many Ember contributors and users use Rails as their backend of choice, paired with an Ember frontend (Ember may also be used with non-Rails backends).
 
-Ember favors convention over configuration. This means that you don't have to think hard about where to put a new script, stylesheet, or other asset. 
+Ember favors convention over configuration. This means that you don't have to think hard about where to put a new script, stylesheet, or other asset.
 
 In Rails there are directories for configuration code, models, controllers, views, and so on. Rails developers know where to put a new model, it goes in the `app/models` directory. Similarly, Ember has directories and conventions to help you organize your codebase and make it less likely your brain blows a fuse when jumping between projects that use the same framework.
 
 Ember provides a command line interface known as [Ember CLI](http://www.ember-cli.com/) that is invoked on the command line as `ember`. When developing Ember applications, you tend to use the `ember` command in ways that are similar to how you use the `rails` command.
 
-Thankfully -- as it creates a thriving, evolving JavaScript ecosystem -- not all developers will agree with what I'm about to write and that's okay. 
+Thankfully -- as it creates a thriving, evolving JavaScript ecosystem -- not all developers will agree with what I'm about to write and that's okay.
 
 I feel Ember is a good default choice JavaScript framework for most Rails web applications that also want to distribute apps in the app stores across all of the PhoneGap-supported operating systems. Ember will allow us to reuse and share templates throughout our app. Ember CLI will keep us from having to write many, if any, command line tools.
 
@@ -346,7 +349,7 @@ When making your choice of framework, here are some guidelines and consideration
 - Are other teams and businesses successfully and happily using the framework in existing applications that are similar to what you're working on?
 
 
-Take mine and other developer's claims about frameworks with a pinch of salt. Be especially wary of developers claiming their framework is the one-framework-to-rule-them-all. 
+Take mine and other developer's claims about frameworks with a pinch of salt. Be especially wary of developers claiming their framework is the one-framework-to-rule-them-all.
 
 Each framework has its own advantages and disadvantages that vary depending on your unique requirements. Make time to do good research. Try frameworks out. Prototype. Make your own objective decision. Taking time up-front will likely save you time in the long run by helping you make an informed choice.
 
@@ -404,7 +407,7 @@ Add the generated Ember app to your repo.
 
 npm dependencies are specified in `client/package.json` under the `devDependencies` configuration. These are the dependencies needed to build and serve the Ember app (they are *not* runtime dependencies required in the browser. Browser runtime dependencies are managed by Bower).
 
-npm always installs its dependencies in a directory named `node_modules` that is in the same directory as the `package.json` file. 
+npm always installs its dependencies in a directory named `node_modules` that is in the same directory as the `package.json` file.
 
 To get the npm dependencies installed in `node_modules/` in our project root, perform the following:
 
@@ -457,7 +460,7 @@ This will install Bower and add it to `package.json` under `devDependencies`. Do
 
 Bower dependencies are specified in `client/bower.json` under the `dependencies` configuration. These are the dependencies needed at in the browser to successfully run an Ember application.
 
-Bower installs its dependencies in a directory named `bower_components` that is in the same directory as the `bower.json` file. 
+Bower installs its dependencies in a directory named `bower_components` that is in the same directory as the `bower.json` file.
 
 To get the Bower dependencies installed in `bower_components/` in our project root, perform the following:
 
@@ -532,7 +535,7 @@ Open `bin/ember` in your editor and save it with these contents:
 ```bash
 #!/usr/bin/env sh
 
-# Thin wrapper script to execute ember commands in the correct working directory. 
+# Thin wrapper script to execute ember commands in the correct working directory.
 # All ember commands need to be run inside the client/ dir. To save remembering
 # to change directories, just run `bin/ember ...` from the project root. All
 # ember commands will work. For usage enter `bin/ember --help`
@@ -633,7 +636,7 @@ Next we'll save ourselves time and precious keystrokes by using the Foreman gem 
 
 In this particular app, we've got two processes that need managing in our development environment: the `bin/ember build --watch` process, and the `bin/rails s` process.
 
-Foreman is a gem that reads and runs the processes you want managed from a `Procfile`. Each line in the `Procfile` contains a name for a process and the command used to start that process. 
+Foreman is a gem that reads and runs the processes you want managed from a `Procfile`. Each line in the `Procfile` contains a name for a process and the command used to start that process.
 
 Create `my-rails-app/Procfile` with these contents, which defines two named processes, `rails` and `ember`:
 
@@ -671,7 +674,7 @@ The Ember app has its own `index.html` at `client/app/index.html`. We're not goi
 
 In `client/app/index.html`, you'll see the structure for an HTML document, including the `<html>`, `<head>`, and `<body>` elements. This `index.html` is the file Ember uses as its layout for all of its views. The Ember view templates you write will ultimately end up rendered inside this skeleton HTML structure, usually in the `{{content-for 'body'}}` section.
 
-When using the Ember app in your browser, the `{{content-for 'body'}}` section is dynamically replaced with the contents of `client/app/templates/appliation.hbs`. 
+When using the Ember app in your browser, the `{{content-for 'body'}}` section is dynamically replaced with the contents of `client/app/templates/appliation.hbs`.
 
 The `.hbs` file extension denotes a Handlebars template. Note the exception that `client/app/index.html` is also a Handlebars template although it doesn't have the `.hbs` file extension.
 
@@ -794,9 +797,9 @@ We're not about to change this file, but quickly take a look at `client/config/e
   ...
 
   if (environment === 'development') {
-  
+
   ...
-  
+
   if (environment === 'test') {
 
   ...
@@ -840,7 +843,7 @@ We're going to shortly deploy your app to Heroku. This will be the production en
 
 ### Hiding `Procfile` from Heroku
 
-The `Procfile` we use to control our development environment processes is also used by Heroku if it is present. 
+The `Procfile` we use to control our development environment processes is also used by Heroku if it is present.
 
 The processes we want to run in production are *not* the same as our development environment processes, so we need to make sure Heroku doesn't try to run our `Procfile`.
 
@@ -851,9 +854,9 @@ To stop Heroku from trying to use our `Procfile`, rename it to `Procfile.develop
 mv Procfile Procfile.development
 ```
 
-Now Heroku won't find a `Procfile`, but neither will `foreman` when we next try to run `foreman s` (try it and you should see an error message like `Procfile does not exist`). 
+Now Heroku won't find a `Procfile`, but neither will `foreman` when we next try to run `foreman s` (try it and you should see an error message like `Procfile does not exist`).
 
-To fix this, you can remember to pass the `-f Procfile.development` option to `foreman s`, or you can create a `bin/serve` script to remember this for you. 
+To fix this, you can remember to pass the `-f Procfile.development` option to `foreman s`, or you can create a `bin/serve` script to remember this for you.
 
 Create a new executable file at `my-rails-app/bin/serve`:
 
@@ -910,7 +913,7 @@ We're going to peak behind the curtain on this mystery to help us build a workin
 
 When you deploy to Heroku, it looks at the files inside your app, and takes an educated guess at what programming language and environment is needed to run your application.
 
-In the case of Rails apps, it guesses you need a Ruby environment, and sets this up for you using the "Ruby buildpack". 
+In the case of Rails apps, it guesses you need a Ruby environment, and sets this up for you using the "Ruby buildpack".
 
 A buildpack is a collection of scripts that setup a Heroku server by installing software specified in the buildpack. For example, the Ruby buildpack installs Ruby on any Heroku server it is used on.
 
@@ -950,7 +953,7 @@ heroku create dans-todos --buildpack https://github.com/heroku/heroku-buildpack-
 ```bash
 # Inside my-rails-app/ dir
 #
-# **Only** run if you forgot the --buildpack option above or are converting 
+# **Only** run if you forgot the --buildpack option above or are converting
 # an existing app:
 heroku buildpacks:set https://github.com/heroku/heroku-buildpack-multi
 ```
@@ -1041,7 +1044,7 @@ Define a `postinstall` scripts entry in `package.json` to install the Bower depe
 
 The npm and Bower dependencies installed in your Heroku environment may take a few minutes. This time cost is inevitable the first time you deploy and these dependencies are installed.
 
-To speed up subsequent deployments, you can tell Heroku to cache these dependencies by specifying the `cacheDirectories` option in `package.json`. Heroku will cache the given directories between deployments. 
+To speed up subsequent deployments, you can tell Heroku to cache these dependencies by specifying the `cacheDirectories` option in `package.json`. Heroku will cache the given directories between deployments.
 
 Lets set it up so Heroku will cache the directories where the npm and Bower dependencies are installed. Edit `package.json` so this `cacheDirectories` option is specified below the existing `scripts` option:
 
@@ -1247,7 +1250,7 @@ Write the registration feature using Behaviour Driven Development. Here's the sp
 require 'rails_helper'
 
 feature "User registration", type: :feature, js: true do
-  
+
   scenario "successful with valid details" do
     visit root_path
 
@@ -1263,10 +1266,10 @@ feature "User registration", type: :feature, js: true do
 
     expect(page).to have_title("Please confirm")
     expect(page).to have_text("Please check your inbox and click the link to confirm your account.")
-    
+
     open_email "clark@dailyplanet.metropolis", subject: "Confirm your account"
     click_first_link_in_email
-    
+
     expect(page).to have_title("Sign In")
     expect(page).to have_text("Your account has been confirmed, thank you!")
 
@@ -1286,7 +1289,7 @@ end
 Run spec:
 
 ```bash
-$ bin/rspec spec/features/user_registration_spec.rb 
+$ bin/rspec spec/features/user_registration_spec.rb
 ```
 
 Here's the first test failure you'll encounter:
@@ -1298,7 +1301,7 @@ Here's the first test failure you'll encounter:
        Unable to find link "Register"
 ```
 
-There is no "Register" link on the root page of the app. 
+There is no "Register" link on the root page of the app.
 
 Remove `:registrations` from the `devise_for` `only:` option in `config/routes.rb`. This will stop Devise from generating registration routes for the app. You're going to take control of the registration routes from now on.
 
@@ -1542,7 +1545,7 @@ Edit `client/app/pods/components/user-form/template.hbs`, to be:
 Review the above code and note:
 
 - In the opening `<form>` tag, the `create` `action` will be performed when the form is `submit`ted.
-- The three `{{input ...}}` fields: 
+- The three `{{input ...}}` fields:
   * The 1st input is for the `user.email` model attribute
   * The 2nd input is for the `user.password` model attribute
   * The final input is for the `user.passwordConfirmation` model attribute.
@@ -1578,7 +1581,7 @@ export default Ember.Component.extend({
   actions: {
     // create() is called when form is submitted
     create: function() {
-      // Get user model object from component. It will be auto-populated with 
+      // Get user model object from component. It will be auto-populated with
       // input values from the form:
       var user = this.get('user');
 
@@ -1601,7 +1604,7 @@ Ember initializers can be used to help setup your Ember application when its fir
 
 Ember initializers are often used to make common objects available directly inside components. The initializers do this by "injecting" specified objects into other objects. (You may have heard this ability to inject objects into other objects being described as "dependency injection").
 
-For example, your Ember app might eventually have JavaScript objects representing the `currentUser`, `search`, or `notifications`. Using an initializer, you can inject these objects (and any other objects you can think of) into the Ember components you write. 
+For example, your Ember app might eventually have JavaScript objects representing the `currentUser`, `search`, or `notifications`. Using an initializer, you can inject these objects (and any other objects you can think of) into the Ember components you write.
 
 Generate an initializer to inject the Ember Data `store` into all components:
 
@@ -1701,7 +1704,7 @@ The `host:` option passed to `DS.RESTAdapter` in `application.js` above makes us
 ...
 
   if (environment === 'development') {
-    
+
     ...
 
     ENV.APP.apiHost = 'http://localhost:3000'
@@ -1727,11 +1730,11 @@ Write a request spec defining how the user create API should behave. Save `spec/
 require 'rails_helper'
 
 RSpec.describe "User API", type: :request do
-  
+
   context "POST create" do
-    
+
     it "registers a user and requests confirmation" do
-      
+
       headers = { "Content-Type": "application/json" }
       parameters = {
         user: {
@@ -1740,11 +1743,11 @@ RSpec.describe "User API", type: :request do
           passwordConfirmation: "mutants rule"
         }
       }.to_json
-      
+
       post "/api/v1/users", parameters, headers
 
       expect(response).to have_http_status(:no_content)
-      
+
       expect(all_emails.size).to eq(1)
       expect(last_email_sent).to be_delivered_to("jean@xmen.xmansion")
       expect(last_email_sent).to have_subject("Confirmation instructions")
@@ -1864,10 +1867,10 @@ Re-run the request spec. Here's the next failure:
 ```
   1) User API POST create registers a user and requests confirmation
      Failure/Error: expect(all_emails.size).to eq(1)
-       
+
        expected: 1
             got: 0
-       
+
        (compared using ==)
      # ./spec/requests/user_api_spec.rb:22:in `block (3 levels) in <top (required)>'
 ```
@@ -1902,9 +1905,9 @@ end
 
 Rails and its API-related gems tend to gently nudge you towards using `snake_case` naming conventions in your JSON APIs. This is because Rails (and Ruby) use `snake_case` as a convention for writing Ruby code. However, the output from a JSON API is not Ruby code.
 
-In your JSON APIs, prefer to use the JSON convention of `camelCase` keys as JSON API consumers and clients are likely to find it less taxing to support the JSON `camelCase` convention than the Rails convention of `snake_case` variable names. 
+In your JSON APIs, prefer to use the JSON convention of `camelCase` keys as JSON API consumers and clients are likely to find it less taxing to support the JSON `camelCase` convention than the Rails convention of `snake_case` variable names.
 
-The burden of mapping API key names is more efficiently handled in one place by your app, not in multiple places by each and every client consuming your API in the future. 
+The burden of mapping API key names is more efficiently handled in one place by your app, not in multiple places by each and every client consuming your API in the future.
 
 Most developers, the majority of whom work outside of the Ruby ecosystem, are likely to expect and hope most RESTful APIs follow JSON `camelCase` naming conventions, and working with your API may make their lives easier if it lives up to this very reasonable expectation.
 
@@ -2016,7 +2019,7 @@ Read through the `client/app/styles/app.scss` file. It contains `@import` statem
 
 ##### Autoprefixer
 
-[Autoprefixer](https://github.com/postcss/autoprefixer) is an invaluable tool used by developers who want to preserve their sanity when building applications with cross-browser support. 
+[Autoprefixer](https://github.com/postcss/autoprefixer) is an invaluable tool used by developers who want to preserve their sanity when building applications with cross-browser support.
 
 Autoprefixer adds missing vendor prefixed properties for any existing CSS properties that need them, to help make your styles cross-browser friendly. Autoprefixer saves you having to remember to add vendor prefixes yourself for the browsers your application supports. It doesn't free you from cross-browser testing but it does make it less likely you'll run into cross-browser styling issues due to missing vendor prefixes.
 
@@ -2035,7 +2038,7 @@ By default, Autoprefixer is configured to add vendor prefixes to support a reaso
 
 #### Write the body-class helper
 
-To be able to apply the registration form specific styles in `client/app/styles/register.scss`, you'll need to be able to set the CSS class on the `<body>` tag to `register`. 
+To be able to apply the registration form specific styles in `client/app/styles/register.scss`, you'll need to be able to set the CSS class on the `<body>` tag to `register`.
 
 You're going to write a helper called `body-class` to allow you to write a line of code like this in any view template to set the current body class:
 
@@ -2129,7 +2132,7 @@ Run `bin/serve`, visit the registration form, which should look like this:
 
 *INSTRUCTIONS FOR DAN START*
 
-Replace `spec/features/user_registration_spec.rb` contents with contents from here: 
+Replace `spec/features/user_registration_spec.rb` contents with contents from here:
 
 https://github.com/eliotsykes/dan-todo/blob/form-submit-and-transition-route_example/spec/features/user_registration_spec.rb
 
@@ -2187,17 +2190,17 @@ Create a new route for this confirmation pending page:
 ```bash
 # Inside your-rails-app/ directory:
 
-bin/ember generate route confirmation/pending --pod
+bin/ember generate route confirmation-pending --pod
 ```
 
 This will generate the following output and files:
 
 ```
 installing
-  create app/pods/confirmation/pending/route.js
-  create app/pods/confirmation/pending/template.hbs
+  create app/pods/confirmation-pending/route.js
+  create app/pods/confirmation-pending/template.hbs
 installing
-  create tests/unit/pods/confirmation/pending/route-test.js
+  create tests/unit/pods/confirmation-pending/route-test.js
 ```
 
 It will also add a new route to your `client/app/router.js` file. The `Router.map ...` section of `client/app/router.js` ought to now look like this:
@@ -2207,14 +2210,12 @@ It will also add a new route to your `client/app/router.js` file. The `Router.ma
 Router.map(function() {
   this.route('user.new', { path: '/register' });
 
-  this.route('confirmation', function() {
-    this.route('pending');
-  });
+  this.route('confirmation-pending');
 });
 ...
 ```
 
-Ember provides a `transitionTo` function to take the user to a new route. You'll want to use this in the `user-form` component to take the user to the `confirmation.pending` route when they've successfully submitted their registration details. In the `client/app/pods/components/user-form/component.js` file, update the contents to the following:
+Ember provides a `transitionTo` function to take the user to a new route. You'll want to use this in the `user-form` component to take the user to the `confirmation-pending` route when they've successfully submitted their registration details. In the `client/app/pods/components/user-form/component.js` file, update the contents to the following:
 
 ```javascript
 import Ember from 'ember';
@@ -2231,14 +2232,14 @@ export default Ember.Component.extend({
   actions: {
     // create() is called when form is submitted
     create: function() {
-      // Get user model object from component. It will be auto-populated with 
+      // Get user model object from component. It will be auto-populated with
       // input values from the form:
       var user = this.get('user');
 
       // Use ES6 arrow function => syntax to avoid having to call .bind(this)
       // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions
       var transitionToConfirmationPending = () => {
-        this.get('router').transitionTo('confirmation.pending');
+        this.get('router').transitionTo('confirmation-pending');
       };
 
       // Register/save the user via an AJAX request to the server API:
@@ -2252,7 +2253,7 @@ export default Ember.Component.extend({
 });
 ```
 
-Notice the new `transitionToConfirmationPending` function that will be called when the user is successfully saved. This is what will transition to the `confirmation.pending` route.
+Notice the new `transitionToConfirmationPending` function that will be called when the user is successfully saved. This is what will transition to the `confirmation-pending` route.
 
 Also notice the call to `this.get('router')` in the `transitionToConfirmationPending` function. This is a reference to Ember's `Router` object.
 
@@ -2290,14 +2291,14 @@ export default {
 The router will now be available inside components as `this.get('router')`.
 
 
-Next you'll modify the confirmation pending page template `client/app/pods/confirmation/pending/template.hbs`. You're going to set the body CSS class, the page title, and the body paragraph text to match what is expected in the feature spec. Save the template with these contents:
+Next you'll modify the confirmation pending page template `client/app/pods/confirmation-pending/template.hbs`. You're going to set the body CSS class, the page title, and the body paragraph text to match what is expected in the feature spec. Save the template with these contents:
 
 ```html
 {{body-class 'confirmation'}}
 {{page-title 'Please confirm'}}
 
 <p>
-  Please check your inbox, open the email we&rsquo;ve just sent you, and click 
+  Please check your inbox, open the email we&rsquo;ve just sent you, and click
   the link inside it to confirm your new account.
 </p>
 
@@ -2382,11 +2383,11 @@ The login and session related Devise-provided Rails routes are no longer needed.
 - Update `spec/features/user_registration_spec.rb` to be the same as: https://github.com/eliotsykes/dan-todo/blob/confirm-registration_example/spec/features/user_registration_spec.rb
 
 - *Update* scss files from this directory https://github.com/eliotsykes/dan-todo/tree/confirm-registration_example/client/app/styles for these files only:
-  + `client/app/styles/_color.scss` 
+  + `client/app/styles/_color.scss`
   + `client/app/styles/app.scss`
   + `client/app/styles/form.scss`
-  
-- *Add* these 2 new scss files to your app from this directory https://github.com/eliotsykes/dan-todo/tree/confirm-registration_example/client/app/styles 
+
+- *Add* these 2 new scss files to your app from this directory https://github.com/eliotsykes/dan-todo/tree/confirm-registration_example/client/app/styles
   + `client/app/styles/login.scss`
   + `client/app/styles/notifier.scss`
 
@@ -2441,7 +2442,7 @@ class ConfirmationsController < Devise::ConfirmationsController
   def after_confirmation_path_for(resource_name, resource)
     login_path
   end
-  
+
 end
 ```
 
@@ -2557,7 +2558,7 @@ export default Ember.Component.extend({
     var showNotifier = currentUrl.indexOf('notifications=confirmed') >= 0;
     this.set('isVisible', showNotifier);
   },
-  
+
   actions: {
     // close action is called when `<button {{action "close"}}>Close</button>`
     // is pressed.
@@ -2592,7 +2593,7 @@ Test the component disappears from view when the close button is pressed.
 Re-run the spec:
 
 ```bash
-bin/rspec spec/features/user_registration_spec.rb 
+bin/rspec spec/features/user_registration_spec.rb
 ```
 
 The next failure you'll see will be about one of the sign in form fields being missing:
@@ -2631,7 +2632,7 @@ You're going to write the `Api::V1::SessionsController` that will be responsible
 - Copy `app/controllers/api/v1/sessions_controller.rb` from https://raw.githubusercontent.com/eliotsykes/dan-todo/sessions-controller_example/app/controllers/api/v1/sessions_controller.rb
 - Update `config/routes.rb` from https://raw.githubusercontent.com/eliotsykes/dan-todo/sessions-controller_example/config/routes.rb (this change adds a new route for the sessions controller and combines a couple of similar routes)
 
-To remove one way of performing a brute force attack on the new sessions controller, a user's account will be locked if the wrong password is entered 10 or more times for the same email address. 
+To remove one way of performing a brute force attack on the new sessions controller, a user's account will be locked if the wrong password is entered 10 or more times for the same email address.
 
 The following changes help add this protection by taking advantage of Devise's existing lockable module. Use `git diff` before committing to review the changes and please ask if you have any questions:
 
@@ -2724,7 +2725,7 @@ Write the form for the component, save `client/app/pods/components/login-form/te
 </form>
 ```
 
-Notice the opening `<form>` tag references an `authenticate` action that will be called when the form is submitted. This `authenticate` action is yet to be written. 
+Notice the opening `<form>` tag references an `authenticate` action that will be called when the form is submitted. This `authenticate` action is yet to be written.
 
 `authenticate` will need to submit the email and password entered in the form to the Rails app. The Rails app will respond with an API authentication token, and eventually you'll store this token in the browser and use it to authenticate all subsequent requests from the user.
 
@@ -2738,7 +2739,7 @@ export default Ember.Component.extend({
     // Call the parent init function:
     this._super.apply(this, arguments);
 
-    // Set up a credentials object to use in the template. Allows credentials.email and 
+    // Set up a credentials object to use in the template. Allows credentials.email and
     // credentials.password to be used in input helpers, e.g.:
     // {{input value=credentials.email}}
     this.set('credentials', {});
@@ -2746,7 +2747,7 @@ export default Ember.Component.extend({
   actions: {
     // authenticate() is called when form is submitted
     authenticate: function() {
-      // Get credentials object from component. It will be auto-populated with 
+      // Get credentials object from component. It will be auto-populated with
       // input values from the form:
       var credentials = this.get('credentials');
 
@@ -2833,7 +2834,7 @@ Next, change the password input value from `foo` to `password` (this is the valu
 
 ## Notifier Ember Service
 
-To get us to this point, we've relied on `window.alert` to show login success and failure message to the user. `window.alert` isn't a very satisfying solution for showing messages as it doesn't allow us to style the messages. Now you'll write an Ember service to help handle showing these messages. 
+To get us to this point, we've relied on `window.alert` to show login success and failure message to the user. `window.alert` isn't a very satisfying solution for showing messages as it doesn't allow us to style the messages. Now you'll write an Ember service to help handle showing these messages.
 
 Ember services are singletons (i.e. only one instance of the service exists) that allow different parts of the same Ember application instance to communicate with each other.
 
@@ -2852,7 +2853,7 @@ Open `client/app/pods/components/login-form/component.js` and update the `authen
 
 ```javascript
     authenticate: function() {
-      // Get credentials object from component. It will be auto-populated with 
+      // Get credentials object from component. It will be auto-populated with
       // input values from the form:
       var credentials = this.get('credentials');
 
@@ -2908,7 +2909,7 @@ import Ember from 'ember';
 export default Ember.Component.extend({
   // Ember will hide component when isVisible is false.
   isVisible: Ember.computed.readOnly('notifier.hasMessage'),
-  
+
   actions: {
     // close action is called when `<button {{action "close"}}>Close</button>`
     // is pressed.
@@ -2965,11 +2966,11 @@ export default Ember.Service.extend({
   },
 
   message: '',
-  
-  // Thanks to computed properties, hasMessage will return true when the 
+
+  // Thanks to computed properties, hasMessage will return true when the
   // notifier message is not empty:
   hasMessage: Ember.computed.notEmpty('message'),
-  
+
   setMessage: function(message) {
     this.set('message', message);
   },
@@ -3098,7 +3099,7 @@ If the addon is installed successfully you'll see the following message at the e
 Installed addon package.
 ```
 
-Unfortunately, installing an Ember addon using `ember install` generates an extra (unwanted) `package.json` file for your app (run `git status` if you want to check for yourself). 
+Unfortunately, installing an Ember addon using `ember install` generates an extra (unwanted) `package.json` file for your app (run `git status` if you want to check for yourself).
 
 `ember install` runs an `npm install` command that overwrites the symlink at `client/package.json` with a new file. Your app will now have two different `package.json` files which isn't what we want. Rectify this with:
 
@@ -3122,7 +3123,7 @@ git add .
 git commit -m "Installed simple auth addon"
 ```
 
-It is too easy to trip up on this `package.json`-symlink issue whenever you install an Ember addon. It is a small compromise worth making do with when you want to have your Ember app and Rails app co-exist in the same project. 
+It is too easy to trip up on this `package.json`-symlink issue whenever you install an Ember addon. It is a small compromise worth making do with when you want to have your Ember app and Rails app co-exist in the same project.
 
 However, lets make this compromise more comfortable for your future self by setting up a safety net to catch and fix this issue anytime you install an Ember addon. Its time to add some automation and invoke your shell script superpowers.
 
@@ -3176,7 +3177,7 @@ Next install the `npm_setup` safety net in the existing `bin/ember` script. Open
 ```bash
 #!/usr/bin/env sh
 
-# Thin wrapper script to execute ember commands in the correct working directory. 
+# Thin wrapper script to execute ember commands in the correct working directory.
 # All ember commands need to be run inside the client/ dir. To save remembering
 # to change directories, just run `bin/ember ...` from the project root. All
 # ember commands will work. For usage enter `bin/ember --help`
@@ -3200,3 +3201,273 @@ source bin/npm_setup
 
 Notice the `source bin/npm_setup` lines added to `bin/ember`. These lines invoke our safety net before and after the `ember` command runs. If something happens to create another `package.json` file, `npm_setup` will fix it before it becomes a problem.
 
+
+## Setup Simple Auth
+
+### The Browser Sees All
+
+When doing client-side authentication as you're about to, remember that any code and data that is sent to the client can be viewed by a determined user even if you take precautions to block them from seeing certain parts of the app.
+
+Assume anything (javascript, data, files, etc.) you send from the server to the client is viewable by the user.
+
+Your users have a number of tools at their disposal to help them figure out how you've tried to hide any resources you're sending to and storing in their browser and given enough time a user can outsmart your client-side-only security measures.
+
+Client-side authentication needs to be paired with server-side authentication, which is what we're about to do.
+
+This may remind you of the strongly recommended practice of performing server-side validation and sanitization for all user-submitted data. Its not a good idea to rely only on client-side validation and sanitization. Client-side authentication, validation, and sanitization can fail and be avoided in a number of predictable and unpredictable ways and so its smart to write server-side code defensively that acknowledges this reality.
+
+So we're agreed, don't send sensitive data to a user unless you're certain its OK if they see it.
+
+### Block all routes by default
+
+You're going to setup Simple Auth so routes will default to being viewable only by logged-in users.
+
+For a route to be viewable by an anonymous user, you will have to explicitly configure that route to be publicly viewable.
+
+By choosing this default it means if we introduce a new route to the app, its harder for us to accidentally expose that route to anonymous users. To make a route publicly accessible, you'll have to take deliberate steps to expose that route to anonymous visitors.
+
+To use this secure-by-default strategy with Ember Simple Auth, you're going to write your own route mixin that enhances the route creation process.
+
+> What is a **mixin**? A mixin is an object with functions that can be added to other objects. Multiple mixins can be applied to a single object - this is a way to apply multiple inheritance to a single object.
+
+Your enhancement will detect when a newly created `Ember.Route` object has not been configured with any authentication-related options. For routes where no authentication config has been explicitly chosen, the enhancement will make those routes require the user be authenticated, and redirect unauthenticated users to the login form.
+
+This enhancement is going to be called `SecureDefaultRouteFactory` and it will work by being an Ember mixin that is applied to the `Ember.Route` class.
+
+Generate the `SecureDefaultRouteFactory` mixin:
+
+```bash
+bin/ember generate mixin SecureDefaultRouteFactory
+```
+
+This will output:
+
+```
+installing
+  create app/mixins/secure-default-route-factory.js
+installing
+  create tests/unit/mixins/secure-default-route-factory-test.js
+```
+
+Save `client/app/mixins/secure-default-route-factory.js` with the following contents:
+
+```js
+import Ember from 'ember';
+
+import ApplicationRouteMixin from 'simple-auth/mixins/application-route-mixin';
+import AuthenticatedRouteMixin from 'simple-auth/mixins/authenticated-route-mixin';
+import UnauthenticatedRouteMixin from 'simple-auth/mixins/unauthenticated-route-mixin';
+import OpenRouteMixin from './open-route-mixin';
+
+export default Ember.Mixin.create({
+  create() {
+    // Create the route using the normal technique:
+    var route = this._super(...arguments);
+
+    var authenticationRouteMixinApplied = ApplicationRouteMixin.detect(route) ||
+      AuthenticatedRouteMixin.detect(route) ||
+      UnauthenticatedRouteMixin.detect(route) ||
+      OpenRouteMixin.detect(route);
+
+    if (!authenticationRouteMixinApplied) {
+      // The route was not created with any of the authentication-related route
+      // mixins. Modify route so it requires authentication to be accessed:
+      AuthenticatedRouteMixin.apply(route);
+    }
+
+    return route;
+  }
+});
+```
+
+Review the code above and comments to get an understanding of what its doing. To make use of it you will generate the Ember top-level route and make use of `SecureDefaultRouteFactory` inside it.
+
+The top-level route is known as the "application route" and you generate it with the following command, which you should run:
+
+```bash
+# Inside your-rails-app/ directory.
+
+# Generate the Ember application route:
+bin/ember generate route application
+```
+
+This will ask if you'd like to "Overwrite app/templates/application.hbs?" - answer `n` for no. You want to keep the existing file.
+
+The output from the command will be:
+
+```
+installing
+[?] Overwrite app/templates/application.hbs? No, skip
+  create app/routes/application.js
+  skip app/templates/application.hbs
+installing
+  create tests/unit/routes/application-test.js
+```
+
+The generator creates a new file at `client/app/routes/application.js`. Open the file and give it the following contents:
+
+```js
+import Ember from 'ember';
+import SecureDefaultRouteFactory from '../mixins/secure-default-route-factory';
+import ApplicationRouteMixin from 'simple-auth/mixins/application-route-mixin';
+
+Ember.Route.reopenClass(SecureDefaultRouteFactory);
+
+export default Ember.Route.extend(ApplicationRouteMixin);
+```
+
+Review the above changes and note the import and use of the `ApplicationRouteMixin` provided by Ember Simple Auth.
+
+There are 4 authenticaton-related route mixins:
+
+| Authentication-related Route Mixin | Purpose |
+|------------------------------------|---------|
+| ApplicationRouteMixin              | Defines the default (but configurable) behaviour that most routes will want in various authentication scenarios, e.g. authentication required, authentication succeeds, authentication fails. |
+| AuthenticatedRouteMixin            | For routes that require authentication. Redirects users to the login page if they're not authenticated |
+| UnauthenticatedRouteMixin          | For routes that are only for anonymous or guest users (i.e. users who are not logged in). Typically login pages and user registration pages would use this route. Redirects authenticated users to another (configurable) route. |
+| OpenRouteMixin                     | For routes that are wide open to all users, both authenticated and unauthenticated users. |
+
+Each Ember route will implement exactly one of the above route mixins. Thanks to `SecureDefaultRouteFactory`, unless a route is deliberately configured otherwise, all routes will implement `AuthenticatedRouteMixin` by default and so require that a user is logged in.
+
+If you have a route that you want logged-in users to be blocked from seeing then you'll apply the `UnauthenticatedRouteMixin`.
+
+For your application, the following routes must be available to anonymous, non-logged-in users:
+
+- `client/app/pods/confirmation-pending/route.js`
+- `client/app/pods/session/new/route.js`
+- `client/app/pods/user/new/route.js`
+
+Open each of the above files up and modify them so they import and use the `UnauthenticatedRouteMixin`:
+
+```js
+import Ember from 'ember';
+import UnauthenticatedRouteMixin from 'simple-auth/mixins/unauthenticated-route-mixin';
+
+export default Ember.Route.extend(UnauthenticatedRouteMixin);
+```
+
+Those routes you edited above will only be viewable by non-authenticated users from now on.
+
+You haven't used the `OpenRouteMixin` yet. The `OpenRouteMixin` makes the route available to both logged-in and non-logged-in users. You'll want to use it for publicly viewable routes. Typically this would includes routes for the home page, an "about" page, a "contact us" page, and so on.
+
+Not only have you not used `OpenRouteMixin` yet, it also doesn't exist, you will need to write it yourself. Ember Simple Auth doesn't provide a route mixin that maps to this concept at time of writing.
+
+Generate the mixin file by running:
+
+```bash
+# Inside your-rails-app/ directory:
+bin/ember generate mixin OpenRouteMixin
+```
+
+This will output:
+
+```
+installing
+  create app/mixins/open-route-mixin.js
+installing
+  create tests/unit/mixins/open-route-mixin-test.js
+```
+
+Save `client/app/mixins/open-route-mixin.js` with these contents:
+
+```js
+import Ember from 'ember';
+
+// OpenRouteMixin is a tagging mixin. Apply it to routes that you want
+// publicly viewable to all users, both authenticated and non-authenticated.
+//
+// Tagging mixins add no behaviour to a class themselves. Instead, they tag a
+// class to allow other code to alter behaviour based on the tagging mixins it
+// finds on a particular object.
+//
+// In this case, the SecureDefaultRouteFactory will alter its behaviour when
+// it detects a route that is tagged with OpenRouteMixin. See
+// SecureDefaultRouteFactory for more details.
+export default Ember.Mixin.create({
+});
+```
+
+`OpenRouteMixin` is a "tagging mixin". Tagging mixins add no behaviour to a class themselves. Instead, they tag a class to allow other code to alter behaviour based on the tagging mixins it finds on a particular object.
+
+In this case, `SecureDefaultRouteFactory` will alter its behaviour when it detects a route that is tagged with OpenRouteMixin.
+
+Thanks to `SecureDefaultRouteFactory` the home page route (usually called the "index route" in Ember) auto generated by Ember at runtime will not be available to unauthenticated users. Seeing as you'll need your home page available to all users, its time to customize the index route.
+
+Generate the index route by running:
+
+```bash
+# Inside your-rails-app/ directory:
+bin/ember generate route index --pod
+```
+
+This will output:
+
+```
+installing
+  create app/pods/index/route.js
+  create app/pods/index/template.hbs
+installing
+  create tests/unit/pods/index/route-test.js
+```
+
+Edit `client/app/pods/index/route.js` so it is tagged with the `OpenRouteMixin`:
+
+```js
+import Ember from 'ember';
+import OpenRouteMixin from '../../mixins/open-route-mixin';
+
+// Make route available to both authenticated and non-authenticated users:
+export default Ember.Route.extend(OpenRouteMixin);
+```
+
+Next we need to configure Ember Simple Auth with the route name for the login page so it redirects unauthenticated users to login correctly. Open `client/config/environment.js` and add the 3 new lines in the location identified by this diff:
+
+```diff
+--- b/client/config/environment.js
++++ a/client/config/environment.js
+@@ -21,6 +21,9 @@ module.exports = function(environment) {
+     }
+   };
+
++  ENV['simple-auth'] = {
++    authenticationRoute: 'session.new'
++  };
+
+   if (environment === 'development') {
+     // ENV.APP.LOG_RESOLVER = true;
+```
+
+---
+
+**INSTRUCTIONS FOR DAN START**
+
+Hey Dan, to simplify things a little, the "confirmation pending" route has been modified a tad.
+
+- Replace `client/app/router.js` with contents from https://raw.githubusercontent.com/eliotsykes/dan-todo/setup-simple-auth_example/client/app/router.js
+
+- Edit `client/app/pods/components/user-form/component.js` with the following change:
+
+```js
+this.get('router').transitionTo('confirmation.pending');
+// Change above line to
+this.get('router').transitionTo('confirmation-pending');
+// Notice the '.' in 'confirmation.pending'  changes to a '-'.
+```
+
+- Move the following directories:
+
+```bash
+# Inside your-rails-app/ directory:
+mv client/app/pods/confirmation/pending client/app/pods/confirmation-pending
+mv client/tests/unit/pods/confirmation/pending client/tests/unit/pods/confirmation-pending
+```
+
+`git diff` and review the changes before committing. Send any questions about the changes my way.
+
+**INSTRUCTIONS FOR DAN END**
+
+---
+
+## Simple Auth Authenticators
+
+Coming next...

@@ -12,14 +12,14 @@ export default Ember.Component.extend({
   actions: {
     // create() is called when form is submitted
     create: function() {
-      // Get user model object from component. It will be auto-populated with 
+      // Get user model object from component. It will be auto-populated with
       // input values from the form:
       var user = this.get('user');
 
       // Use ES6 arrow function => syntax to avoid having to call .bind(this)
       // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions
       var transitionToConfirmationPending = () => {
-        this.get('router').transitionTo('confirmation.pending');
+        this.get('router').transitionTo('confirmation-pending');
       };
 
       // Register/save the user via an AJAX request to the server API:

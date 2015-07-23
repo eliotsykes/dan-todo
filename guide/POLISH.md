@@ -132,12 +132,6 @@ modifyRouteModuleForBodyClassHelper();
 Notice the `..` change in the `import` line above.
 
 
-## Secure by default routes
-
-Assume all routes require login unless explicitly excluded on a per-route basis:
-
-https://github.com/simplabs/ember-simple-auth/issues/578
-
 
 ## Why Ruby for acceptance tests? Why not JS?
 
@@ -190,3 +184,6 @@ I've started out doing dependency injection using initializers, though I'm not s
 On reflection, for at least some cases, it would be clearer for the reader to have the dependency and its injection, documented in code right there in the file its used. For example, it'd be more understandable to inject the `router` inside the notifier service in `client/app/services/notifier.js` rather than having a separate initializer script for that purpose. Perhaps for other dependencies it makes sense to use an initializer, e.g. when the injection would need to happen multiple times, like pretty much always injecting components with the `store`.
 
 
+## Debugging Nuggets
+
+http://guides.emberjs.com/v1.13.0/understanding-ember/debugging/
