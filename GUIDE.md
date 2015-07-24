@@ -79,6 +79,7 @@
 - [Setup Simple Auth](#setup-simple-auth)
   - [The Browser Sees All](#the-browser-sees-all)
   - [Block all routes by default](#block-all-routes-by-default)
+  - [Generate application route](#generate-application-route)
 
 <!-- /MarkdownTOC -->
 
@@ -3248,9 +3249,39 @@ For a route to be viewable by an anonymous user, you will have to explicitly con
 
 By choosing this default it means if we introduce a new route to the app, its harder for us to accidentally expose that route to anonymous users. To make a route publicly accessible, you'll have to take deliberate steps to expose that route to anonymous visitors.
 
+### Generate application route
+
+Its time to setup the ember-simple-auth addon. Create a route that all other routes are going to inherit from. Its the Ember convention that this route is named `application`. Run the generator:
+
+```bash
+# Inside your-rails-app/ directory. 
+
+# Generate the Ember application route:
+bin/ember generate route application
+```
+
+This will ask if you'd like to "Overwrite app/templates/application.hbs?" - answer `n` for no. You want to keep the existing file.
+
+The output from the command will be:
+
+```
+installing
+[?] Overwrite app/templates/application.hbs? No, skip
+  create app/routes/application.js
+  skip app/templates/application.hbs
+installing
+  create tests/unit/routes/application-test.js
+```
+
+The generator will create a new file at `client/app/routes/application.js`. Open the file and give it the following contents:
+
+```js
+
+```
 
 TODO: mixin simple auth's ApplicationRouteMixin, followed by customizing with my own beforeModel that calls super - check that ApplicationRouteMixin.beforeModel is called with my customizations to BeforeModel.
 
+TODO: pristine ember-cli-auth in bower_components
 
 ```
 import Ember from 'ember';
