@@ -3334,4 +3334,31 @@ Add this to environment.js
 
 Make sure possible to configure to show a regular, public home page.
 
+TODO: Mixin overview.
 
+Generate mixin:
+
+```bash
+bin/ember generate mixin ConfigurableAuthenticationRouteMixin
+```
+
+Generates:
+
+```
+installing
+  create app/mixins/configurable-authentication-route-mixin.js
+installing
+  create tests/unit/mixins/configurable-authentication-route-mixin-test.js
+```
+
+```bash
+bin/ember generate route index --pod
+```
+
+To generate the index route at URL path `/`. See template. What to put in the instructions about pods/index/...?
+
+Todo - remove and instructions for removal of pods/list/* (and any tests) as this was just a placeholder. Will need to remove from router too.
+
+Remember each route that doesn't need authentication must have needsAuthentication set to false in it and in its parent routes.
+
+TODO: Confirmation will need a route that sets needsauth to true - alternatively just don't nest that route, put it at top level not /confirmation/pending but /confirmation-pending
