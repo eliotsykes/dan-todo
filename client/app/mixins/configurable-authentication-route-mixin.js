@@ -11,10 +11,6 @@ export default Ember.Mixin.create({
     return this.get(AuthConfig.sessionPropertyName);
   },
 
-  hasAuthenticatedSession: function() {
-    this.getSession().get('isAuthenticated');
-  },
-
   demandAuthentication: function(transition) {
     transition.abort();
     this.getSession().set('attemptedTransition', transition);
@@ -27,7 +23,7 @@ export default Ember.Mixin.create({
 
   demandAuthenticationIfRequired: function(transition) {
     var isRouteWithURL = this.routeName !== 'application';
-    if (isRouteWithURL && this.get('needsAuthentication') && !this.hasAuthenticatedSession()) {
+    if (isRouteWithURL && this.get('needsAuthentication') && !this.getSession().get('isAuthenticated')) {
       this.demandAuthentication(transition);  
     }
   },
