@@ -1,38 +1,46 @@
 import Ember from 'ember';
-import Configuration from 'simple-auth/configuration';
+import AuthConfig from 'simple-auth/configuration';
 import ApplicationRouteMixin from 'simple-auth/mixins/application-route-mixin';
 
-export default Ember.Route.extend(ApplicationRouteMixin, {
-  
-  skipAuthentication: false,
+Ember.Route.reopen({
+  // The more secure default is to need authentication for all routes. Do not
+  // change this value in this file. Only change needsAuthentication in the 
+  // route.js file for the route that does not need authentication.
+  needsAuthentication: true,
+
+  getSession: function() {
+    return this.get(AuthConfig.sessionPropertyName);
+  },
+
+  hasAuthenticatedSession: function() {
+    this.getSession().get('isAuthenticated');
+  },
+
+  demandAuthentication: function(transition) {
+    transition.abort();
+    this.getSession().set('attemptedTransition', transition);
+    Ember.assert(
+      'Infinite transition loop detected. AuthConfig.authenticationRoute should not demand authentication.',
+      this.get('routeName') !== AuthConfig.authenticationRoute
+    );
+    transition.send('sessionRequiresAuthentication');
+  },
 
   beforeModel: function(transition) {
+    console.log("needsAuthentication", this.get('needsAuthentication'), this);
 
     var superResult = this._super(transition);
 
-    // function isAuthenticated() {
-    //   this.get(Configuration.sessionPropertyName).get('isAuthenticated');
-    // }
-
-    // function requireAuthentication() {
-    //   transition.abort();
-    //   this.get(Configuration.sessionPropertyName).set('attemptedTransition', transition);
-    //   Ember.assert('The route configured as Configuration.authenticationRoute cannot implement the AuthenticatedRouteMixin mixin as that leads to an infinite transitioning loop!', this.get('routeName') !== Configuration.authenticationRoute);
-    //   transition.send('sessionRequiresAuthentication');
-    // }
-    
-    var skip = this.get('skipAuthentication') === true;
-
-    if (!skip && !this.get(Configuration.sessionPropertyName).get('isAuthenticated')) {
-    // if (!skip && !isAuthenticated()) {
-      // requireAuthentication();
-      transition.abort();
-      this.get(Configuration.sessionPropertyName).set('attemptedTransition', transition);
-      Ember.assert('The route configured as Configuration.authenticationRoute cannot implement the AuthenticatedRouteMixin mixin as that leads to an infinite transitioning loop!', this.get('routeName') !== Configuration.authenticationRoute);
-      transition.send('sessionRequiresAuthentication');
+    if (this.get('needsAuthentication') && !this.hasAuthenticatedSession()) {
+      console.log("about to demand authentication", this.get('needsAuthentication'));
+      this.demandAuthentication(transition);  
     }
 
     return superResult;
   }
 
+});
+
+export default Ember.Route.extend(ApplicationRouteMixin, {
+  needsAuthentication: false
 });

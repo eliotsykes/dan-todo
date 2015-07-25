@@ -3319,4 +3319,19 @@ export default Ember.Route.extend(ApplicationRouteMixin, AuthenciatedRouteMixin,
 ```
 
 
+Revisit explanation of application.js route. Make it clear that routes do not inherit.
+
+
+Ember.Route.reopen will likely be needed https://github.com/simplabs/ember-simple-auth/issues/578#issuecomment-118947003
+
+Add this to environment.js
+
+```js
+  ENV['simple-auth'] = {
+    authenticationRoute: 'session.new'
+  };
+```
+
+Make sure possible to configure to show a regular, public home page.
+
 
