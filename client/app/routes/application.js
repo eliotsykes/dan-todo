@@ -2,7 +2,7 @@ import Ember from 'ember';
 import AuthConfig from 'simple-auth/configuration';
 import ApplicationRouteMixin from 'simple-auth/mixins/application-route-mixin';
 
-Ember.Route.reopen({
+var ConfigurableAuthenticationRouteMixin = Ember.Mixin.create({
   // The more secure default is to need authentication for all routes. Do not
   // change this value in this file. Only change needsAuthentication in the 
   // route.js file for the route that does not need authentication.
@@ -40,6 +40,7 @@ Ember.Route.reopen({
   }
 
 });
+Ember.Route.reopen(ConfigurableAuthenticationRouteMixin);
 
 export default Ember.Route.extend(ApplicationRouteMixin, {
   needsAuthentication: false
