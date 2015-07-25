@@ -3249,6 +3249,32 @@ For a route to be viewable by an anonymous user, you will have to explicitly con
 
 By choosing this default it means if we introduce a new route to the app, its harder for us to accidentally expose that route to anonymous users. To make a route publicly accessible, you'll have to take deliberate steps to expose that route to anonymous visitors.
 
+To use this secure-by-default strategy with Ember Simple Auth, you're going to write your own route mixin.
+
+Generate mixin:
+
+```bash
+bin/ember generate mixin ConfigurableAuthenticationRouteMixin
+```
+
+Generates:
+
+```
+installing
+  create app/mixins/configurable-authentication-route-mixin.js
+installing
+  create tests/unit/mixins/configurable-authentication-route-mixin-test.js
+```
+
+ASDF: This is where you are.
+
+
+
+
+
+
+
+
 ### Generate application route
 
 Its time to setup the ember-simple-auth addon. Create a route that all other routes are going to inherit from. Its the Ember convention that this route is named `application`. Run the generator:
@@ -3279,47 +3305,10 @@ The generator will create a new file at `client/app/routes/application.js`. Open
 
 ```
 
-TODO: mixin simple auth's ApplicationRouteMixin, followed by customizing with my own beforeModel that calls super - check that ApplicationRouteMixin.beforeModel is called with my customizations to BeforeModel.
 
 TODO: pristine ember-cli-auth in bower_components
 
-```
-import Ember from 'ember';
-import ApplicationRouteMixin from 'simple-auth/mixins/application-route-mixin';
-
-export default Ember.Route.extend(ApplicationRouteMixin, AuthenciatedRouteMixin, {
-  
-  // authenticatedOnly *default*
-  // unauthenticatedOnly
-  // none or open or openToAll
-  authenticationPolicy: "authenticatedOnly"
-  
-  beforeModel: function(transition) {
-
-    // Check this _super calls ApplicationRouteMixin#beforeModel:
-
-    // refactor to strategy
-    if (authenticationPolicy === "openToAll") {
-
-    }
-    else if (authenticationPolicy === "unauthenticatedOnly") {
-  
-    } else {
-      var superResult = this._super(transition);  
-    }
-    
-
-    ...
-
-    return superResult;
-  }
-});
-
-
-```
-
-
-Revisit explanation of application.js route. Make it clear that routes do not inherit.
+TODO: Revisit explanation of application.js route. Make it clear that routes do not inherit.
 
 
 Ember.Route.reopen will likely be needed https://github.com/simplabs/ember-simple-auth/issues/578#issuecomment-118947003
@@ -3332,22 +3321,7 @@ Add this to environment.js
   };
 ```
 
-TODO: Mixin overview.
 
-Generate mixin:
-
-```bash
-bin/ember generate mixin ConfigurableAuthenticationRouteMixin
-```
-
-Generates:
-
-```
-installing
-  create app/mixins/configurable-authentication-route-mixin.js
-installing
-  create tests/unit/mixins/configurable-authentication-route-mixin-test.js
-```
 
 Remember each route that doesn't need authentication must have needsAuthentication set to false in it and in its parent routes.
 
@@ -3355,3 +3329,4 @@ TODO: Change confirmation.pending route in router.js so it doesn't have parent r
 
 TODO: Instructions on which routes to add (and generate?) needsAuthentication: false on.
 
+ELIOT: Start much higher in this file - see asdf
