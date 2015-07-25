@@ -3362,3 +3362,6 @@ Todo - remove and instructions for removal of pods/list/* (and any tests) as thi
 Remember each route that doesn't need authentication must have needsAuthentication set to false in it and in its parent routes.
 
 TODO: Confirmation will need a route that sets needsauth to true - alternatively just don't nest that route, put it at top level not /confirmation/pending but /confirmation-pending
+
+
+TODO: Instructions on which routes to add (and generate?) needsAuthentication: false on.
