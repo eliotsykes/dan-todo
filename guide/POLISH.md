@@ -87,7 +87,7 @@ Check all symlinks as there are a number of ways they can be accidentally broken
 
 Include instructions for:
 
-- Installing nvm 
+- Installing nvm
 - Installing specific node version with nvm
 - Create `.nvmrc` file containing node version
 - Running `nvm use` to set node version (automate this?)
@@ -187,3 +187,7 @@ On reflection, for at least some cases, it would be clearer for the reader to ha
 ## Debugging Nuggets
 
 http://guides.emberjs.com/v1.13.0/understanding-ember/debugging/
+
+## L10n & i18n Overview
+
+Overview of approaches to providing localized versions of app. Technique(s) will need to work for app store apps and web app.
