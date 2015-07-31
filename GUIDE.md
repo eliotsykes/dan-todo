@@ -3644,3 +3644,27 @@ bin/rspec spec/features/user_registration_spec.rb
 ```
 
 The spec should (finally!) pass. Your app can now register new users and log them in - congratulations!
+
+
+
+
+
+
+
+## Login Feature Spec
+
+We briefly test the login functionality in the user registration spec, however it'd be good to give it some thorough testing in its own dedicated feature spec, covering happy and unhappy paths.
+
+Write the following `spec/features/login_spec.rb`:
+
+```ruby
+TODO: login feature spec
+```
+
+## Keep User Logged In
+
+TODO: Add spec/features/login_spec.rb to check user remains logged in after full page refresh.
+
+TODO: Persist user session across page refreshes. Write the api-v1.js#restore function. console.log(data) inside restore() to debug.
+
+TODO: write restore function of ap1-v1.js (and test in feature specs) that page reload persists authenticated session. Look at ember-simple-auth-devise authenticator source: https://github.com/simplabs/ember-simple-auth/blob/master/packages/ember-simple-auth-devise/lib/simple-auth-devise/authenticators/devise.js
