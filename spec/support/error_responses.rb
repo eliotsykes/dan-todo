@@ -16,5 +16,5 @@ module ErrorResponses
 end
 
 RSpec.configure do |config|
-  config.include ErrorResponses, type: :request
+  config.include ErrorResponses
 end
