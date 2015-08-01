@@ -3651,17 +3651,44 @@ The spec should (finally!) pass. Your app can now register new users and log the
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ## Login Feature Spec
+
+---
+
+**INSTRUCTIONS FOR DAN START**
+
+Delete spec/features/sign_in_spec.rb as we're about to replace it with a slightly different feature spec.
+
+**INSTRUCTIONS FOR DAN END**
+
+---
 
 We briefly test the login functionality in the user registration spec, however it'd be good to give it some thorough testing in its own dedicated feature spec, covering happy and unhappy paths.
 
-Write the following `spec/features/login_spec.rb`:
+Write the following `spec/features/user_login_spec.rb`:
 
 ```ruby
 TODO: login feature spec
 ```
 
 ## Keep User Logged In
+
+
+
 
 TODO: Add spec/features/login_spec.rb to check user remains logged in after full page refresh.
 
