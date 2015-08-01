@@ -3673,6 +3673,9 @@ The spec should (finally!) pass. Your app can now register new users and log the
 
 Delete spec/features/sign_in_spec.rb as we're about to replace it with a slightly different feature spec.
 
+Update existing `spec/support/error_responses.rb` from https://raw.githubusercontent.com/eliotsykes/dan-todo/login-spec_example/spec/support/error_responses.rb
+
+
 **INSTRUCTIONS FOR DAN END**
 
 ---
