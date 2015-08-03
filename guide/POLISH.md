@@ -191,3 +191,16 @@ http://guides.emberjs.com/v1.13.0/understanding-ember/debugging/
 ## L10n & i18n Overview
 
 Overview of approaches to providing localized versions of app. Technique(s) will need to work for app store apps and web app.
+
+
+## Ember Artifacts Overview
+
+Include table of Ember artifacts (components, services, routes, etc.) describing what each is, when it should be used, and giving example usage.
+
+Show overview table early on in book then repeat row(s) of it throughout book when introducing an artifact.
+
+| Ember Artifact | Summary       | Examples                         |
+|----------------|---------------|----------------------------------|
+| Components     | ...           | Password strength indicator, ... |
+| Services       | Singleton ... | ...                              |
+| ...            |               |                                  |
