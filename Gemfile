@@ -24,6 +24,7 @@ end
 
 group :development, :test do
   gem 'pry-rails'
+  gem 'spring-commands-rspec'
 end
 
 gem 'rails', '4.2.0'
