@@ -3690,7 +3690,41 @@ TODO: login feature spec
 
 ## Keep User Logged In
 
+```diff
+--- a/client/app/routes/application.js
++++ b/client/app/routes/application.js
+@@ -4,4 +4,10 @@ import ApplicationRouteMixin from 'simple-auth/mixins/application-route-mixin';
 
+ Ember.Route.reopenClass(SecureDefaultRouteFactory);
+
+-export default Ember.Route.extend(ApplicationRouteMixin);
+\ No newline at end of file
++export default Ember.Route.extend(ApplicationRouteMixin, {
++  actions: {
++    invalidateSession() {
++      this.get('session').invalidate();
++    }
++  }
++});
+```
+
+```diff
+--- a/client/app/templates/application.hbs
++++ b/client/app/templates/application.hbs
+@@ -2,8 +2,12 @@
+
+ <nav>
+ {{#link-to 'index'}}Home{{/link-to}}
+-{{#link-to 'user.new'}}Register{{/link-to}}
+-{{#link-to 'session.new'}}Sign in{{/link-to}}
++{{#if session.isAuthenticated}}
++  <a href="/logout" {{action 'invalidateSession'}}>Sign out</a>
++{{else}}
++  {{#link-to 'user.new'}}Register{{/link-to}}
++  {{#link-to 'session.new'}}Sign in{{/link-to}}
++{{/if}}
+ </nav>
+```
 
 
 TODO: Add spec/features/login_spec.rb to check user remains logged in after full page refresh.

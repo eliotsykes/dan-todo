@@ -4,4 +4,10 @@ import ApplicationRouteMixin from 'simple-auth/mixins/application-route-mixin';
 
 Ember.Route.reopenClass(SecureDefaultRouteFactory);
 
-export default Ember.Route.extend(ApplicationRouteMixin);
+export default Ember.Route.extend(ApplicationRouteMixin, {
+  actions: {
+    invalidateSession() {
+      this.get('session').invalidate();
+    }
+  }
+});
