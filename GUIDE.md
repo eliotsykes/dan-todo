@@ -3678,25 +3678,6 @@ bin/rspec spec/features/user_registration_spec.rb
 The spec should (finally!) pass. Your app can now register new users and log them in - congratulations!
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ## Login Feature Spec
 
 ---
