@@ -1200,6 +1200,7 @@ RSpec's documentation formatter gives more detailed feedback than the default fo
 Write `spec/support/ember_builder.rb` to build the Ember test environment once for each suite run:
 
 ```ruby
+# spec/support/ember_builder.rb
 class EmberBuilder
   include Singleton
 
@@ -1229,6 +1230,37 @@ RSpec.configure do |config|
 
   config.before(:each, type: :feature) do
     EmberBuilder.build_once
+    # Increase default wait time to account for Ember app boot time:
+    using_wait_time 20.seconds do
+      BrowserCache.prime
+    end
+  end
+
+end
+```
+
+Write `spec/support/browser_cache.rb` which is used in `ember_builder.rb` to prime the browser cache with the application assets once for each test suite run:
+
+```ruby
+class BrowserCache
+  include Singleton
+
+  def initialize
+    @primed_drivers = []
+  end
+
+  def prime
+    return if @primed_drivers.include?(Capybara.current_driver)
+    puts "----------------------------------------------"
+    puts "Priming browser cache for #{Capybara.current_driver} driver..."
+    Capybara.current_session.visit '/'
+    puts "...completed priming browser cache."
+    puts "----------------------------------------------"
+    @primed_drivers << Capybara.current_driver
+  end
+
+  def self.prime
+    instance.prime
   end
 
 end
@@ -3697,9 +3729,16 @@ Remove `require 'capybara/rails'` from `spec/rails_helper.rb` (this is now done 
  # Requires supporting ruby files with custom matchers and macros, etc, in
 ```
 
-# Eliot TODO!
-- Changes to `spec/support/ember_builder.rb`. This could be done when its originally written.
-- Added `spec/support/browser_cache.rb`. This could be done with original ember_builder.rb creation.
+Add the following lines directly after the `EmberBuilder.build_once` line in `spec/support/ember_builder.rb` to prime the testing browser's cache once per test suite run:
+
+```ruby
+    # Increase default wait time to account for Ember app boot time:
+    using_wait_time 20.seconds do
+      BrowserCache.prime
+    end
+```
+
+Copy the following file to `spec/support/browser_cache.rb`: https://raw.githubusercontent.com/eliotsykes/dan-todo/login-spec_example/spec/support/browser_cache.rb
 
 **INSTRUCTIONS FOR DAN END**
 
@@ -3707,7 +3746,7 @@ Remove `require 'capybara/rails'` from `spec/rails_helper.rb` (this is now done 
 
 We briefly test the login functionality in the user registration spec, however it'd be good to give it some thorough testing in its own dedicated feature spec, covering happy and unhappy paths.
 
-Write the following `spec/features/user_login_spec.rb`:
+Write and review the following `spec/features/user_login_spec.rb`:
 
 ```ruby
 require 'rails_helper'
@@ -3815,7 +3854,137 @@ feature 'User login', type: :feature, js: true do
 end
 ```
 
-Run spec, expected failures.
+There's now multiple tests that exercise the login functionality. Its important for the reliability of our tests that each of these tests start in a consistent state, with no user logged in. If a new test starts and the user from the previous test is still logged in you're going to see some odd testing behaviour. Let's eliminate that as a possibility. You're going to ensure that each test starts with ensuring any logged-in user that could be still logged in from the previous test is forcibly logged out.
+
+First write an HTML file that is responsible for clearing the client-side `localStorage` data for our logged-in test users. Create the file `client/public/logout.html` with contents:
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Logout</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+  body {
+    background-color: #EFEFEF;
+    color: #2E2F30;
+    text-align: center;
+    font-family: arial, sans-serif;
+    margin: 0;
+  }
+
+  div.dialog {
+    width: 95%;
+    max-width: 33em;
+    margin: 4em auto 0;
+  }
+
+  div.dialog > div {
+    border: 1px solid #CCC;
+    border-right-color: #999;
+    border-left-color: #999;
+    border-bottom-color: #BBB;
+    border-top: #B00100 solid 4px;
+    border-top-left-radius: 9px;
+    border-top-right-radius: 9px;
+    background-color: white;
+    padding: 7px 12% 0;
+    box-shadow: 0 3px 8px rgba(50, 50, 50, 0.17);
+  }
+
+  h1 {
+    font-size: 100%;
+    color: #730E15;
+    line-height: 1.5em;
+  }
+
+  div.dialog > p {
+    margin: 0 0 1em;
+    padding: 1em;
+    background-color: #F7F7F7;
+    border: 1px solid #CCC;
+    border-right-color: #999;
+    border-left-color: #999;
+    border-bottom-color: #999;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    border-top-color: #DADADA;
+    color: #666;
+    box-shadow: 0 3px 8px rgba(50, 50, 50, 0.17);
+  }
+  </style>
+</head>
+
+<body>
+
+  <div class="dialog">
+    <div>
+      <h1 id="logout-status">Please wait&hellip;</h1>
+    </div>
+    <!-- <p>If you are the application owner check the logs for more information.</p> -->
+  </div>
+</body>
+<script>
+  function onDocumentReady(fn) {
+    if (document.readyState != 'loading'){
+      fn();
+    } else {
+      document.addEventListener('DOMContentLoaded', fn);
+    }
+  }
+
+  function logout() {
+    localStorage.clear();
+    var statusMessage = "Unable to log you out, please refresh to try again.";
+    if (localStorage.length > 0) {
+      alert(statusMessage);
+    } else {
+      statusMessage = "You have been logged out.";
+    }
+    var statusElement = document.getElementById("logout-status");
+    statusElement.textContent = statusMessage;
+  }
+
+  onDocumentReady(logout);
+</script>
+</html>
+```
+
+Each feature test will visit this `logout.html` file, ensuring the test begins with an anonymous, unauthenticated user.
+
+Write a `LoginHelper` at `spec/support/login_helper.rb`:
+
+```ruby
+module LoginHelper
+
+  def logout
+    visit '/logout'
+    expect(page).to have_content 'You have been logged out.'
+  end
+
+end
+
+RSpec.configure do |config|
+
+  config.include LoginHelper, type: :feature
+
+  config.before(:each, type: :feature) do
+    logout
+  end
+
+end
+```
+
+This helper forces any logged-in user to logout at the start of each feature test.
+
+Next run `user_login_spec.rb` to ensure it fails:
+
+```bash
+bin/rspec spec/features/user_login_spec.rb
+```
+
+Next you'll write the code to get this spec passing.
+
 
 ## Keep User Logged In
 
@@ -3882,7 +4051,3 @@ TODO: Step-by-step bullet point explanation of what happens when Simple Auth log
 - What is stored in browser local storage by default by Simple Auth (use inspector? screengrab? show sample JSON object)
 - What the restore function in api-v1 authenticator does
 - What else does Simple Auth do after restore calls resolve(sessionData)
-
-Files added:
-- `spec/support/login_helper.rb`
-- `client/public/logout.html`
