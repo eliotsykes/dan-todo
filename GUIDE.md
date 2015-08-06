@@ -3793,6 +3793,26 @@ feature 'User login', type: :feature, js: true do
     expect(page).to have_logged_in_nav
   end
 
+  scenario 'should logout user via link' do
+    create :user, email: 'someone@somewhere.example', password: 'test password', password_confirmation: 'test password'
+
+    visit_login_page
+
+    fill_in 'Enter your email', with: 'someone@somewhere.example'
+    fill_in 'Enter your password', with: 'test password'
+
+    click_button 'Sign In'
+    expect(page).to have_login_success_message
+    expect(page).to have_logged_in_nav
+
+    click_link 'Sign out'
+    expect(page).to have_logged_out_nav
+
+    refresh
+
+    expect(page).to have_logged_out_nav
+  end
+
   scenario 'fails with wrong password' do
     create :user, email: 'someone@somewhere.example', password: 'test password', password_confirmation: 'test password'
 
@@ -3849,6 +3869,10 @@ feature 'User login', type: :feature, js: true do
 
   def have_logged_in_nav
     have_link('Sign out').and have_no_link('Sign in').and have_no_link('Register')
+  end
+
+  def have_logged_out_nav
+    have_link('Sign in').and have_link('Register').and have_no_link('Sign out')
   end
 
 end
@@ -3977,34 +4001,51 @@ end
 
 This helper forces any logged-in user to logout at the start of each feature test.
 
-Next run `user_login_spec.rb` to ensure it fails:
+Run `user_login_spec.rb` to ensure it fails:
 
 ```bash
 bin/rspec spec/features/user_login_spec.rb
 ```
 
+The failures will be to do with the nav shown to the user not being right:
+
+```
+Failures:
+
+  1) User login successful with correct credentials
+     Failure/Error: expect(page).to have_logged_in_nav
+       expected to find link "Sign out" but there were no matches and expected #has_no_link?("Sign in") to return true, got false and expected #has_no_link?("Register") to return true, got false
+     # ./spec/features/user_login_spec.rb:23:in `block (2 levels) in <top (required)>'
+     # ./spec/features/user_login_spec.rb:7:in `block (3 levels) in <top (required)>'
+     # ./spec/support/error_responses.rb:10:in `respond_without_detailed_exceptions'
+     # ./spec/features/user_login_spec.rb:6:in `block (2 levels) in <top (required)>'
+     # -e:1:in `<main>'
+
+  2) User login should logout user via link
+     Failure/Error: expect(page).to have_logged_in_nav
+       expected to find link "Sign out" but there were no matches and expected #has_no_link?("Sign in") to return true, got false and expected #has_no_link?("Register") to return true, got false
+     # ./spec/features/user_login_spec.rb:55:in `block (2 levels) in <top (required)>'
+     # ./spec/features/user_login_spec.rb:7:in `block (3 levels) in <top (required)>'
+     # ./spec/support/error_responses.rb:10:in `respond_without_detailed_exceptions'
+     # ./spec/features/user_login_spec.rb:6:in `block (2 levels) in <top (required)>'
+     # -e:1:in `<main>'
+
+  3) User login stays logged in after page refreshes
+     Failure/Error: expect(page).to have_logged_in_nav
+       expected to find link "Sign out" but there were no matches and expected #has_no_link?("Sign in") to return true, got false and expected #has_no_link?("Register") to return true, got false
+     # ./spec/features/user_login_spec.rb:37:in `block (2 levels) in <top (required)>'
+     # ./spec/features/user_login_spec.rb:7:in `block (3 levels) in <top (required)>'
+     # ./spec/support/error_responses.rb:10:in `respond_without_detailed_exceptions'
+     # ./spec/features/user_login_spec.rb:6:in `block (2 levels) in <top (required)>'
+     # -e:1:in `<main>'
+```
+
 Next you'll write the code to get this spec passing.
 
 
-## Keep User Logged In
+## Detecting logged-in users
 
-```diff
---- a/client/app/routes/application.js
-+++ b/client/app/routes/application.js
-@@ -4,4 +4,10 @@ import ApplicationRouteMixin from 'simple-auth/mixins/application-route-mixin';
-
- Ember.Route.reopenClass(SecureDefaultRouteFactory);
-
--export default Ember.Route.extend(ApplicationRouteMixin);
-\ No newline at end of file
-+export default Ember.Route.extend(ApplicationRouteMixin, {
-+  actions: {
-+    invalidateSession() {
-+      this.get('session').invalidate();
-+    }
-+  }
-+});
-```
+Modify the navigation in `client/app/templates/application.hbs`:
 
 ```diff
 --- a/client/app/templates/application.hbs
@@ -4023,6 +4064,38 @@ Next you'll write the code to get this spec passing.
 +{{/if}}
  </nav>
 ```
+
+Here you can see Ember Simple Auth makes the logged-in `session` object available in view templates. The new code is calling `.isAuthenticated` on `session` to decide to show the logout link to logged-in users only. Anonymous users, thanks to the `else` block, are only shown links relevant to non-authenticated users ("Register" and "Sign in").
+
+Re-run the feature spec to see it progress to the next failure:
+
+```bash
+bin/rspec spec/features/user_login_spec.rb
+```
+
+```
+Failures:
+
+  1) User login stays logged in after page refreshes
+     Failure/Error: expect(page).to have_logged_in_nav
+       expected to find link "Sign out" but there were no matches
+     # ./spec/features/user_login_spec.rb:42:in `block (2 levels) in <top (required)>'
+     # ./spec/features/user_login_spec.rb:7:in `block (3 levels) in <top (required)>'
+     # ./spec/support/error_responses.rb:10:in `respond_without_detailed_exceptions'
+     # ./spec/features/user_login_spec.rb:6:in `block (2 levels) in <top (required)>'
+     # -e:1:in `<main>'
+```
+
+## Keep User Logged In
+
+The latest test failure is due to an authenticated user being logged-out when they refresh the page.
+
+You can remedy this with a little effort by taking advantage of hooks Ember Simple Auth provides to help you persist an authenticated user's login across requests (and therefore page refreshes).
+
+Ember Simple Auth by default is storing the user's authentication token in the browser's `localStorage`. The authentication token is actually still in the `localStorage` when a logged-in user refreshes the page, *however* Ember Simple Auth will clear it out of `localStorage` and logout the user on page refresh *unless* we tell Ember Simple Auth that its OK to keep the user logged-in between page refreshes.
+
+To get Ember Simple Auth to keep our users logged-in across requests, replace the `restore` function on the `api-v1.js` authenticator:
+
 
 ```diff
 --- a/client/app/authenticators/api-v1.js
@@ -4046,8 +4119,50 @@ Next you'll write the code to get this spec passing.
    },
 ```
 
-TODO: Step-by-step bullet point explanation of what happens when Simple Auth logs a user in AND makes their login persist across page reloads. Include:
+Ember Simple Auth calls this `restore` function when it detects a session object in `localStorage`, which happens when refreshing the page for a logged-in user. If the `restore` function calls the `resolve(sessionData)` function the user is kept logged-in. Otherwise, the user is logged out and their `localStorage` is cleared.
 
-- What is stored in browser local storage by default by Simple Auth (use inspector? screengrab? show sample JSON object)
-- What the restore function in api-v1 authenticator does
-- What else does Simple Auth do after restore calls resolve(sessionData)
+The new `restore` function checks that the session object stored in `localStorage` contains a non-blank `token`. If it does contain a token then we call `resolve(sessionData)`, and so instruct Ember Simple Auth to keep the user logged-in.
+
+Given this knowledge, it would be trivial to write some code in the browser console to trick Ember Simple Auth into treating anybody as a logged-in user. However, as the server-side API only responds to valid authentication tokens, no sensitive data would be exposed to an attacker who successfully fooled Ember Simple Auth in their browser. The attacker would also need to fool the API, which is much harder thanks to it requiring a valid authentication token.
+
+Re-run the spec:
+
+```bash
+bin/rspec spec/features/user_login_spec.rb
+```
+
+This should now be passing proving the login functionality is working as desired.
+
+
+## Ember Simple Auth Deprecation
+
+Ember Simple Auth 0.8.x has a deprecation warning about the built-in `invalidateSession` function. You may have seen this deprecation warning in the browser console.
+
+To avoid seeing this particular warning, modify the application route as below:
+
+```diff
+--- a/client/app/routes/application.js
++++ b/client/app/routes/application.js
+@@ -4,4 +4,10 @@ import ApplicationRouteMixin from 'simple-auth/mixins/application-route-mixin';
+
+ Ember.Route.reopenClass(SecureDefaultRouteFactory);
+
+-export default Ember.Route.extend(ApplicationRouteMixin);
+\ No newline at end of file
++export default Ember.Route.extend(ApplicationRouteMixin, {
++  actions: {
++    invalidateSession() {
++      this.get('session').invalidate();
++    }
++  }
++});
+```
+
+
+## Registration & Login Feature Specs Check-up
+
+How are all the 2 feature specs we've written doing? Run them both, they should both be passing:
+
+```bash
+bin/rspec spec/features/user_*
+```

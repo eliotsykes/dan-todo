@@ -42,6 +42,26 @@ feature 'User login', type: :feature, js: true do
     expect(page).to have_logged_in_nav
   end
 
+  scenario 'should logout user via link' do
+    create :user, email: 'someone@somewhere.example', password: 'test password', password_confirmation: 'test password'
+
+    visit_login_page
+
+    fill_in 'Enter your email', with: 'someone@somewhere.example'
+    fill_in 'Enter your password', with: 'test password'
+
+    click_button 'Sign In'
+    expect(page).to have_login_success_message
+    expect(page).to have_logged_in_nav
+
+    click_link 'Sign out'
+    expect(page).to have_logged_out_nav
+
+    refresh
+
+    expect(page).to have_logged_out_nav
+  end
+
   scenario 'fails with wrong password' do
     create :user, email: 'someone@somewhere.example', password: 'test password', password_confirmation: 'test password'
 
@@ -98,6 +118,10 @@ feature 'User login', type: :feature, js: true do
 
   def have_logged_in_nav
     have_link('Sign out').and have_no_link('Sign in').and have_no_link('Register')
+  end
+
+  def have_logged_out_nav
+    have_link('Sign in').and have_link('Register').and have_no_link('Sign out')
   end
 
 end
