@@ -204,3 +204,8 @@ Show overview table early on in book then repeat row(s) of it throughout book wh
 | Components     | ...           | Password strength indicator, ... |
 | Services       | Singleton ... | ...                              |
 | ...            |               |                                  |
+
+
+## Test Environment Speedup
+
+Get EmberBuilder to kick-off `bin/ember build --watch` if its not running or detect when its already running. Fork its process so it continues to run after the tests finish. See if this helps speed up the feature spec runs as the ember app doesn't need building each time.
