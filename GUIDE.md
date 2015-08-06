@@ -3726,9 +3726,34 @@ TODO: login feature spec
  </nav>
 ```
 
+```diff
+--- a/client/app/authenticators/api-v1.js
++++ b/client/app/authenticators/api-v1.js
+@@ -2,8 +2,16 @@ import Ember from 'ember';
+ import Base from 'simple-auth/authenticators/base';
 
-TODO: Add spec/features/login_spec.rb to check user remains logged in after full page refresh.
+ export default Base.extend({
+-  restore(/*data*/) {
+-    return Ember.RSVP.reject();
++
++  // restore needed to keep user logged in after page refreshes.
++  restore(sessionData) {
++    return new Ember.RSVP.Promise(function(resolve, reject){
++      if (!Ember.isEmpty(sessionData.token)) {
++        resolve(sessionData);
++      } else {
++        reject();
++      }
++    });
+   },
+```
 
-TODO: Persist user session across page refreshes. Write the api-v1.js#restore function. console.log(data) inside restore() to debug.
+TODO: Step-by-step bullet point explanation of what happens when Simple Auth logs a user in AND makes their login persist across page reloads. Include:
 
-TODO: write restore function of ap1-v1.js (and test in feature specs) that page reload persists authenticated session. Look at ember-simple-auth-devise authenticator source: https://github.com/simplabs/ember-simple-auth/blob/master/packages/ember-simple-auth-devise/lib/simple-auth-devise/authenticators/devise.js
+- What is stored in browser local storage by default by Simple Auth (use inspector? screengrab? show sample JSON object)
+- What the restore function in api-v1 authenticator does
+- What else does Simple Auth do after restore calls resolve(sessionData)
+
+Files added:
+- `spec/support/login_helper.rb`
+- `spec/support/capybara_extensions.rb`

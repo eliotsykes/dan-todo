@@ -73,9 +73,14 @@ feature 'User login', type: :feature, js: true do
   end
 
   def refresh
-    # This JS executes in the browser to reload the current page. Approximate
-    # recreation of using the browser refresh button.
-    execute_script 'var bypassCache = true; window.location.reload(bypassCache);'
+    url = URI.parse(current_url)
+    if url.query.blank?
+      url.query = ""
+    else
+      url.query << "&"
+    end
+    url.query << "refreshEnforcer=#{rand}"
+    visit url.to_s
   end
 
   def visit_login_page

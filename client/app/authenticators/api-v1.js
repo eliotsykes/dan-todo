@@ -2,8 +2,16 @@ import Ember from 'ember';
 import Base from 'simple-auth/authenticators/base';
 
 export default Base.extend({
-  restore(/*data*/) {
-    return Ember.RSVP.reject();
+
+  // restore needed to keep user logged in after page refreshes.
+  restore(sessionData) {
+    return new Ember.RSVP.Promise(function(resolve, reject){
+      if (!Ember.isEmpty(sessionData.token)) {
+        resolve(sessionData);
+      } else {
+        reject();
+      }
+    });
   },
 
   authenticate(credentials) {
@@ -19,9 +27,9 @@ export default Base.extend({
       };
 
       return authenticator.makeRequest(data).then(function(response) {
-        return resolve(response);
+        resolve(response);
       }, function(xhr /*, status, error*/) {
-        return reject(xhr.responseJSON || xhr.responseText);
+        reject(xhr.responseJSON || xhr.responseText);
       });
     });
   },
