@@ -3756,4 +3756,36 @@ TODO: Step-by-step bullet point explanation of what happens when Simple Auth log
 
 Files added:
 - `spec/support/login_helper.rb`
-- `spec/support/capybara_extensions.rb`
+- `client/public/logout.html`
+
+---
+
+**INSTRUCTION FOR DAN START**
+
+Create file `spec/support/capybara.rb` with contents:
+
+```ruby
+require 'capybara/rails'
+require 'capybara/rspec'
+
+# Increase default wait time to account for Ember app boot time:
+Capybara.default_wait_time = 5.seconds
+```
+
+Remove `require 'capybara/rails'` from `spec/rails_helper.rb` (this is now done in `spec/support/capybara.rb`):
+```diff
+--- a/spec/rails_helper.rb
++++ b/spec/rails_helper.rb
+@@ -3,7 +3,6 @@ ENV["RAILS_ENV"] ||= 'test'
+ require 'spec_helper'
+ require File.expand_path("../../config/environment", __FILE__)
+ require 'rspec/rails'
+-require 'capybara/rails'
+ # Add additional requires below this line. Rails is not loaded until this point!
+
+ # Requires supporting ruby files with custom matchers and macros, etc, in
+```
+
+**INSTRUCTION FOR DAN END**
+
+---
