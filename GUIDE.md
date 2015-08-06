@@ -3768,8 +3768,7 @@ Create file `spec/support/capybara.rb` with contents:
 require 'capybara/rails'
 require 'capybara/rspec'
 
-# Increase default wait time to account for Ember app boot time:
-Capybara.default_wait_time = 5.seconds
+Capybara.default_wait_time = 3.seconds
 ```
 
 Remove `require 'capybara/rails'` from `spec/rails_helper.rb` (this is now done in `spec/support/capybara.rb`):
@@ -3789,3 +3788,7 @@ Remove `require 'capybara/rails'` from `spec/rails_helper.rb` (this is now done 
 **INSTRUCTION FOR DAN END**
 
 ---
+
+
+- Changes to `spec/support/ember_builder.rb`. This could be done when its originally written.
+- Added `spec/support/browser_cache.rb`. This could be done with original ember_builder.rb creation.

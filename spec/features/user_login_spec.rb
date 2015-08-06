@@ -20,7 +20,7 @@ feature 'User login', type: :feature, js: true do
     click_button 'Sign In'
 
     expect(page).to have_login_success_message
-    expect(page).to have_logout_link
+    expect(page).to have_logged_in_nav
     expect(page).to have_title 'Your Lists'
   end
 
@@ -34,12 +34,12 @@ feature 'User login', type: :feature, js: true do
 
     click_button 'Sign In'
     expect(page).to have_login_success_message
-    expect(page).to have_logout_link
+    expect(page).to have_logged_in_nav
 
     refresh
 
     expect(page).not_to have_login_success_message
-    expect(page).to have_logout_link
+    expect(page).to have_logged_in_nav
   end
 
   scenario 'fails with wrong password' do
@@ -96,7 +96,8 @@ feature 'User login', type: :feature, js: true do
     have_text 'You are signed in'
   end
 
-  def have_logout_link
-    have_link 'Sign out'
+  def have_logged_in_nav
+    have_link('Sign out').and have_no_link('Sign in').and have_no_link('Register')
   end
+
 end

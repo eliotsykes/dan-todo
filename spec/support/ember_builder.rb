@@ -21,12 +21,17 @@ class EmberBuilder
   def self.build_once
     instance.build_once
   end
+
 end
 
 RSpec.configure do |config|
 
   config.before(:each, type: :feature) do
     EmberBuilder.build_once
+    # Increase default wait time to account for Ember app boot time:
+    using_wait_time 20.seconds do
+      BrowserCache.prime
+    end
   end
 
 end
