@@ -1,6 +1,6 @@
 {{x-notifier}}
 
-<nav>
+<nav style="display:none;">
 {{#link-to 'index'}}Home{{/link-to}}
 {{#if session.isAuthenticated}}
   <a href="/logout" {{action 'invalidateSession'}}>Sign out</a>

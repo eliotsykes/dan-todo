@@ -1,0 +1,25 @@
+button, .button {
+  display: block;
+  margin-top: 1em;
+  background-color: $color-go;
+  padding: 1.25em 1em;
+  font-family: $sans-serifs;
+  font-size: 1.125em;
+  border: 0;
+  color: $color-white;
+  width: 100%;
+  font-weight: normal;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+
+  &:focus {
+    outline: 0.4375em solid $color-focus-outline;
+    outline-offset: 0;
+  }
+
+  &:hover {
+    background-color: $color-go-hover;
+  }
+
+}
