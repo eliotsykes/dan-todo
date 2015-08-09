@@ -34,28 +34,6 @@ label {
   margin: 0;
 }
 
-button {
-  display: block;
-  margin-top: 1em;
-  background-color: $color-go;
-  padding: 1.25em 1em;
-  font-size: 1.125em;
-  border: 0;
-  color: $color-white;
-  width: 100%;
-  font-weight: normal;
-  cursor: pointer;
-
-  &:focus {
-    outline: 0.4375em solid $color-focus-outline;
-    outline-offset: 0;
-  }
-}
-
-button:hover {
-  background-color: $color-go-hover;
-}
-
 form footer {
   margin-top: 2em;
   font-size: 1em;

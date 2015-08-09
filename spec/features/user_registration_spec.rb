@@ -5,7 +5,7 @@ feature "User registration", type: :feature, js: true do
   scenario "successful with valid details" do
     visit root_path
 
-    click_link "Register"
+    click_link "Create a new account"
 
     expect(page).to have_title("Please register")
     expect(page).to have_css(:h1, text: /\ALet.s get you signed up.\z/)
