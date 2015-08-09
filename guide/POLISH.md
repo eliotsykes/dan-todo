@@ -209,3 +209,10 @@ Show overview table early on in book then repeat row(s) of it throughout book wh
 ## Test Environment Speedup
 
 Get EmberBuilder to kick-off `bin/ember build --watch` if its not running or detect when its already running. Fork its process so it continues to run after the tests finish. See if this helps speed up the feature spec runs as the ember app doesn't need building each time.
+
+
+## Home Screen Design
+
+Incorporate these "Home Screen Spike" changes into the final book: https://github.com/eliotsykes/dan-todo/pull/26 (closed & unmerged pull request)
+
+Use the above CSS and home page design from the very beginning in the final book. The logged-in and logged-out messages should be introduced as soon as possible, in the first time the registration and login specs are introduced, and the first time the related ember artifacts are written (authentication route customizations in routes/application.js, notifier service).
