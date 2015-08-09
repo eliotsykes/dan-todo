@@ -12,7 +12,7 @@ feature 'User login', type: :feature, js: true do
     create :user, email: 'someone@somewhere.example', password: 'test password', password_confirmation: 'test password'
 
     visit root_path
-    click_link 'Sign in'
+    click_link 'Use your existing account'
     expect(page).to be_login_page
 
     fill_in 'Enter your email', with: 'someone@somewhere.example'
@@ -53,13 +53,20 @@ feature 'User login', type: :feature, js: true do
     click_button 'Sign In'
     expect(page).to have_login_success_message
     expect(page).to have_logged_in_nav
+    expect(current_path).to eq lists_path
+    path_requiring_login = current_path
 
     click_link 'Sign out'
-    expect(page).to have_logged_out_nav
+    expect(page).to be_home_page
+    expect(page).to have_content 'You have been logged out'
 
-    refresh
+    visit path_requiring_login
+    expect(page).to be_login_page
+    expect(page).to have_content 'Please login to access this'
+  end
 
-    expect(page).to have_logged_out_nav
+  def be_home_page
+    have_title('Welcome').and have_css(:h1, text: 'Take charge of your todos')
   end
 
   scenario 'fails with wrong password' do
