@@ -183,6 +183,8 @@ I've started out doing dependency injection using initializers, though I'm not s
 
 On reflection, for at least some cases, it would be clearer for the reader to have the dependency and its injection, documented in code right there in the file its used. For example, it'd be more understandable to inject the `router` inside the notifier service in `client/app/services/notifier.js` rather than having a separate initializer script for that purpose. Perhaps for other dependencies it makes sense to use an initializer, e.g. when the injection would need to happen multiple times, like pretty much always injecting components with the `store`.
 
+[See `Ember.inject.service('notifier')` usage in `routes/application.js`](https://github.com/eliotsykes/dan-todo/pull/26/files#diff-59620bd5cfc481f6b567b969ae335311R9)
+
 
 ## Debugging Nuggets
 
