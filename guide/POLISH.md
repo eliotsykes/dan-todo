@@ -226,3 +226,10 @@ Improve feel of UI using animations (via liquid-fire?). Candidate animations:
 
 - Notifications via notifier service (when appearing and when closing)
 - Switching screens, e.g. home screen -> login/registration
+
+
+## Running `ember` ought to call `bin/ember` (likewise phonegap, serve & other bin/ scripts?)
+
+Its easy to accidentally run `ember` in the root project/Rails directory which results in files not being created in the `client/` directory (and then the accidental files need cleaning up). Have `bin/ember` or `bin/` be at the start of the PATH. See this for ideas & possibly using direnv project: https://github.com/sstephenson/rbenv/wiki/Understanding-binstubs#adding-project-specific-binstubs-to-path
+
+See if the ember executable provides or can be augmented with a mechanism to check a .ember-cli file in the project root for the ember `client/` directory. The advantage of an Ember CLI supported solution is that the paths output from ember commands would show the correct paths starting with `client/`, e.g. when running an ember generator.
