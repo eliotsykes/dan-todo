@@ -2,4 +2,17 @@
 
 <h1>Your Lists</h1>
 
+<table>
+  {{#each model as |list|}}
+    <tr>
+      <td>{{list.title}}</td>
+      <td>TODO: Some action icons</td>
+    </tr>
+  {{/each}}
+  <footer>Total: {{model.length}} list(s)</footer>
+</table>
+
+TODO: table-footer markup
+
+
 {{outlet}}

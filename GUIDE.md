@@ -4147,3 +4147,34 @@ How are all the 2 feature specs we've written doing? Run them both, they should 
 ```bash
 bin/rspec spec/features/user_*
 ```
+
+
+## List UI
+
+Spike in progress.
+
+Spike should enable:
+
+- view lists
+- create list
+- delete list
+- edit list
+
+See `~/dev/app-store-rails/asr-todo/client` for approach in that app. In-line editing, see `~/dev/app-store-rails/asr-todo/client/app/templates/components/todo-widget.hbs`
+
+Run:
+```bash
+bin/ember generate model list title:string --pod
+```
+
+outputs:
+```
+installing
+  create app/pods/list/model.js
+installing
+  create tests/unit/pods/list/model-test.js
+```
+
+TODO: Add spec for list page first before generating model
+
+TODO NEXT: Generate authorizer with ember simple auth and ensure its sending the correct header to the API ('X-Api-Key' header). See Devise authorizer source for an idea of how to implement. https://github.com/simplabs/ember-simple-auth#authorizers
