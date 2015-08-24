@@ -4177,4 +4177,52 @@ installing
 
 TODO: Add spec for list page first before generating model
 
-TODO NEXT: Generate authorizer with ember simple auth and ensure its sending the correct header to the API ('X-Api-Key' header). See Devise authorizer source for an idea of how to implement. https://github.com/simplabs/ember-simple-auth#authorizers
+Generate application authorizer. The authorizer is responsible for including the API token in every request to the backend.
+
+```bash
+bin/ember generate authorizer application
+```
+outputs and creates file:
+```
+installing
+  create app/authorizers/application.js
+```
+
+Configure the authorizer to use in `ENV['simple-auth']` in `client/config/environment.js`:
+
+```diff
+--- a/client/config/environment.js
++++ b/client/config/environment.js
+@@ -23,7 +23,8 @@ module.exports = function(environment) {
+
+   ENV['simple-auth'] = {
+     authenticationRoute: 'session.new',
+-    routeAfterAuthentication: 'list'
++    routeAfterAuthentication: 'list',
++    authorizer: 'authorizer:application'
+   };
+
+   if (environment === 'development') {
+```
+
+Save `client/app/authorizers/application.js` with contents:
+
+```diff
+--- /dev/null
++++ b/client/app/authorizers/application.js
+@@ -0,0 +1,12 @@
++import Base from 'simple-auth/authorizers/base';
++
++export default Base.extend({
++  authorize(jqXHR, requestOptions) {
++    let isAuthenticated = this.get('session.isAuthenticated');
++    let token = this.get('session.secure.token');
++
++    if (isAuthenticated && !Ember.isEmpty(token)) {
++      jqXHR.setRequestHeader('X-Api-Key', token);
++    }
++  }
++});
+```
+
+TODO NEXT: Show existing lists in table, then UI to create a new list. UI should be modal or entirely new page or inline form?
