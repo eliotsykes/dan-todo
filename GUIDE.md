@@ -4225,6 +4225,26 @@ Save `client/app/authorizers/application.js` with contents:
 +});
 ```
 
+Modify `client/app/pods/list/index/route.js`:
+
+```js
+import Ember from 'ember';
+
+export default Ember.Route.extend({
+  model() {
+    return this.store.findAll('list');
+  }
+});
+```
+
+Modify `client/app/pods/list/index/template.hbs`:
+
+```
+TODO
+```
+
+TODO: Instructions on updating stylesheets to latest and add new ones.
+
 TODO NEXT:
 1. Delete list button in table rows
 2. Edit list title (inline input field as UI)

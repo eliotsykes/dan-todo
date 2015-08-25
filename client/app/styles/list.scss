@@ -1,0 +1,21 @@
+body.lists {
+  align-items: flex-start;
+  background-color: $color-grey-very-light;
+
+  h1 {
+    font-size: 1.25em;
+    margin: 0.5em 0;
+  }
+
+  nav {
+    display: none;
+  }
+
+  footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 60px;
+  }
+
+}

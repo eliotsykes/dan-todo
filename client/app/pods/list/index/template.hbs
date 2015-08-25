@@ -1,3 +1,4 @@
+{{body-class "lists"}}
 {{page-title "Your Lists"}}
 
 <h1>Your Lists</h1>
@@ -6,13 +7,15 @@
   {{#each model as |list|}}
     <tr>
       <td>{{list.title}}</td>
-      <td>TODO: Some action icons</td>
     </tr>
   {{/each}}
-  <footer>Total: {{model.length}} list(s)</footer>
 </table>
 
-TODO: table-footer markup
+You have no lists message if empty
 
 
 {{outlet}}
+
+<footer>
+  This is the footer nav
+</footer>
