@@ -2,16 +2,15 @@
 {{page-title "Your Lists"}}
 
 <h1>Your Lists</h1>
-
-<table>
+{{#if model.length}}
+<ol>
   {{#each model as |list|}}
-    <tr>
-      <td>{{list.title}}</td>
-    </tr>
+    <li>{{list.title}}</li>
   {{/each}}
-</table>
-
-_Create your first list_ (no lists message)
+</ol>
+{{else}}
+Create your first list
+{{/if}}
 
 
 {{outlet}}
