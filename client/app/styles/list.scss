@@ -1,3 +1,5 @@
+$color-primary: $color-green-medium;
+
 body.lists {
   align-items: flex-start;
   background-color: $color-grey-very-light;
@@ -7,7 +9,7 @@ body.lists {
     margin: 0;
     padding: 0.5em 0;
     color: $color-white;
-    background-color: $color-green-medium;
+    background-color: $color-primary;
   }
 
   nav {
@@ -30,6 +32,12 @@ body.lists {
 
     &:last-child {
       border-bottom-width: 0;
+    }
+
+    a {
+      color: $color-primary;
+      text-decoration: none;
+      text-align: center;
     }
   }
 
