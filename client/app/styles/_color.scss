@@ -1,5 +1,7 @@
-$color-go: #009966;
-$color-go-hover: #008055;
+$color-green-medium: #009966;
+$color-green-dark: #008055;
+$color-go: $color-green-medium;
+$color-go-hover: $color-green-dark;
 
 $color-grey-very-dark: #111;
 $color-grey-dark: #999;
@@ -14,5 +16,5 @@ $color-yellow-pale: #ffffcc;
 $color-white: white;
 
 $color-turquoise: #40e0d0;
-$color-turquoise-dark: #1aa093;
+// $color-turquoise-dark: #1aa093;
 $color-focus-outline: $color-turquoise;
