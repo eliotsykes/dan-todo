@@ -3,7 +3,7 @@
 
 <h1>Your Lists</h1>
 <ol>
-  <li><a href="javascript:void(0)">+ New List</a></li>
+  <li>{{link-to '+ New List' 'list'}}</li>
   {{#each model as |list|}}
     <li>{{list.title}}</li>
   {{/each}}
