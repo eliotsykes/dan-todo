@@ -4246,8 +4246,9 @@ TODO
 TODO: Instructions on updating stylesheets to latest and add new ones.
 
 TODO NEXT:
-1. Delete list button in table rows
-2. Edit list title (inline input field as UI)
-2. UI to create a new list. UI should be modal or entirely new page or inline form? New page or modal preferred to demonstrate how that'd work with its own dedicated route.
+1. /list/new form on its own dedicated page.
+2. Edits will make use of the /list/new form too.
+3. Edit link at top (next to h1) of /list will enable/display an edit link for each list. Clicking one of those edit links will lead to the /list/123/edit form.
+4. Edit form for a list also contains a delete button at the very bottom.
 
 TODO: Merge POLISH.md notes from branch to master
