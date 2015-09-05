@@ -4249,3 +4249,5 @@ TODO NEXT:
 1. Delete list button in table rows
 2. Edit list title (inline input field as UI)
 2. UI to create a new list. UI should be modal or entirely new page or inline form? New page or modal preferred to demonstrate how that'd work with its own dedicated route.
+
+TODO: Merge POLISH.md notes from branch to master
