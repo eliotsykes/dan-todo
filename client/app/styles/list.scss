@@ -30,15 +30,19 @@ body.lists {
     padding: 0 0 0 0.125em;
     line-height: 4em;
 
+    a {
+      display: block;
+      text-decoration: none;
+    }
+
+    &:first-child a {
+      color: $color-primary;
+    }
+
     &:last-child {
       border-bottom-width: 0;
     }
 
-    a {
-      color: $color-primary;
-      text-decoration: none;
-      text-align: center;
-    }
   }
 
 }
