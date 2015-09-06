@@ -12,7 +12,9 @@ Router.map(function() {
   this.route('user.new', { path: '/register' });
   this.route('confirmation-pending');
   this.route('session.new', { path: '/login' });
-  this.route('list', function() {});
+  this.route('list', function() {
+    this.route('new');
+  });
 });
 
 export default Router;
