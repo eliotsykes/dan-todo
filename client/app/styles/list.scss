@@ -4,18 +4,6 @@ body.lists {
   align-items: flex-start;
   background-color: $color-grey-very-light;
 
-  h1 {
-    font-size: 1.375em;
-    margin: 0;
-    padding: 0.5em 0;
-    color: $color-white;
-    background-color: $color-primary;
-  }
-
-  nav {
-    display: none;
-  }
-
   ol {
     font-size: 1.25em;
     list-style: none;

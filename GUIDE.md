@@ -4246,9 +4246,44 @@ TODO
 TODO: Instructions on updating stylesheets to latest and add new ones.
 
 TODO NEXT:
-1. /list/new form on its own dedicated page.
+1. /list/new form on its own dedicated page. ember g route list.new etc.
 2. Edits will make use of the /list/new form too.
 3. Edit link at top (next to h1) of /list will enable/display an edit link for each list. Clicking one of those edit links will lead to the /list/123/edit form.
 4. Edit form for a list also contains a delete button at the very bottom.
+
+Run Ember's generate command to generate a route for creating new lists:
+
+```bash
+# Inside your-rails-app/ directory:
+bin/ember generate route list/new --pod
+```
+
+This will generate the following output and files inside the list pod:
+
+```
+installing
+  create app/pods/list/new/route.js
+  create app/pods/list/new/template.hbs
+installing
+  create tests/unit/pods/list/new/route-test.js
+```
+
+The generate will modify `client/app/router.js` for you, by nesting the `list.new` route within the existing `list` route:
+
+```diff
+--- a/client/app/router.js
++++ b/client/app/router.js
+@@ -12,7 +12,9 @@ Router.map(function() {
+   this.route('user.new', { path: '/register' });
+   this.route('confirmation-pending');
+   this.route('session.new', { path: '/login' });
+-  this.route('list', function() {});
++  this.route('list', function() {
++    this.route('new');
++  });
+ });
+
+ export default Router;
+```
 
 TODO: Merge POLISH.md notes from branch to master

@@ -1,9 +1,11 @@
 {{body-class "lists"}}
 {{page-title "Your Lists"}}
 
-<h1>Your Lists</h1>
+<header>
+  <h1>Your Lists</h1>
+</header>
 <ol>
-  <li>{{link-to '+ New List' 'list'}}</li>
+  <li>{{link-to '+ New List' 'list.new'}}</li>
   {{#each model as |list|}}
     <li>{{list.title}}</li>
   {{/each}}
