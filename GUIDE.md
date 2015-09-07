@@ -4245,12 +4245,6 @@ TODO
 
 TODO: Instructions on updating stylesheets to latest and add new ones.
 
-TODO NEXT:
-1. /list/new form on its own dedicated page. ember g route list.new etc.
-2. Edits will make use of the /list/new form too.
-3. Edit link at top (next to h1) of /list will enable/display an edit link for each list. Clicking one of those edit links will lead to the /list/123/edit form.
-4. Edit form for a list also contains a delete button at the very bottom.
-
 Run Ember's generate command to generate a route for creating new lists:
 
 ```bash
@@ -4285,5 +4279,29 @@ The generate will modify `client/app/router.js` for you, by nesting the `list.ne
 
  export default Router;
 ```
+
+The name of this component will be `list-form`. Generate it with this command:
+
+```bash
+bin/ember generate component list-form --pod
+```
+
+Generates:
+
+```
+installing
+  create app/pods/components/list-form/component.js
+  create app/pods/components/list-form/template.hbs
+installing
+  create tests/unit/pods/components/list-form/component-test.js
+```
+
+
+TODO NEXT:
+1. /list/new form markup and script (component?)
+2. Edits will make use of the /list/new form too.
+3. Edit link at top (next to h1) of /list will enable/display an edit link for each list. Clicking one of those edit links will lead to the /list/123/edit form.
+4. Edit form for a list also contains a delete button at the very bottom.
+5. Feature specs for list index, new, delete
 
 TODO: Merge POLISH.md notes from branch to master
