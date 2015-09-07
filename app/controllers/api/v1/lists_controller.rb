@@ -12,7 +12,7 @@ class Api::V1::ListsController < Api::ApiController
   def create
     @list = @user.lists.new(list_params)
     if @list.save
-      render json: @list
+      render json: {list: @list}, status: :created
     end
   end
 

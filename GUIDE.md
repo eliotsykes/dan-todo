@@ -4297,6 +4297,11 @@ installing
 ```
 
 
+`ListsController#create` needed tweaks:
+
+- `status: :created`
+- Root node of `list` in generated JSON (requirement of Ember Data)
+
 TODO NEXT:
 1. /list/new form markup and script (component?)
 Duplicate lists being shown after creation. This is probably due to null ids in list objects. Ensure list create api returns id as expected by ember data. https://stackoverflow.com/questions/21339537/when-would-store-findall-return-duplicate-values
