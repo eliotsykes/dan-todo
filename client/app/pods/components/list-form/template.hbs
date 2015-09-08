@@ -2,5 +2,5 @@
   <label for="title">List Title</label>
   {{input id="title" type="text" required="true" value=list.title}}
 
-  <button type="submit">Save</button>
+  {{#if list.isDirty}}<button type="submit">Save</button>{{/if}}
 </form>
