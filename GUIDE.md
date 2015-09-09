@@ -4307,10 +4307,7 @@ Explain `Model#isSaving` and other related `isMethods` and what dirty attributes
 
 TODO NEXT:
 1. /list/new form markup and script (component?)
-Duplicate lists being shown after creation. This is probably due to null ids in list objects. Ensure list create api returns id as expected by ember data. https://stackoverflow.com/questions/21339537/when-would-store-findall-return-duplicate-values
 
-
-Add + use ListSerializer
 Feature Spec
 
 2. Edits will make use of the /list/new form too.
