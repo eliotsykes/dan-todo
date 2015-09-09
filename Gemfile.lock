@@ -102,6 +102,7 @@ GEM
       activesupport (>= 4.1.0)
     hike (1.2.3)
     i18n (0.7.0)
+    interception (0.5)
     jbuilder (2.2.12)
       activesupport (>= 3.0.0, < 5)
       multi_json (~> 1.2)
@@ -132,6 +133,9 @@ GEM
       slop (~> 3.4)
     pry-rails (0.3.4)
       pry (>= 0.9.10)
+    pry-rescue (1.4.2)
+      interception (>= 0.5)
+      pry
     pundit (0.3.0)
       activesupport (>= 3.0.0)
     rack (1.6.0)
@@ -173,6 +177,10 @@ GEM
       railties (>= 4.2.0, < 5)
     restclient (0.10.1)
       paint (~> 0.8)
+    rspec (3.1.0)
+      rspec-core (~> 3.1.0)
+      rspec-expectations (~> 3.1.0)
+      rspec-mocks (~> 3.1.0)
     rspec-core (3.1.7)
       rspec-support (~> 3.1.0)
     rspec-expectations (3.1.2)
@@ -266,10 +274,12 @@ DEPENDENCIES
   jquery-rails
   pg
   pry-rails
+  pry-rescue
   pundit
   rails (= 4.2.0)
   rails_12factor
   restclient
+  rspec
   rspec-rails (~> 3.1.0)
   sass-rails (~> 4.0.3)
   sdoc (~> 0.4.0)
