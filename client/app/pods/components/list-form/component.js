@@ -15,24 +15,34 @@ export default Ember.Component.extend({
     create() {
       // Get list model object from component. It will be auto-populated with
       // input values from the form:
-      var list = this.get('list');
-
-      // Get the notifier service:
-      var notifier = this.get('notifier');
+      let list = this.get('list');
 
       // Use ES6 arrow function => syntax to avoid having to call .bind(this)
       // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions
-      var onCreate = () => {
-        notifier.setMessage("New list saved successfully.");
+      let transitionToListIndex = () => {
         this.get('router').transitionTo('list.index');
       };
 
+      let hasUnsavedChanges = list.get('hasDirtyAttributes');
+
+      if (!hasUnsavedChanges) {
+        transitionToListIndex();
+        return;
+      }
+
+      // Get the notifier service:
+      let notifier = this.get('notifier');
+
+      function onCreate() {
+        notifier.setMessage('New list saved successfully.');
+      }
+
       function onCreateFailed(/*error*/) {
-        notifier.setMessage("Sorry, list was not saved, please try again.");
+        notifier.setMessage('Sorry, list was not saved, please try again.');
       }
 
       // Register/save the list via an AJAX request to the server API:
-      list.save().then(onCreate, onCreateFailed);
+      list.save().then(onCreate).catch(onCreateFailed).finally(transitionToListIndex);
     }
   }
 
