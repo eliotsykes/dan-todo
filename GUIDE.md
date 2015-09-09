@@ -4310,6 +4310,9 @@ TODO NEXT:
 Duplicate lists being shown after creation. This is probably due to null ids in list objects. Ensure list create api returns id as expected by ember data. https://stackoverflow.com/questions/21339537/when-would-store-findall-return-duplicate-values
 
 
+Add + use ListSerializer
+Feature Spec
+
 2. Edits will make use of the /list/new form too.
 3. Edit link at top (next to h1) of /list will enable/display an edit link for each list. Clicking one of those edit links will lead to the /list/123/edit form.
 4. Edit form for a list also contains a delete button at the very bottom.
