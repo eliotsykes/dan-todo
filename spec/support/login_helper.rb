@@ -1,5 +1,10 @@
 module LoginHelper
 
+  def visit_login_page_and_login(*args)
+    visit_login_page
+    login(*args)
+  end
+
   def visit_login_page
     visit login_path
     expect(page).to be_login_page

@@ -25,9 +25,7 @@ feature 'User login', type: :feature, js: true do
   scenario 'stays logged in after page refreshes' do
     create :user, email: 'someone@somewhere.example', password: 'test password', password_confirmation: 'test password'
 
-    visit_login_page
-
-    login email: 'someone@somewhere.example', password: 'test password'
+    visit_login_page_and_login email: 'someone@somewhere.example', password: 'test password'
 
     expect(page).to have_login_success_message
     expect(page).to have_logged_in_nav
@@ -41,9 +39,7 @@ feature 'User login', type: :feature, js: true do
   scenario 'should logout user via link' do
     create :user, email: 'someone@somewhere.example', password: 'test password', password_confirmation: 'test password'
 
-    visit_login_page
-
-    login email: 'someone@somewhere.example', password: 'test password'
+    visit_login_page_and_login email: 'someone@somewhere.example', password: 'test password'
 
     expect(page).to have_login_success_message
     expect(page).to have_logged_in_nav
@@ -59,9 +55,7 @@ feature 'User login', type: :feature, js: true do
   scenario 'fails with wrong password' do
     create :user, email: 'someone@somewhere.example', password: 'test password', password_confirmation: 'test password'
 
-    visit_login_page
-
-    login email: 'someone@somewhere.example', password: 'wrong password'
+    visit_login_page_and_login email: 'someone@somewhere.example', password: 'wrong password'
 
     expect(page).to have_text 'Sorry, we failed to sign you in, please try again.'
     expect(page).not_to have_login_success_message
@@ -71,9 +65,7 @@ feature 'User login', type: :feature, js: true do
   scenario 'fails with wrong username' do
     create :user, email: 'someone@somewhere.example', password: 'test password', password_confirmation: 'test password'
 
-    visit_login_page
-
-    login email: 'not-someone@somewhere.example', password: 'test password'
+    visit_login_page_and_login email: 'not-someone@somewhere.example', password: 'test password'
 
     expect(page).to have_text 'Sorry, we failed to sign you in, please try again.'
     expect(page).not_to have_login_success_message
