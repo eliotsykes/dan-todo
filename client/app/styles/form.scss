@@ -46,15 +46,22 @@ button {
   font-weight: normal;
   cursor: pointer;
 
-  &:focus {
-    outline: 0.4375em solid $color-focus-outline;
-    outline-offset: 0;
+  &:disabled {
+    background-color: $color-grey-light;
+  }
+
+  &:not(:disabled) {
+    &:focus {
+      outline: 0.4375em solid $color-focus-outline;
+      outline-offset: 0;
+    }
+
+    &:hover {
+      background-color: $color-go-hover;
+    }
   }
 }
 
-button:hover {
-  background-color: $color-go-hover;
-}
 
 form footer {
   margin-top: 2em;

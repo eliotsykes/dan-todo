@@ -2,5 +2,7 @@
   <label for="title">List Title</label>
   {{input id="title" type="text" required="true" value=list.title}}
 
-  {{#if list.isDirty}}<button type="submit">Save</button>{{/if}}
+  <button type="submit" disabled={{list.isSaving}}>
+    {{#if list.isSaving}}Saving{{else}}Save{{/if}}
+  </button>
 </form>

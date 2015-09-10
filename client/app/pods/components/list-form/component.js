@@ -3,7 +3,7 @@ import Ember from 'ember';
 export default Ember.Component.extend({
   init() {
     // Call the parent init function:
-    this._super.apply(this, arguments);
+    this._super(...arguments);
 
     // Set up a list to use in the template. Allows list.title to be
     // used in input helpers like: {{input value=list.title}}
