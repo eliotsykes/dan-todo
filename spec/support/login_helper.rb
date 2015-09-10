@@ -14,11 +14,16 @@ module LoginHelper
     have_title('Sign In').and have_css(:h1, text: 'Sign In')
   end
 
-  def login(email: nil, password: nil, user: nil)
+  def login(email: nil, password: nil, user: nil, clear_notifications: true)
     email, password = user.email, user.password if user
     fill_in 'Enter your email', with: email
     fill_in 'Enter your password', with: password
     click_button 'Sign In'
+    clear_notifications() if clear_notifications
+  end
+
+  def clear_notifications
+    click_button "Close"
   end
 
   def logout

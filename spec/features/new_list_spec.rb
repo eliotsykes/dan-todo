@@ -1,16 +1,26 @@
 require 'rails_helper'
 
-feature 'New list' do
+feature 'New list', type: :feature, js: true do
 
   scenario 'added successfully' do
-    #create user
+    user = create(:user)
+    visit_login_page_and_login user: user
 
-    #login
+    click_link "+ New List"
 
-    #click new list link
+    expect(page).to have_title "New List"
+    expect(page).to have_css "h1", text: "New List"
 
-    #enter list title
-    flunk
+    fill_in "List Title", with: "Groceries"
+    click_button "Save"
+
+    expect(page).to have_text "New list saved successfully."
+    expect(page).to have_title "Your Lists"
+    expect(page).to have_css "h1", text: "Your Lists"
+    expect(page).to have_css "li", text: "Groceries"
+
+    list_titles = user.lists.pluck(:title)
+    expect(list_titles).to eq(["Groceries"]), "List should be saved to database"
   end
 
   xscenario 'requires title' do
