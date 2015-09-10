@@ -1,0 +1,16 @@
+footer {
+  margin-top: 2em;
+  text-align: center;
+  color: $color-grey-dark;
+
+  a {
+    color: $color-grey-very-dark;
+    text-decoration: none;
+    padding-bottom: 0.0625em;
+    border-bottom: 0.125em solid $color-red;
+
+    &:hover {
+      background-color: $color-yellow-pale;
+    }
+  }
+}
