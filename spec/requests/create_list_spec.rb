@@ -17,4 +17,12 @@ describe 'create list api' do
     expect(list.title).to eq("List 1")
     expect(list.user).to eq(user)
   end
+
+  xit 'does not create an invalid list' do
+    user = create(:user)
+
+    post "/api/v1/lists", {list: {title: ""}}, X-Api-Key: user.api_key
+
+    expect(response).to have_http_status :invalid
+  end
 end
