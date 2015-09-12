@@ -18,11 +18,17 @@ describe 'create list api' do
     expect(list.user).to eq(user)
   end
 
-  xit 'does not create an invalid list' do
+  it 'does not create an invalid list' do
     user = create(:user)
 
-    post "/api/v1/lists", {list: {title: ""}}, X-Api-Key: user.api_key
+    parameters = {list: {title: ""}}.to_json
+    headers = {"X-Api-Key" => user.api_key}.merge(json_request_headers)
 
-    expect(response).to have_http_status :invalid
+    post "/api/v1/lists", parameters, headers
+
+    expect(response).to have_http_status :unprocessable_entity
+    expect(response.content_type).to eq("application/json")
+    expect(json).to eq errors: ["Title can't be blank"]
+    expect(List.count).to eq 0
   end
 end

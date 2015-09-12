@@ -10,9 +10,11 @@ class Api::V1::ListsController < Api::ApiController
   end
 
   def create
-    @list = @user.lists.new(list_params)
-    if @list.save
-      render json: @list, status: :created
+    list = @user.lists.new(list_params)
+    if list.save
+      render json: list, status: :created
+    else
+      render json: {errors: list.errors.full_messages}, status: :unprocessable_entity
     end
   end
 
