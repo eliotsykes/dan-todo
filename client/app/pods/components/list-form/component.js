@@ -10,6 +10,16 @@ export default Ember.Component.extend({
     this.set('list', this.get('store').createRecord('list'));
   },
 
+  willDestroy() {
+    let preventUnsavedListFromBeingDisplayed = () => {
+      let list = this.get('list');
+      if (list.get('isNew')) {
+        list.destroyRecord();
+      }
+    }
+    preventUnsavedListFromBeingDisplayed();
+  },
+
   actions: {
     // create() is called when form is submitted
     create() {
@@ -35,14 +45,20 @@ export default Ember.Component.extend({
 
       function onCreate() {
         notifier.setMessage('New list saved successfully.');
+        transitionToListIndex();
       }
 
-      function onCreateFailed(/*error*/) {
-        notifier.setMessage('Sorry, list was not saved, please try again.');
+      function onCreateFailed(error) {
+        let errorMessage = "Sorry, list was not saved.";
+        let errors = error.responseJSON.errors;
+        if (Ember.isPresent(errors)) {
+          errorMessage += " " + errors.join(". ");
+        }
+        notifier.setMessage(errorMessage);
       }
 
       // Register/save the list via an AJAX request to the server API:
-      list.save().then(onCreate).catch(onCreateFailed).finally(transitionToListIndex);
+      list.save().then(onCreate).catch(onCreateFailed);
     }
   }
 
