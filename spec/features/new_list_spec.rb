@@ -38,7 +38,7 @@ feature 'New list', type: :feature, js: true do
 
   scenario 'not added when user cancels' do
     user = create(:user)
-    list = create(:list, user: user, title: "Cleaning Supplies")
+    create(:list, user: user, title: "Cleaning Supplies")
     visit_new_list_page user: user
 
     fill_in "List Title", with: "Groceries"
@@ -60,14 +60,6 @@ feature 'New list', type: :feature, js: true do
     expect(page).to be_lists_page
     click_link "+ New List"
     expect(page).to be_new_list_page
-  end
-
-  def be_lists_page
-    have_title("Your Lists").and have_css("h1", text: "Your Lists")
-  end
-
-  def be_new_list_page
-    have_title("New List").and have_css("h1", text: "New List")
   end
 
 end
