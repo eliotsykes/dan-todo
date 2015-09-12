@@ -36,10 +36,21 @@ feature 'New list', type: :feature, js: true do
     )
   end
 
-  xscenario 'not added when user cancels' do
-    # click the '< Lists' back button after filling in a title
+  scenario 'not added when user cancels' do
+    user = create(:user)
+    list = create(:list, user: user, title: "Cleaning Supplies")
+    visit_new_list_page user: user
 
-    # Check the list is not shown in index
+    fill_in "List Title", with: "Groceries"
+    click_link "Lists"
+
+    expect(page).to be_lists_page
+    expect(page).to have_text "Cleaning Supplies"
+    expect(page).to have_no_text "Groceries"
+    expect(page).to(
+      have_css("li[data-list]", visible: false, count: 1),
+      "Unsaved list should not be shown in list"
+    )
   end
 
   private
