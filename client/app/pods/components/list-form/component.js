@@ -16,7 +16,7 @@ export default Ember.Component.extend({
       if (list.get('isNew')) {
         list.destroyRecord();
       }
-    }
+    };
     preventUnsavedListFromBeingDisplayed();
   },
 
