@@ -4313,3 +4313,6 @@ TODO NEXT:
 5. Feature specs for list index, new, delete
 
 TODO: Merge POLISH.md notes from branch to master
+
+
+TODO: Include instructions to run `rake db:migrate` since changing null constraint of lists title column.
