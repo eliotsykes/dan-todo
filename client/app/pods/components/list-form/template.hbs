@@ -1,6 +1,6 @@
 <form {{action "create" on="submit"}}>
   <label for="title">List Title</label>
-  {{input id="title" type="text" required="true" value=list.title}}
+  {{input id="title" type="text" value=list.title}}
 
   <button type="submit" disabled={{list.isSaving}}>
     {{#if list.isSaving}}Saving&hellip;{{else}}Save{{/if}}
