@@ -4,7 +4,7 @@ feature 'Delete list', type: :feature, js: true do
 
   scenario 'removes list' do
     user = create(:user)
-    list = create(:list, user: user, title: "Groceries")
+    create(:list, user: user, title: "Groceries")
 
     visit_login_page_and_login user: user
     click_link "Edit"

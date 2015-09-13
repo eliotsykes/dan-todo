@@ -4,10 +4,11 @@ feature 'Edit list', type: :feature, js: true do
 
   scenario "updates title" do
     user = create(:user)
-    list = create(:list, user: user, title: "Groceries")
+    create(:list, user: user, title: "Groceries")
 
     visit_login_page_and_login user: user
     click_link "Edit"
+    click_link "Edit List"
 
     expect(page).to be_edit_list_page
     expect(page).to have_field("List Title", with: "Groceries")
