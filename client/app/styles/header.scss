@@ -4,21 +4,28 @@ header {
   background-color: $color-green-light;
   padding: 0.6875em 0;
 
-  a:first-child {
+  a {
     color: $color-green-dark;
     text-decoration: none;
     letter-spacing: 1px;
     font-weight: bold;
     text-transform: uppercase;
     position: absolute;
-    top: 0px;
-    left: 0px;
-    padding: 0.875em 0 0 0.5em;
+    top: 0;
+    padding: 0.875em 0.5em 0;
 
-    &::before {
-      content: '\25C0';
-      margin-right: 0.125em;
-      font-size: 0.75em;
+    &:first-child {
+      left: 0;
+
+      &::before {
+        content: '\25C0';
+        margin-right: 0.125em;
+        font-size: 0.75em;
+      }
+    }
+
+    &:last-child {
+      right: 0;
     }
   }
 
