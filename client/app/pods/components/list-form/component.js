@@ -5,9 +5,13 @@ export default Ember.Component.extend({
     // Call the parent init function:
     this._super(...arguments);
 
-    // Set up a list to use in the template. Allows list.title to be
-    // used in input helpers like: {{input value=list.title}}
-    this.set('list', this.get('store').createRecord('list'));
+    let isListProvided = Ember.isPresent(this.get('list'));
+
+    if (!isListProvided) {
+      // Set up a list to use in the template. Allows list.title to be
+      // used in input helpers like: {{input value=list.title}}
+      this.set('list', this.get('store').createRecord('list'));
+    }
   },
 
   willDestroy() {
