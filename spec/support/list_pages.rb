@@ -1,11 +1,21 @@
 module ListPages
 
   def be_lists_page
-    have_title("Your Lists").and have_css("h1", text: "Your Lists")
+    have_heading("Your Lists")
   end
 
   def be_new_list_page
-    have_title("New List").and have_css("h1", text: "New List")
+    have_heading("New List")
+  end
+
+  def be_edit_list_page
+    have_heading("Edit List")
+  end
+
+  private
+
+  def have_heading(heading)
+    have_title(heading).and have_css("h1", text: heading)
   end
 
 end

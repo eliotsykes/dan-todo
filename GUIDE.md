@@ -4306,7 +4306,7 @@ installing
 Explain `Model#isSaving` and other related `isMethods` and what dirty attributes are.
 
 TODO NEXT:
-1. List index feature spec
+1. Edit list feature spec
 2. Edits will make use of the /list/new form too.
 3. Edit link at top (next to h1) of /list will enable/display an edit link for each list. Clicking one of those edit links will lead to the /list/123/edit form.
 4. Edit form for a list also contains a delete button at the very bottom.
