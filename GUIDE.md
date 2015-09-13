@@ -4305,14 +4305,15 @@ installing
 
 Explain `Model#isSaving` and other related `isMethods` and what dirty attributes are.
 
+TODO: Include instructions to run `rake db:migrate` since changing null constraint of lists title column.
+
+```bash
+# Generate controller needed for queryParams.editsLocked:
+bin/ember generate controller list/index --pod
+```
+
 TODO NEXT:
-1. Edit list feature spec
 2. Edits will make use of the /list/new form too.
-3. Edit link at top (next to h1) of /list will enable/display an edit link for each list. Clicking one of those edit links will lead to the /list/123/edit form.
 4. Edit form for a list also contains a delete button at the very bottom.
-5. Feature specs for list index, new, delete
 
 TODO: Merge POLISH.md notes from branch to master
-
-
-TODO: Include instructions to run `rake db:migrate` since changing null constraint of lists title column.
