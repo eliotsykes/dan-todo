@@ -4315,5 +4315,5 @@ bin/ember generate controller list/index --pod
 TODO NEXT:
 2. Edits will make use of the /list/new form too.
 4. Edit form for a list also contains a delete button at the very bottom.
-
+5. Remove data-list attribute from list index li elements. Try to make it as plain html as possible for simpler learning, remove clutter.
 TODO: Merge POLISH.md notes from branch to master

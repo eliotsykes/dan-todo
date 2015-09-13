@@ -22,7 +22,7 @@
   {{#each model as |list|}}
     <li data-list>
       {{list.title}}
-      {{#unless editsLocked}}{{link-to 'Edit List' 'list.new'}}{{/unless}}
+      {{#unless editsLocked}}{{link-to 'Edit List' 'list.edit' list}}{{/unless}}
     </li>
   {{/each}}
 </ol>

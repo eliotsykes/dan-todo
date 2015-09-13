@@ -1,0 +1,11 @@
+{{body-class "lists"}}
+{{page-title "Edit List"}}
+
+<header>
+  {{link-to 'Cancel' 'list' (query-params editsLocked=true)}}
+  <h1>Edit List</h1>
+</header>
+
+{{list-form}}
+
+{{outlet}}

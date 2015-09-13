@@ -14,6 +14,7 @@ Router.map(function() {
   this.route('session.new', { path: '/login' });
   this.route('list', function() {
     this.route('new');
+    this.route('edit', { path: ':list_id/edit' });
   });
 });
 
