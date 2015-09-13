@@ -3,12 +3,27 @@
 
 <header>
   <h1>Your Lists</h1>
-  {{link-to 'Edit' 'list.new'}}
+  {{#if editsLocked}}
+    {{link-to 'Edit' (query-params editsLocked=false)}}
+  {{else}}
+    {{link-to 'Done' (query-params editsLocked=true)}}
+  {{/if}}
 </header>
+
 <ol>
-  <li>{{link-to '+ New List' 'list.new'}}</li>
+  <li>
+    {{#if editsLocked}}
+      {{link-to '+ New List' 'list.new'}}
+    {{else}}
+      Choose list to edit
+    {{/if}}
+  </li>
+
   {{#each model as |list|}}
-    <li data-list>{{list.title}}</li>
+    <li data-list>
+      {{list.title}}
+      {{#unless editsLocked}}{{link-to 'Edit List' 'list.new'}}{{/unless}}
+    </li>
   {{/each}}
 </ol>
 
