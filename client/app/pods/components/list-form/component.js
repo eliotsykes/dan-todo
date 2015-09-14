@@ -1,28 +1,28 @@
 import Ember from 'ember';
 
 export default Ember.Component.extend({
-  init() {
-    // Call the parent init function:
-    this._super(...arguments);
+  // init() {
+  //   // Call the parent init function:
+  //   this._super(...arguments);
+  //
+  //   let isListProvided = Ember.isPresent(this.get('list'));
+  //
+  //   if (!isListProvided) {
+  //     // Set up a list to use in the template. Allows list.title to be
+  //     // used in input helpers like: {{input value=list.title}}
+  //     this.set('list', this.get('store').createRecord('list'));
+  //   }
+  // },
 
-    let isListProvided = Ember.isPresent(this.get('list'));
-
-    if (!isListProvided) {
-      // Set up a list to use in the template. Allows list.title to be
-      // used in input helpers like: {{input value=list.title}}
-      this.set('list', this.get('store').createRecord('list'));
-    }
-  },
-
-  willDestroy() {
-    let preventUnsavedListFromBeingDisplayed = () => {
-      let list = this.get('list');
-      if (list.get('isNew')) {
-        list.destroyRecord();
-      }
-    };
-    preventUnsavedListFromBeingDisplayed();
-  },
+  // willDestroy() {
+  //   let preventUnsavedListFromBeingDisplayed = () => {
+  //     let list = this.get('list');
+  //     if (list.get('isNew')) {
+  //       list.destroyRecord();
+  //     }
+  //   };
+  //   preventUnsavedListFromBeingDisplayed();
+  // },
 
   actions: {
     // create() is called when form is submitted
@@ -34,7 +34,9 @@ export default Ember.Component.extend({
       // Use ES6 arrow function => syntax to avoid having to call .bind(this)
       // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions
       let transitionToListIndex = () => {
-        this.get('router').transitionTo('list.index');
+        this.get('router').transitionTo(
+          'list.index', { queryParams: { editsLocked: true } }
+        );
       };
 
       let hasUnsavedChanges = list.get('isDirty');

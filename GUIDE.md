@@ -4319,6 +4319,7 @@ bin/ember generate route list/edit --path=:list_id/edit --pod
 
 TODO NEXT:
 2. Edits will make use of the /list/new form too.
+2.25) Move logic out of list-form/component.js into routes for list/new and list/edit
 2.5) API for /api/v1/lists/:id
 3. List model loaded successfully when doing a refresh on /list/21/edit (add feature spec coverage)
 4. Edit form for a list also contains a delete button at the very bottom.
