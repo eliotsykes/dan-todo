@@ -10,7 +10,7 @@ feature 'New list', type: :feature, js: true do
     click_button "Save"
 
     expect(page).to be_lists_page
-    expect(page).to have_text "New list saved."
+    expect(page).to have_text "New list created."
     expect(page).to have_css "li[data-list]", text: "Groceries"
 
     list_titles = user.lists.pluck(:title)
@@ -24,7 +24,7 @@ feature 'New list', type: :feature, js: true do
     expect(page).to have_field("List Title", with: "")
     click_button "Save"
 
-    expect(page).to have_text "Sorry, list was not saved. Title can't be blank"
+    expect(page).to have_text "Sorry, list was not created. Title can't be blank"
     expect(page).to be_new_list_page
     expect(List.count).to eq(0)
 

@@ -20,8 +20,22 @@ feature 'Edit list', type: :feature, js: true do
     expect(list_titles).to eq ["Food"]
   end
 
-  xscenario "changes not saved when list is invalid" do
+  scenario "changes not saved when list is invalid" do
+    user = create(:user)
+    list = create(:list, user: user, title: "Groceries")
 
+    visit_edit_list_page user: user, list: list
+
+    fill_in "List Title", with: ""
+    click_button "Save"
+
+    expect(page).to have_text "Sorry, list was not updated. Title can't be blank"
+    expect(page).to be_edit_list_page
+
+    click_link "Cancel"
+
+    expect(page).to be_lists_page
+    expect(page).to have_text "Groceries"
   end
 
   scenario "changes not saved when user cancels" do
