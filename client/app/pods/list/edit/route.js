@@ -6,7 +6,7 @@ export default Ember.Route.extend({
   },
   deactivate() {
     let rollbackUnsavedChanges = () => {
-      let list = this.modelFor('list/edit')
+      let list = this.modelFor('list/edit');
       list.rollback();
     };
     rollbackUnsavedChanges();
