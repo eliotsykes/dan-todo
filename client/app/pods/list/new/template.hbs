@@ -2,10 +2,10 @@
 {{page-title "New List"}}
 
 <header>
-  {{link-to 'Lists' 'list'}}
+  {{link-to 'Cancel' 'list'}}
   <h1>New List</h1>
 </header>
 
-{{list-form action="create" list=model}}
+{{list-form list=model successMessage="New list saved." errorMessage="Sorry, list was not saved."}}
 
 {{outlet}}

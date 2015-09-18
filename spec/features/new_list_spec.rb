@@ -10,7 +10,7 @@ feature 'New list', type: :feature, js: true do
     click_button "Save"
 
     expect(page).to be_lists_page
-    expect(page).to have_text "New list saved successfully."
+    expect(page).to have_text "New list saved."
     expect(page).to have_css "li[data-list]", text: "Groceries"
 
     list_titles = user.lists.pluck(:title)
@@ -28,7 +28,7 @@ feature 'New list', type: :feature, js: true do
     expect(page).to be_new_list_page
     expect(List.count).to eq(0)
 
-    click_link "Lists"
+    click_link "Cancel"
     expect(page).to be_lists_page
     expect(page).to(
       have_no_css("li[data-list]", visible: false),
@@ -42,7 +42,7 @@ feature 'New list', type: :feature, js: true do
     visit_new_list_page user: user
 
     fill_in "List Title", with: "Groceries"
-    click_link "Lists"
+    click_link "Cancel"
 
     expect(page).to be_lists_page
     expect(page).to have_text "Cleaning Supplies"

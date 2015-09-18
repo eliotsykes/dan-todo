@@ -8,8 +8,8 @@ module ListPages
     have_heading("New List")
   end
 
-  def be_edit_list_page
-    have_heading("Edit List")
+  def be_edit_list_page(list)
+    have_heading("Edit List").and have_field("List Title", with: list.title)
   end
 
   private
