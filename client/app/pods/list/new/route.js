@@ -2,7 +2,7 @@ import Ember from 'ember';
 
 export default Ember.Route.extend({
   notifier: Ember.inject.service('notifier'),
-  
+
   model() {
     return this.store.createRecord('list');
   },
@@ -24,7 +24,7 @@ export default Ember.Route.extend({
       // Use ES6 arrow function => syntax to avoid having to call .bind(this)
       // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Functions/Arrow_functions
       let transitionToListIndex = () => {
-        this.get('router').transitionTo(
+        this.transitionTo(
           'list.index', { queryParams: { editsLocked: true } }
         );
       };
