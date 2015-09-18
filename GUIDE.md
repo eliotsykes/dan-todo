@@ -4324,4 +4324,6 @@ TODO NEXT:
 3. List model loaded successfully when doing a refresh on /list/21/edit (add feature spec coverage)
 4. Edit form for a list also contains a delete button at the very bottom.
 5. Remove data-list attribute from list index li elements. Try to make it as plain html as possible for simpler learning, remove clutter.
+6. Remove some of the injectors in initalizers. Switch out with needs?
+
 TODO: Merge POLISH.md notes from branch to master
