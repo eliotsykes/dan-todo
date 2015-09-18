@@ -4318,9 +4318,11 @@ bin/ember generate route list/edit --path=:list_id/edit --pod
 ```
 
 TODO NEXT:
+1. Get request spec passing update_list_spec.rb
+2. Get edit_list feature spec passing
 2.5) API for /api/v1/lists/:id
 3. List model loaded successfully when doing a refresh on /list/21/edit (add feature spec coverage)
-4. Edit form for a list also contains a delete button at the very bottom.
+4. Edit form for a list also contains a delete button at the very bottom. Get delete_list feature spec passing.
 5. Remove data-list attribute from list index li elements. Try to make it as plain html as possible for simpler learning, remove clutter.
 6. Remove some of the injectors in initalizers. Switch out with needs?
 
