@@ -33,13 +33,13 @@ describe ListsController do
       expect(list.title).to eq('I\'ve been updated')
     end
 
-    it "attempts to update a list with no user" do
+    it "fails to update a list with no user" do
       sign_out @user
-      list = @user.lists.create
+      list = create(:list, user: @user, title: "Original Title")
+
       put :update, id: list.id, list: { title: 'I\'ve been updated' }
-      list.reload
-      expect(list.title).to eq(nil)
-      expect(response).to redirect_to(new_user_session_path)
+
+      expect(list.reload.title).to eq("Original Title")
     end
 
     it "prevents an attacker from updating another user's list" do
