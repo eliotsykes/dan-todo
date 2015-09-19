@@ -2,15 +2,11 @@ class Api::V1::ListsController < Api::ApiController
   respond_to :json
 
   def index
-    render json: @user.lists
-  end
-
-  def new
-    @list = List.new
+    render json: current_user.lists
   end
 
   def create
-    list = @user.lists.new(list_params)
+    list = current_user.lists.new(list_params)
     if list.save
       render json: list, status: :created
     else
