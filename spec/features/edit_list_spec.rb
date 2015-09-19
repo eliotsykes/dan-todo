@@ -63,34 +63,20 @@ feature 'Edit list', type: :feature, js: true do
     expect(page).to have_link "+ New List"
     expect(page).to have_no_link "Done"
 
-    within "header" do
-      click_link "Edit"
-      expect(page).to have_no_link "Edit"
-      expect(page).to have_link "Done"
-    end
+    click_link "Edit", exact: true
+    expect(page).to have_no_link "Edit", exact: true
+    expect(page).to have_link "Done"
 
     expect(page).to have_no_link "+ New List"
 
     expect(page).to have_css "li[data-list] a", text: "Edit List", count: 2
 
-    within "header" do
-      click_link "Done"
-      expect(page).to have_no_link "Done"
-      expect(page).to have_link "Edit"
-    end
+    click_link "Done"
+    expect(page).to have_no_link "Done"
+    expect(page).to have_link "Edit", exact: true
 
     expect(page).to have_no_link "Edit List"
     expect(page).to have_link "+ New List"
-  end
-
-  private
-
-  def visit_edit_list_page(user:, list:)
-    visit_login_page_and_login user: user
-    expect(page).to be_lists_page
-    click_link "Edit"
-    click_link "Edit List"
-    expect(page).to be_edit_list_page(list)
   end
 
 end

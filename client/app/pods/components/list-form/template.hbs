@@ -5,4 +5,10 @@
   <button type="submit" disabled={{list.isSaving}}>
     {{#if list.isSaving}}Saving&hellip;{{else}}Save{{/if}}
   </button>
+
+  {{#unless list.isNew}}
+    <button {{action 'delete'}} disabled={{list.isSaving}}>
+      Delete
+    </button>
+  {{/unless}}
 </form>

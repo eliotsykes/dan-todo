@@ -2,6 +2,30 @@ import Ember from 'ember';
 
 export default Ember.Component.extend({
   actions: {
+    delete() {
+      let cancelled = !window.confirm("Are you sure you want to delete this list?");
+      if (cancelled) {
+        return;
+      }
+
+      let list = this.get('list');
+
+      let transitionToListIndex = () => {
+        this.get('router').transitionTo(
+          'list.index', { queryParams: { editsLocked: true } }
+        );
+      };
+
+      let notifier = this.get('notifier');
+      let successMessage = "List deleted.";
+
+      function onSuccess() {
+        notifier.setMessage(successMessage);
+        transitionToListIndex();
+      }
+
+      list.destroyRecord().then(onSuccess);
+    },
     // save() is called when form is submitted
     save() {
       let list = this.get('list');

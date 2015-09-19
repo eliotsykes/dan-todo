@@ -1,5 +1,13 @@
 module ListPages
 
+  def visit_edit_list_page(user:, list:)
+    visit_login_page_and_login user: user
+    expect(page).to be_lists_page
+    click_link "Edit"
+    click_link "Edit List"
+    expect(page).to be_edit_list_page(list)
+  end
+
   def be_lists_page
     have_heading("Your Lists")
   end

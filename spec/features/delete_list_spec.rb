@@ -4,22 +4,32 @@ feature 'Delete list', type: :feature, js: true do
 
   scenario 'removes list' do
     user = create(:user)
-    create(:list, user: user, title: "Groceries")
+    list = create(:list, user: user, title: "Groceries")
 
-    visit_login_page_and_login user: user
-    click_link "Edit"
+    visit_edit_list_page user: user, list: list
 
-    expect(page).to be_edit_list_page
-    expect(page).to have_field("List Title", with: "Groceries")
-    click_button "Delete"
+    confirmation_message = accept_confirm do
+      click_button "Delete"
+    end
+    expect(confirmation_message).to eq "Are you sure you want to delete this list?"
 
-    expect(page).to have_confirm("Delete list?")
-    confirm_dialog
-
+    expect(page).to have_text "List deleted."
     expect(page).to be_lists_page
-    expect(page).to have_text "List deleted"
     expect(page).to have_no_text "Groceries"
     expect(List.count).to eq(0)
   end
 
+  scenario "prevents delete when user cancels" do
+    user = create(:user)
+    list = create(:list, user: user, title: "Groceries")
+
+    visit_edit_list_page user: user, list: list
+
+    confirmation_message = dismiss_confirm do
+      click_button "Delete"
+    end
+    expect(confirmation_message).to eq "Are you sure you want to delete this list?"
+    flunk "More to do"
+  end
+  
 end
