@@ -29,7 +29,14 @@ feature 'Delete list', type: :feature, js: true do
       click_button "Delete"
     end
     expect(confirmation_message).to eq "Are you sure you want to delete this list?"
-    flunk "More to do"
+
+    expect(page).to be_edit_list_page list
+
+    click_link "Cancel"
+
+    expect(page).to be_lists_page
+    expect(page).to have_text "Groceries"
+    expect(list.reload.persisted?).to eq true
   end
-  
+
 end
