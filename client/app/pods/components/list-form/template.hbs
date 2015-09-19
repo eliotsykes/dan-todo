@@ -8,7 +8,7 @@
 
   {{#unless list.isNew}}
     <button {{action 'delete'}} disabled={{list.isSaving}}>
-      Delete
+      {{#if list.isDeleted}}Deleting&hellip;{{else}}Delete{{/if}}
     </button>
   {{/unless}}
 </form>
