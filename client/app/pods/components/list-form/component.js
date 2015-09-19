@@ -9,16 +9,12 @@ export default Ember.Component.extend({
         return;
       }
 
-      let list = this.get('list');
-      let notifier = this.get('notifier');
-      let successMessage = "List deleted.";
-
       let onSuccess = () => {
-        notifier.setMessage(successMessage);
+        this.get('notifier').setMessage("List deleted.");
         this.transitionToListIndex();
       }
 
-      list.destroyRecord().then(onSuccess);
+      this.get('list').destroyRecord().then(onSuccess);
     },
     // save() is called when form is submitted
     save() {
