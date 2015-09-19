@@ -10,9 +10,9 @@ export default Ember.Component.extend({
       }
 
       let onSuccess = () => {
-        this.get('notifier').setMessage("List deleted.");
+        this.notify("List deleted.");
         this.transitionToListIndex();
-      }
+      };
 
       this.get('list').destroyRecord().then(onSuccess);
     },
@@ -26,23 +26,21 @@ export default Ember.Component.extend({
         return;
       }
 
-      // Get the notifier service:
-      let notifier = this.get('notifier');
       let successMessage = this.get('successMessage');
       let errorMessage = this.get('errorMessage');
 
       let onSuccess = () => {
-        notifier.setMessage(successMessage);
+        this.notify(successMessage);
         this.transitionToListIndex();
-      }
+      };
 
       let onFailure = (error) => {
         let errors = error.responseJSON.errors;
         if (Ember.isPresent(errors)) {
           errorMessage += " " + errors.join(". ");
         }
-        notifier.setMessage(errorMessage);
-      }
+        this.notify(errorMessage);
+      };
 
       // Register/save the list via an AJAX request to the server API:
       list.save().then(onSuccess).catch(onFailure);
@@ -52,6 +50,9 @@ export default Ember.Component.extend({
     this.get('router').transitionTo(
       'list.index', { queryParams: { editsLocked: true } }
     );
+  },
+  notify(message) {
+    this.get('notifier').setMessage(message);
   }
 
 });
