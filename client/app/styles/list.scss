@@ -19,12 +19,19 @@ body.lists {
     line-height: 4em;
 
     a {
-      display: block;
+      display: inline-block;
       text-decoration: none;
+      float: right;
+      padding: 0 2em;
+      background-color: $color-go;
+      color: $color-white;
     }
 
     &:first-child a {
       color: $color-primary;
+      float: none;
+      background-color: $color-white;
+      padding: 0;
     }
 
     &:last-child {
