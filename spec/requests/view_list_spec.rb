@@ -40,8 +40,17 @@ describe 'view list' do
       expect(response).to have_http_status :not_found
     end
 
-    xit 'responds with 404 Not Found for non-existent list' do
+    it 'responds with 404 Not Found for non-existent list' do
+      user = create(:user)
 
+      non_existent_list_id = 1
+      parameters = nil
+      headers = {"X-Api-Key" => user.api_key}.merge(json_request_headers)
+      respond_without_detailed_exceptions do
+        get "/api/v1/lists/#{non_existent_list_id}", parameters, headers
+      end
+
+      expect(response).to have_http_status :not_found
     end
 
   end
