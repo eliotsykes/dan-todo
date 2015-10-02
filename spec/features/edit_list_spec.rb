@@ -79,4 +79,14 @@ feature 'Edit list', type: :feature, js: true do
     expect(page).to have_link "+ New List"
   end
 
+  scenario "refreshes successfully" do
+    user = create(:user)
+    list = create(:list, user: user, title: "Groceries")
+
+    visit_edit_list_page user: user, list: list
+    refresh
+    
+    expect(page).to be_edit_list_page(list)
+  end
+
 end
