@@ -60,4 +60,21 @@ button {
       background-color: $color-go-hover;
     }
   }
+
+  + button {
+    background-color: $color-white;
+    color: $color-red;
+    border: 1px solid $color-red;
+
+    &:not(:disabled) {
+      &:focus {
+        outline-color: $color-red-focus-outline;
+      }
+
+      &:hover {
+        background-color: $color-red;
+        color: $color-white;
+      }
+    }
+  }
 }
