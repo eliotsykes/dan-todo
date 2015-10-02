@@ -14,7 +14,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :sessions, only: :create, format: false
       resources :users, only: :create, format: false, defaults: { format: :json }
-      resources :lists, only: [:index, :create, :update, :destroy] do
+      resources :lists, only: [:index, :create, :update, :destroy, :show] do
         resources :items, only: [:create, :destroy]
       end
     end

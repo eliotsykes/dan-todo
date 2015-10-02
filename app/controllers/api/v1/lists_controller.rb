@@ -5,6 +5,10 @@ class Api::V1::ListsController < Api::ApiController
     render json: current_user.lists
   end
 
+  def show
+    render json: current_user.lists.find(params[:id])
+  end
+
   def create
     list = current_user.lists.new(list_params)
     if list.save
