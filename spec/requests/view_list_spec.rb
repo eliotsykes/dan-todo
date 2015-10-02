@@ -26,8 +26,18 @@ describe 'view list' do
       expect(response).to have_http_status :unauthorized
     end
 
-    xit 'responds with 404 Not Found for list belonging to another user' do
+    it 'responds with 404 Not Found for list belonging to another user' do
+      attacker = create(:user)
+      victim = create(:user)
+      victims_list = create(:list, title: 'Groceries', user: victim)
 
+      parameters = nil
+      headers = {"X-Api-Key" => attacker.api_key}.merge(json_request_headers)
+      respond_without_detailed_exceptions do
+        get "/api/v1/lists/#{victims_list.id}", parameters, headers
+      end
+
+      expect(response).to have_http_status :not_found
     end
 
     xit 'responds with 404 Not Found for non-existent list' do
