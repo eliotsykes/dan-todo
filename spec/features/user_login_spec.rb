@@ -92,17 +92,4 @@ feature 'User login', type: :feature, js: true do
     expect(page).to be_login_page
   end
 
-  private
-
-  def refresh
-    url = URI.parse(current_url)
-    if url.query.blank?
-      url.query = ""
-    else
-      url.query << "&"
-    end
-    url.query << "refreshEnforcer=#{rand}"
-    visit url.to_s
-  end
-
 end
