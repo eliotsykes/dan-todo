@@ -226,6 +226,7 @@ Improve feel of UI using animations (via liquid-fire?). Candidate animations:
 
 - Notifications via notifier service (when appearing and when closing)
 - Switching screens, e.g. home screen -> login/registration
+- Lists -> New/Edit List and back
 
 
 ## Running `ember` ought to call `bin/ember` (likewise phonegap, serve & other bin/ scripts?)
@@ -235,3 +236,102 @@ Its easy to accidentally run `ember` in the root project/Rails directory which r
 See if the ember executable provides or can be augmented with a mechanism to check a .ember-cli file in the project root for the ember `client/` directory. The advantage of an Ember CLI supported solution is that the paths output from ember commands would show the correct paths starting with `client/`, e.g. when running an ember generator.
 
 Research this solution to running rails and ember generators from the one `geee` command, maybe something along similar lines for this? Its both a node package and a gem: https://rubygems.org/gems/geee , https://github.com/coleww/g , https://www.npmjs.com/package/geee
+
+
+## Touch gestures
+
+Introduce hammer.js for touch gestures, such as deleting lists/items by swiping.
+
+
+## Consider Picnic CSS for good default, classless styles
+
+Avoid DIY CSS? Picnic CSS is classless, allows demonstration markup with minimal clutter and so is less distracting. http://www.picnicss.com/
+
+
+## Client-Side Validation
+
+Apply `disabled` to Save/Update `<button>`s until model valid.
+
+- https://github.com/dockyard/ember-validations
+- https://github.com/maestrooo/ember-cli-html5-validation
+
+
+## Focused gems à la tiny npm packages
+
+This will reduce side-tracking content in the book. Some potential gems:
+
+### capybara-refresh
+
+`refresh` method used in feature specs
+
+### rspec-json-testing
+
+See `spec/support/json_helper.rb`
+
+### rails-ember-testing
+
+See `spec/support/ember_builder.rb`
+
+### rails-error-testing-helper
+
+See `spec/support/error_responses.rb`
+
+### rails-capybara-extensions
+
+See `spec/support/browser_cache.rb`
+
+### rails-testing-extensions
+
+A gem that configures automatically (or generates config) in place of the majority of files in `spec/support`
+
+### rails-errors-extended / rails-rescue-more
+
+```ruby
+# config/initializers/rescue_responses.rb
+class UnauthorizedAccess < ActionController::ActionControllerError
+end
+
+class UnsupportedMediaType < ActionController::ActionControllerError
+end
+
+ActionDispatch::ExceptionWrapper.rescue_responses.merge!(
+  'UnauthorizedAccess' => :unauthorized,
+  'UnsupportedMediaType' => :unsupported_media_type
+)
+```
+
+### rails-static-router
+
+See `config/initializers/static_router.rb`
+
+### rails-json-keymaster / rails-param-keymaker
+
+```
+# config/initializers/json_param_key_transform.rb
+# Transform JSON request param keys from JSON-conventional camelCase to
+# Rails-conventional snake_case:
+...
+```
+
+Obsoleted if json-api-resources gem used?
+
+### rails-public-path
+
+See `config/initializers/public_path.rb`
+
+### Parent gem to wrap these smaller gems?
+
+E.g. rails-api-extensions that just requires all the above small gems as dependencies. Readers will only need to `gem 'rails-api-extensions'` in `Gemfile`.
+
+
+## JavaScript Debugging Kickstart Chapter
+
+- Write `debugger` to add a breakpoint in your JS.
+- `console.log(...)`
+- Chrome/Firefox dev tools (enable AJAX logging in Chrome)
+- Other tips
+
+
+## Put Offline Chapter at End
+
+App should work offline. Offline-not-quite-first/offline-last, so as to avoid adding an excess of new stuff at once for developers encountering Ember for the first time.
