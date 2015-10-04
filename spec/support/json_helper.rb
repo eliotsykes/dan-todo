@@ -1,10 +1,14 @@
 module JsonHelper
   def json
-    @json ||= JSON.parse(response.body, symbolize_names: true)
+    @json ||= JsonHelper.parse(response.body)
   end
 
   def json_request_headers
     { "Content-Type" => "application/json", "Accept" => "application/json" }
+  end
+
+  def self.parse(json_string)
+    JSON.parse(json_string, symbolize_names: true)
   end
 end
 
