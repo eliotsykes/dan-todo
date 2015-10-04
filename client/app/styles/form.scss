@@ -46,31 +46,35 @@ button {
   font-weight: normal;
   cursor: pointer;
 
-  &:focus {
-    outline: 0.4375em solid $color-focus-outline;
-    outline-offset: 0;
+  &:disabled {
+    background-color: $color-grey-light;
   }
-}
 
-button:hover {
-  background-color: $color-go-hover;
-}
+  &:not(:disabled) {
+    &:focus {
+      outline: 0.4375em solid $color-focus-outline;
+      outline-offset: 0;
+    }
 
-form footer {
-  margin-top: 2em;
-  font-size: 1em;
-  color: $color-grey-dark;
-  text-align: center;
-}
+    &:hover {
+      background-color: $color-go-hover;
+    }
+  }
 
-form footer a {
-  color: $color-grey-very-dark;
-  text-decoration: none;
-  padding-bottom: 0.0625em;
-  border-bottom: 0.125em solid $color-red;
-  font-size: 1em;
-}
+  + button {
+    background-color: $color-white;
+    color: $color-red;
+    border: 1px solid $color-red;
 
-form footer a:hover {
-  background-color: $color-yellow-pale;
+    &:not(:disabled) {
+      &:focus {
+        outline-color: $color-red-focus-outline;
+      }
+
+      &:hover {
+        background-color: $color-red;
+        color: $color-white;
+      }
+    }
+  }
 }

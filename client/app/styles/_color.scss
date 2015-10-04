@@ -1,16 +1,24 @@
-$color-go: #009966;
-$color-go-hover: #008055;
+$color-green-light: #b7e3d4;
+$color-green-medium: #009966;
+$color-green-dark: #008055;
+// $color-green-very-dark: #003322;
+
+$color-go: $color-green-medium;
+$color-go-hover: $color-green-dark;
 
 $color-grey-very-dark: #111;
 $color-grey-dark: #999;
 $color-grey-medium: #666;
 $color-grey-light: #ccc;
+$color-grey-very-light: #f5f5f5;
 
 $color-red: red;
+$color-red-focus-outline: #ff7f50;
 
 $color-yellow-pale: #ffffcc;
 
 $color-white: white;
 
 $color-turquoise: #40e0d0;
+// $color-turquoise-dark: #1aa093;
 $color-focus-outline: $color-turquoise;

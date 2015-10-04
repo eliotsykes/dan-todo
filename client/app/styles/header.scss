@@ -1,0 +1,38 @@
+header {
+
+  margin: 0;
+  background-color: $color-green-light;
+  padding: 0.6875em 0;
+
+  a {
+    color: $color-green-dark;
+    text-decoration: none;
+    letter-spacing: 1px;
+    font-weight: bold;
+    text-transform: uppercase;
+    position: absolute;
+    top: 0;
+    padding: 0.875em 0.5em 0;
+
+    &:first-child {
+      left: 0;
+
+      &::before {
+        content: '\25C0';
+        margin-right: 0.125em;
+        font-size: 0.75em;
+      }
+    }
+
+    &:last-child {
+      right: 0;
+    }
+  }
+
+  h1 {
+    color: $color-white;
+    font-size: 1.375em;
+    margin: 0;
+    text-align: center;
+  }
+}
