@@ -4200,3 +4200,111 @@ The `<nav>` markup has been tweaked to make some of the future work easier. Upda
 - [`client/app/templates/application.hbs`](https://raw.githubusercontent.com/eliotsykes/dan-todo/move-nav-markup/client/app/templates/application.hbs)
 
 **INSTRUCTIONS FOR DAN END**
+
+
+## List Index
+
+In the next few steps, you're going to build the list CRUD functionality. Let's start with the list index view, that will show a list of all the list titles belonging to the logged-in user.
+
+Review then run `spec/features/list_index_spec.rb`:
+
+```bash
+bin/rspec spec/features/list_index_spec.rb
+```
+
+The failure you'll see ought to be:
+
+```
+Failures:
+
+  1) List index shows lists
+     Failure/Error: expect(page).to have_css "li[data-list]", count: 2
+       expected to find css "li[data-list]" 2 times but there were no matches
+     # ./spec/features/list_index_spec.rb:13:in `block (2 levels) in <top (required)>'
+     # -e:1:in `<main>'
+
+Finished in 38.51 seconds (files took 0.61091 seconds to load)
+1 example, 1 failure
+```
+
+The failure is due to the list titles not being shown on the page yet.
+
+Update the list index template at `client/app/pods/list/index/template.hbs` with the following changes (some of the changes won't be needed just yet but we'll include them anyway for now):
+
+```patch
+--- a/client/app/pods/list/index/template.hbs
++++ b/client/app/pods/list/index/template.hbs
+@@ -1,5 +1,34 @@
++{{body-class "lists"}}
+ {{page-title "Your Lists"}}
+
+-<h1>Your Lists</h1>
++<header>
++  <h1>Your Lists</h1>
++  {{#if editsLocked}}
++    {{link-to 'Edit' (query-params editsLocked=false)}}
++  {{else}}
++    {{link-to 'Done' (query-params editsLocked=true)}}
++  {{/if}}
++</header>
++
++<ol>
++  <li>
++    {{#if editsLocked}}
++      {{link-to '+ New List' 'list.new'}}
++    {{else}}
++      Choose list to edit
++    {{/if}}
++  </li>
++
++  {{#each model as |list|}}
++    <li data-list>
++      {{list.title}}
++      {{#unless editsLocked}}{{link-to 'Edit List' 'list.edit' list}}{{/unless}}
++    </li>
++  {{/each}}
++</ol>
++
++<footer>
++  <a href="/logout" {{action 'invalidateSession'}}>Sign out</a>
++</footer>
+
+ {{outlet}}
+```
+
+The most important part of the template currently is the part responsible for rendering the list titles within `<li>` elements. See where this begins on the line containing `{{#each model as |list|}}` above.
+
+`{{#each model as |list|}}` is an each loop that iterates through each list object stored in an array named `model`.
+
+In Ember, the `model` is a name that gets treated especially well. The `model` is a name used to represent the primary resource(s) being used in the current route and template.
+
+Here the primary resources are the list objects belonging to the logged-in user, that we are trying to display in the list index template.
+
+The `model` is the collection of list objects belonging to the logged-in user.
+
+`model` is so special that it gets its own dedicated function in every Ember route. The function is named `model()` and it is where the code for populating `model` goes.
+
+Add the following `model()` function to `client/app/pods/list/index/route.js`:
+
+```patch--- a/client/app/pods/list/index/route.js
++++ b/client/app/pods/list/index/route.js
+@@ -1,4 +1,7 @@
+ import Ember from 'ember';
+
+ export default Ember.Route.extend({
++  model() {
++    return this.store.findAll('list');
++  }
+ });
+```
+
+The `model()` function is fetching and returning all of the list objects from the Ember Data `store` using `this.store.findAll('list')`.
+
+REACHED HERE.
+
+----
+
+- TODO: Missing list/model.js, generate it `bin/ember generate model list title:string --pod`
+- TODO: Authorizer needed now that we're hitting the API. Add authorizer instructions in this current section on list index.
+- TODO: Gradually write instructions for generators etc. based on notes from https://github.com/eliotsykes/dan-todo/blob/list-spike/GUIDE.md#list-ui
+- REMINDER: To take changes from branch with: `git co list-spike -- path/to/file`
