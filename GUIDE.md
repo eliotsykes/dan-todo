@@ -4179,4 +4179,18 @@ Run `bin/rake db:migrate` to perform the new migration from above (`db/migrate/2
 
 To bring logout page style closer to other page styles: replace `client/public/logout.html` with contents of file at https://raw.githubusercontent.com/eliotsykes/dan-todo/master/client/public/logout.html
 
+Here are the feature spec changes and additions to support the new/edit/delete list functionality for the Ember app:
+
+- Delete `spec/features/create_destroy_spec.rb` and `spec/features/sign_in_spec.rb`
+- Add files:
+  + [`spec/features/delete_list_spec.rb`](https://raw.githubusercontent.com/eliotsykes/dan-todo/aee2f2c373efd52f5c6bb86ea9b4a9f9a89b65d0/spec/features/delete_list_spec.rb)
+  + [`spec/features/edit_list_spec.rb`](https://raw.githubusercontent.com/eliotsykes/dan-todo/aee2f2c373efd52f5c6bb86ea9b4a9f9a89b65d0/spec/features/edit_list_spec.rb)
+  + [`spec/features/list_index_spec.rb`](https://raw.githubusercontent.com/eliotsykes/dan-todo/aee2f2c373efd52f5c6bb86ea9b4a9f9a89b65d0/spec/features/list_index_spec.rb)
+  + [`spec/features/new_list_spec.rb`](https://raw.githubusercontent.com/eliotsykes/dan-todo/aee2f2c373efd52f5c6bb86ea9b4a9f9a89b65d0/spec/features/new_list_spec.rb)
+  + [`spec/support/list_pages.rb`](https://raw.githubusercontent.com/eliotsykes/dan-todo/aee2f2c373efd52f5c6bb86ea9b4a9f9a89b65d0/spec/support/list_pages.rb)
+  + [`spec/support/refresh.rb`](https://raw.githubusercontent.com/eliotsykes/dan-todo/aee2f2c373efd52f5c6bb86ea9b4a9f9a89b65d0/spec/support/refresh.rb)
+- Update files with contents from:
+  + [`spec/features/user_login_spec.rb`](https://raw.githubusercontent.com/eliotsykes/dan-todo/aee2f2c373efd52f5c6bb86ea9b4a9f9a89b65d0/spec/features/user_login_spec.rb)
+  + [`spec/support/login_helper.rb`](https://raw.githubusercontent.com/eliotsykes/dan-todo/aee2f2c373efd52f5c6bb86ea9b4a9f9a89b65d0/spec/support/login_helper.rb)
+
 **INSTRUCTIONS FOR DAN END**
