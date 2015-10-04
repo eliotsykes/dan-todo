@@ -149,17 +149,6 @@ Introduce --skip-ember-build option for RSpec and EmberBuilder.
 
 
 
-
-
----
-
-Authentication: ember-simple-auth-devise?
-
-
-
-
-
-
 ---
 
 Registration: Bulk user registration issues mitigated by email confirmation requirement. Include in spec that non-confirmed user cannot successfully login.
@@ -238,29 +227,3 @@ What about PhoneGap Developer App and the apiHost? Test it once 0.16.2 of connec
 # Build login before registration
 
 Move login (feature spec & form) chapter to *before* registration chapter. Acceptable to have login only available to manually created users initially. Then the registration spec can include login at the end more smoothly.
-
-
-
-
-
-
-
-
-
----
-
-# Ember Simple Auth
-
-In login-form component.js: 
-
-```javascript
-      // this.get('session')
-      //   .authenticate('authenticator:api-v1', credentials)
-      //   .then(onAuthentication, onAuthenticationFailed);
-```
-
-Have you seen that the above code introduces `notifier`? This is an Ember service you're going to write shortly. The `notifier` service is going to provide a way for you to show a message to your user easily from any component.
-
-```
-var notifier = this.get('notifier');
-```

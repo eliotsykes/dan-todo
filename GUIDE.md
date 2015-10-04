@@ -4147,3 +4147,174 @@ How are all the 2 feature specs we've written doing? Run them both, they should 
 ```bash
 bin/rspec spec/features/user_*
 ```
+
+
+## List UI
+
+Spike in progress.
+
+Spike should enable:
+
+- view lists
+- create list
+- delete list
+- edit list
+
+See `~/dev/app-store-rails/asr-todo/client` for approach in that app. In-line editing, see `~/dev/app-store-rails/asr-todo/client/app/templates/components/todo-widget.hbs`
+
+Run:
+```bash
+bin/ember generate model list title:string --pod
+```
+
+outputs:
+```
+installing
+  create app/pods/list/model.js
+installing
+  create tests/unit/pods/list/model-test.js
+```
+
+TODO: Add spec for list page first before generating model
+
+Generate application authorizer. The authorizer is responsible for including the API token in every request to the backend.
+
+```bash
+bin/ember generate authorizer application
+```
+outputs and creates file:
+```
+installing
+  create app/authorizers/application.js
+```
+
+Configure the authorizer to use in `ENV['simple-auth']` in `client/config/environment.js`:
+
+```diff
+--- a/client/config/environment.js
++++ b/client/config/environment.js
+@@ -23,7 +23,8 @@ module.exports = function(environment) {
+
+   ENV['simple-auth'] = {
+     authenticationRoute: 'session.new',
+-    routeAfterAuthentication: 'list'
++    routeAfterAuthentication: 'list',
++    authorizer: 'authorizer:application'
+   };
+
+   if (environment === 'development') {
+```
+
+Save `client/app/authorizers/application.js` with contents:
+
+```diff
+--- /dev/null
++++ b/client/app/authorizers/application.js
+@@ -0,0 +1,12 @@
++import Base from 'simple-auth/authorizers/base';
++
++export default Base.extend({
++  authorize(jqXHR, requestOptions) {
++    let isAuthenticated = this.get('session.isAuthenticated');
++    let token = this.get('session.secure.token');
++
++    if (isAuthenticated && !Ember.isEmpty(token)) {
++      jqXHR.setRequestHeader('X-Api-Key', token);
++    }
++  }
++});
+```
+
+Modify `client/app/pods/list/index/route.js`:
+
+```js
+import Ember from 'ember';
+
+export default Ember.Route.extend({
+  model() {
+    return this.store.findAll('list');
+  }
+});
+```
+
+Modify `client/app/pods/list/index/template.hbs`:
+
+```
+TODO
+```
+
+TODO: Instructions on updating stylesheets to latest and add new ones.
+
+Run Ember's generate command to generate a route for creating new lists:
+
+```bash
+# Inside your-rails-app/ directory:
+bin/ember generate route list/new --pod
+```
+
+This will generate the following output and files inside the list pod:
+
+```
+installing
+  create app/pods/list/new/route.js
+  create app/pods/list/new/template.hbs
+installing
+  create tests/unit/pods/list/new/route-test.js
+```
+
+The generate will modify `client/app/router.js` for you, by nesting the `list.new` route within the existing `list` route:
+
+```diff
+--- a/client/app/router.js
++++ b/client/app/router.js
+@@ -12,7 +12,9 @@ Router.map(function() {
+   this.route('user.new', { path: '/register' });
+   this.route('confirmation-pending');
+   this.route('session.new', { path: '/login' });
+-  this.route('list', function() {});
++  this.route('list', function() {
++    this.route('new');
++  });
+ });
+
+ export default Router;
+```
+
+The name of this component will be `list-form`. Generate it with this command:
+
+```bash
+bin/ember generate component list-form --pod
+```
+
+Generates:
+
+```
+installing
+  create app/pods/components/list-form/component.js
+  create app/pods/components/list-form/template.hbs
+installing
+  create tests/unit/pods/components/list-form/component-test.js
+```
+
+
+`ListsController#create` needed tweaks:
+
+- `status: :created`
+- Root node of `list` in generated JSON (requirement of Ember Data)
+
+
+Explain `Model#isSaving` and other related `isMethods` and what dirty attributes are.
+
+TODO: Include instructions to run `rake db:migrate` since changing null constraint of lists title column.
+
+```bash
+# Generate controller needed for queryParams.editsLocked:
+bin/ember generate controller list/index --pod
+```
+
+```bash
+# Generate route with path option for editing list:
+bin/ember generate route list/edit --path=:list_id/edit --pod
+```
+
+TODO: Merge POLISH.md notes from branch to master

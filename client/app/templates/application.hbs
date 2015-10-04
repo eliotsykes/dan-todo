@@ -1,13 +1,3 @@
 {{x-notifier}}
 
-<nav>
-{{#link-to 'index'}}Home{{/link-to}}
-{{#if session.isAuthenticated}}
-  <a href="/logout" {{action 'invalidateSession'}}>Sign out</a>
-{{else}}
-  {{#link-to 'user.new'}}Register{{/link-to}}
-  {{#link-to 'session.new'}}Sign in{{/link-to}}
-{{/if}}
-</nav>
-
 {{outlet}}

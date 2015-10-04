@@ -1,0 +1,14 @@
+<form {{action "save" on="submit"}}>
+  <label for="title">List Title</label>
+  {{input id="title" type="text" value=list.title}}
+
+  <button type="submit" disabled={{list.isSaving}}>
+    {{#if list.isCreatingOrUpdating}}Saving&hellip;{{else}}Save{{/if}}
+  </button>
+
+  {{#if showDeleteButton}}
+    <button {{action 'delete'}} disabled={{list.isSaving}}>
+      {{#if list.isDeleted}}Deleting&hellip;{{else}}Delete{{/if}}
+    </button>
+  {{/if}}
+</form>
