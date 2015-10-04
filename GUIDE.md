@@ -4177,5 +4177,6 @@ Add these files to the project:
 
 Run `bin/rake db:migrate` to perform the new migration from above (`db/migrate/20150912152932_add_not_null_constraint_to_list_title.rb`).
 
+To bring logout page style closer to other page styles: replace `client/public/logout.html` with contents of file at https://raw.githubusercontent.com/eliotsykes/dan-todo/master/client/public/logout.html
 
 **INSTRUCTIONS FOR DAN END**
