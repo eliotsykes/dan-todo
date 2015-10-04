@@ -4154,4 +4154,28 @@ bin/rspec spec/features/user_*
 
 Replace your local `client/app/styles` directory contents completely with each of the raw files from the `client/app/styles` directory referenced here: https://github.com/eliotsykes/dan-todo/tree/35162516037a8de14aac04d8b24e7b7889629a97/client/app/styles
 
+The following changes are minor tweaks to the Rails API and model for list to make it work with the Ember work that is coming shortly.
+
+Replace these existing files with the linked to versions:
+- [app/controllers/api/api_controller.rb](https://raw.githubusercontent.com/eliotsykes/dan-todo/rails-api-model-list-tweaks/app/controllers/api/api_controller.rb)
+- [app/controllers/api/v1/lists_controller.rb](https://raw.githubusercontent.com/eliotsykes/dan-todo/rails-api-model-list-tweaks/app/controllers/api/v1/lists_controller.rb)
+- [app/models/list.rb](https://raw.githubusercontent.com/eliotsykes/dan-todo/rails-api-model-list-tweaks/app/models/list.rb)
+- [config/routes.rb](https://raw.githubusercontent.com/eliotsykes/dan-todo/rails-api-model-list-tweaks/config/routes.rb)
+- [spec/controllers/lists_controller_spec.rb](https://raw.githubusercontent.com/eliotsykes/dan-todo/rails-api-model-list-tweaks/spec/controllers/lists_controller_spec.rb)
+- [spec/requests/create_list_spec.rb](https://raw.githubusercontent.com/eliotsykes/dan-todo/rails-api-model-list-tweaks/spec/requests/create_list_spec.rb)
+- [spec/requests/update_list_spec.rb](https://raw.githubusercontent.com/eliotsykes/dan-todo/rails-api-model-list-tweaks/spec/requests/update_list_spec.rb)
+- [spec/support/json_helper.rb](https://raw.githubusercontent.com/eliotsykes/dan-todo/rails-api-model-list-tweaks/spec/support/json_helper.rb)
+
+Add these files to the project:
+- [app/serializers/list_serializer.rb](https://raw.githubusercontent.com/eliotsykes/dan-todo/rails-api-model-list-tweaks/app/serializers/list_serializer.rb)
+- [db/migrate/20150912152932_add_not_null_constraint_to_list_title.rb](https://raw.githubusercontent.com/eliotsykes/dan-todo/rails-api-model-list-tweaks/db/migrate/20150912152932_add_not_null_constraint_to_list_title.rb)
+- [spec/models/list_spec.rb](https://raw.githubusercontent.com/eliotsykes/dan-todo/rails-api-model-list-tweaks/spec/models/list_spec.rb)
+- [spec/requests/view_list_spec.rb](https://raw.githubusercontent.com/eliotsykes/dan-todo/rails-api-model-list-tweaks/spec/requests/view_list_spec.rb)
+- [spec/serializers/list_serializer_spec.rb](https://raw.githubusercontent.com/eliotsykes/dan-todo/rails-api-model-list-tweaks/spec/serializers/list_serializer_spec.rb)
+
+`git diff` the above changes before committing to see what changes were made and ask any questions.
+
+Run `bin/rake db:migrate` to perform the new migration from above (`db/migrate/20150912152932_add_not_null_constraint_to_list_title.rb`).
+
+
 **INSTRUCTIONS FOR DAN END**
