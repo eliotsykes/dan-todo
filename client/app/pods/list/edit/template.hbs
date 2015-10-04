@@ -6,6 +6,8 @@
   <h1>Edit List</h1>
 </header>
 
-{{list-form list=model successMessage="Updated list." errorMessage="Sorry, list was not updated."}}
+{{list-form list=model showDeleteButton=true
+    successMessage="Updated list."
+    errorMessage="Sorry, list was not updated."}}
 
 {{outlet}}

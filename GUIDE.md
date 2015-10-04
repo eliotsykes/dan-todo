@@ -4317,9 +4317,4 @@ bin/ember generate controller list/index --pod
 bin/ember generate route list/edit --path=:list_id/edit --pod
 ```
 
-TODO NEXT:
-
-5. Saving... message on button not when deleting, shouldn't change
-6. Remove some of the injectors in initializers. Switch out with needs?
-
 TODO: Merge POLISH.md notes from branch to master
