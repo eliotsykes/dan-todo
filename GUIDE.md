@@ -4147,3 +4147,11 @@ How are all the 2 feature specs we've written doing? Run them both, they should 
 ```bash
 bin/rspec spec/features/user_*
 ```
+
+## EARLY OCTOBER 2015 INSTRUCTIONS RESUME HERE
+
+**INSTRUCTIONS FOR DAN START**
+
+Replace your local `client/app/styles` directory contents completely with each of the raw files from the `client/app/styles` directory referenced here: https://github.com/eliotsykes/dan-todo/tree/35162516037a8de14aac04d8b24e7b7889629a97/client/app/styles
+
+**INSTRUCTIONS FOR DAN END**
