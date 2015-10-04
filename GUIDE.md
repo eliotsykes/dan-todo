@@ -4193,4 +4193,10 @@ Here are the feature spec changes and additions to support the new/edit/delete l
   + [`spec/features/user_login_spec.rb`](https://raw.githubusercontent.com/eliotsykes/dan-todo/aee2f2c373efd52f5c6bb86ea9b4a9f9a89b65d0/spec/features/user_login_spec.rb)
   + [`spec/support/login_helper.rb`](https://raw.githubusercontent.com/eliotsykes/dan-todo/aee2f2c373efd52f5c6bb86ea9b4a9f9a89b65d0/spec/support/login_helper.rb)
 
+
+The `<nav>` markup has been tweaked to make some of the future work easier. Update the 2 following existing templates with contents from the given links:
+
+-	[`client/app/pods/index/template.hbs`](https://raw.githubusercontent.com/eliotsykes/dan-todo/move-nav-markup/client/app/pods/index/template.hbs)
+- [`client/app/templates/application.hbs`](https://raw.githubusercontent.com/eliotsykes/dan-todo/move-nav-markup/client/app/templates/application.hbs)
+
 **INSTRUCTIONS FOR DAN END**
